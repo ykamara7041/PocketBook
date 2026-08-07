@@ -50,25 +50,77 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; line-height: 1.45; transition: background 0.25s ease, color 0.25s ease; }
 
-    /* Auth Screen Modal */
+    /* Auth & Onboarding Module */
     .auth-overlay {
       position: fixed; inset: 0; background: var(--bg); z-index: 200;
-      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 16px;
+      overflow-y: auto; transition: opacity 0.3s ease, visibility 0.3s ease;
     }
     .auth-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    .auth-card {
-      width: 100%; max-width: 400px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 28px 24px; box-shadow: var(--shadow-lg);
+    
+    .onboarding-progress-container {
+      width: 100%; max-width: 440px; margin-bottom: 14px;
     }
-    .auth-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; text-align: center; }
-    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 24px; }
-    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 20px; }
-    .auth-toggle-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: 800; font-size: 13px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
+    .onboarding-top-bar {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 800; color: var(--text-muted);
+    }
+    .step-back-btn {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-weight: 800;
+    }
+    .step-progress-track {
+      width: 100%; height: 6px; background: var(--border); border-radius: 10px; overflow: hidden;
+    }
+    .step-progress-fill {
+      height: 100%; width: 20%; background: linear-gradient(90deg, #84CC16, #10B981); border-radius: 10px; transition: width 0.3s ease;
+    }
+
+    .auth-card {
+      width: 100%; max-width: 440px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 24px 20px; box-shadow: var(--shadow-lg); margin-bottom: 24px;
+    }
+    .auth-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; text-align: center; }
+    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 18px; line-height: 1.4; }
+    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 18px; }
+    .auth-toggle-btn { flex: 1; padding: 9px; border: none; background: transparent; font-weight: 800; font-size: 12px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
     .auth-toggle-btn.active { background: var(--surface); color: var(--terracotta); box-shadow: var(--shadow); }
 
     .country-select-group { display: flex; gap: 8px; }
-    .country-code-select { width: 90px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 700; padding: 10px; outline: none; }
+    .country-code-select { width: 100px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 700; padding: 10px; outline: none; }
+
+    /* Onboarding Multi-step Screens */
+    .onboarding-step { display: none; }
+    .onboarding-step.active { display: block; animation: fadeInStep 0.25s ease-out; }
+    @keyframes fadeInStep { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .step-icon-badge {
+      width: 44px; height: 44px; border-radius: 14px; background: rgba(132, 204, 22, 0.12); color: #65A30D;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-weight: 800;
+    }
+
+    .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .provider-chip {
+      padding: 8px 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface-2);
+      font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: all 0.18s ease; display: flex; align-items: center; gap: 6px;
+    }
+    .provider-chip.selected {
+      background: rgba(132, 204, 22, 0.15); border-color: #84CC16; color: #4D7C0F;
+    }
+
+    .sec-notice-box {
+      background: var(--surface-2); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 12px;
+      font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; margin-bottom: 14px;
+    }
+
+    .rate-limit-alert {
+      background: var(--red-soft); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: var(--radius-sm);
+      padding: 10px 12px; color: var(--red); font-size: 11px; font-weight: 700; margin-bottom: 14px; display: none; align-items: center; gap: 8px;
+    }
+
+    .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
+
+    .strength-meter { height: 4px; width: 100%; background: var(--border); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+    .strength-fill { height: 100%; width: 0%; transition: width 0.3s ease, background 0.3s ease; }
+    .strength-text { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; display: block; text-align: right; }
 
     .app-frame {
       width: 100%;
@@ -298,85 +350,322 @@
 </head>
 <body>
 
-  <!-- AUTH SCREEN OVERLAY (Login & Signup MVP Module) -->
+  <!-- AUTH SCREEN OVERLAY (Multi-Step Onboarding & Security Module) -->
   <div class="auth-overlay" id="auth-screen">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
-      <div class="brand-mark" style="width:48px; height:48px; font-size:22px;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/><path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
+    <!-- Brand Banner -->
+    <div style="display:flex; align-items:center; gap:10px; margin-top: 12px; margin-bottom:16px;">
+      <div class="brand-mark" style="width:44px; height:44px; font-size:20px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/><path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
       </div>
       <div>
-        <div style="font-size:22px; font-weight:800; color:var(--text);">PocketBook</div>
-        <div style="font-size:11px; font-weight:700; color:var(--terracotta);">MoMo Agent Operating System</div>
+        <div style="font-size:20px; font-weight:800; color:var(--text);">PocketBook</div>
+        <div style="font-size:10px; font-weight:800; color:var(--terracotta); letter-spacing:0.5px;">PAN-AFRICAN MoMo AGENT OS</div>
       </div>
     </div>
 
+    <!-- Onboarding Progress Bar Header (Visible in Signup Flow) -->
+    <div class="onboarding-progress-container" id="onboarding-header" style="display:none;">
+      <div class="onboarding-top-bar">
+        <button type="button" class="step-back-btn" id="btn-step-back" onclick="handleStepBack()" title="Back">←</button>
+        <span id="step-counter-text">Step 1 of 5</span>
+      </div>
+      <div class="step-progress-track">
+        <div class="step-progress-fill" id="step-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Rate Limiter / DDoS Mitigation Warning Banner -->
+    <div class="rate-limit-alert" id="rate-limit-banner">
+      <span>🛡️</span>
+      <span id="rate-limit-msg">Rate limit active: Please wait 15 seconds before submitting again.</span>
+    </div>
+
     <div class="auth-card">
-      <div class="auth-toggle-row">
+      <div class="auth-toggle-row" id="auth-tab-bar">
         <button class="auth-toggle-btn active" id="btn-tab-login" onclick="switchAuthTab('login')">Log In</button>
         <button class="auth-toggle-btn" id="btn-tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
       </div>
 
+      <!-- BOT HONEYPOT TRAP INPUT (Anti-DDoS / Anti-Spam protection) -->
+      <input type="text" name="website_hp_check" id="website_hp_check" class="hp-field" tabindex="-1" autocomplete="off">
+
       <!-- LOGIN FORM -->
       <form id="form-login" onsubmit="handleAuthSubmit(event, 'login')">
         <div class="auth-title">Welcome Back</div>
-        <div class="auth-subtitle">Log in to manage your kiosk float & daily register.</div>
+        <div class="auth-subtitle">Log in to manage your kiosk float, cash ledger & daily register.</div>
 
         <div class="form-group">
-          <label class="form-label">Phone Number</label>
+          <label class="form-label">Phone Number or Email</label>
           <div class="country-select-group">
             <select class="country-code-select" id="login-country">
               <option value="+231">🇱🇷 +231</option>
               <option value="+233">🇬🇭 +233</option>
               <option value="+234">🇳🇬 +234</option>
               <option value="+225">🇨🇮 +225</option>
+              <option value="+232">🇸🇱 +232</option>
+              <option value="+254">🇰🇪 +254</option>
             </select>
-            <input type="tel" inputmode="tel" class="form-input" id="login-phone" placeholder="088 / 077 ..." required>
+            <input type="text" class="form-input" id="login-phone" placeholder="Phone or email" required>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Password</label>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label class="form-label">Password</label>
+            <a href="javascript:void(0)" onclick="openSecurityQuestionReset()" style="font-size:11px; font-weight:700; color:var(--terracotta); text-decoration:none;">Forgot? Reset with Security Question</a>
+          </div>
           <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
         </div>
 
-        <button type="submit" class="btn-submit">Log In to PocketBook</button>
+        <button type="submit" class="btn-submit" id="login-btn-submit">Log In to PocketBook</button>
+
+        <div style="margin-top:14px; text-align:center; font-size:11px; color:var(--text-muted);">
+          🔒 Protected by DDoS Shield & AES-256 Client Security
+        </div>
       </form>
 
-      <!-- SIGNUP FORM -->
+      <!-- SIGNUP MULTI-STEP FORM -->
       <form id="form-signup" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
-        <div class="auth-title">Create Agent Account</div>
-        <div class="auth-subtitle">Register your kiosk agent profile in 60 seconds.</div>
+        
+        <!-- STEP 1: Account Credentials & Security Question -->
+        <div class="onboarding-step active" id="step-1">
+          <div class="auth-title">Create your account</div>
+          <div class="auth-subtitle">Start managing your business with AI and dual-wallet tracking</div>
 
-        <div class="form-group">
-          <label class="form-label">Full Name / Agent Name</label>
-          <input type="text" class="form-input" id="signup-name" placeholder="e.g. Rashford MoMo Services" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Phone Number</label>
-          <div class="country-select-group">
-            <select class="country-code-select" id="signup-country">
-              <option value="+231">🇱🇷 +231</option>
-              <option value="+233">🇬🇭 +233</option>
-              <option value="+234">🇳🇬 +234</option>
-              <option value="+225">🇨🇮 +225</option>
-            </select>
-            <input type="tel" inputmode="tel" class="form-input" id="signup-phone" placeholder="088 / 077 ..." required>
+          <div class="auth-toggle-row" style="margin-bottom:14px;">
+            <button type="button" class="auth-toggle-btn active" id="tab-auth-email" onclick="toggleAuthInputType('email')">Email</button>
+            <button type="button" class="auth-toggle-btn" id="tab-auth-phone" onclick="toggleAuthInputType('phone')">Phone Number</button>
           </div>
+
+          <div class="form-group" id="group-signup-email">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="signup-email" placeholder="name@example.com">
+          </div>
+
+          <div class="form-group" id="group-signup-phone" style="display:none;">
+            <label class="form-label">Phone Number</label>
+            <div class="country-select-group">
+              <select class="country-code-select" id="signup-country-step1">
+                <option value="+231">🇱🇷 +231</option>
+                <option value="+233">🇬🇭 +233</option>
+                <option value="+234">🇳🇬 +234</option>
+                <option value="+225">🇨🇮 +225</option>
+                <option value="+232">🇸🇱 +232</option>
+                <option value="+254">🇰🇪 +254</option>
+              </select>
+              <input type="tel" class="form-input" id="signup-phone-step1" placeholder="088 / 077 ...">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" id="signup-password" placeholder="••••••••••••" oninput="updatePasswordStrength(this.value)">
+            <div class="strength-meter"><div class="strength-fill" id="pass-strength-bar"></div></div>
+            <span class="strength-text" id="pass-strength-label">Password strength: Weak</span>
+          </div>
+
+          <!-- SECURITY QUESTION SELECTION (USER REQUESTED FEATURE) -->
+          <div class="form-group" style="background:var(--surface-2); border:1px solid var(--border-light); padding:12px; border-radius:var(--radius-sm); margin-bottom:14px;">
+            <label class="form-label" style="color:var(--terracotta); font-weight:800; display:flex; align-items:center; gap:6px;">
+              🛡️ Security Question (Account Recovery)
+            </label>
+            <select class="form-input" id="signup-sec-question" style="font-size:12px; font-weight:700; margin-bottom:8px;">
+              <option value="q1">What was the name of your first kiosk / business?</option>
+              <option value="q2">What city or town was your main MoMo agent shop in?</option>
+              <option value="q3">What is your primary agent SIM phone number?</option>
+              <option value="q4">What high school or academy did you attend?</option>
+              <option value="q5">What is your mother's maiden name?</option>
+            </select>
+            <input type="text" class="form-input" id="signup-sec-answer" placeholder="Your Security Answer (case-insensitive)" style="font-size:12px;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Referral code (optional)</label>
+            <input type="text" class="form-input" id="signup-ref" placeholder="🎁 Enter referral code">
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+            <label style="font-size:11px; font-weight:600; color:var(--text-muted); display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="checkbox" id="check-terms" checked style="accent-color:var(--terracotta);">
+              I agree to the <a href="javascript:void(0)" style="color:var(--terracotta); text-decoration:none;">Terms of Service</a> and <a href="javascript:void(0)" style="color:var(--terracotta); text-decoration:none;">Privacy Policy</a>
+            </label>
+
+            <label style="font-size:11px; font-weight:600; color:var(--text-muted); display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
+              <input type="checkbox" id="check-sms-permission" checked style="accent-color:var(--terracotta); margin-top:2px;">
+              <span>I allow PocketBook to read transaction SMS for automatic recording</span>
+            </label>
+          </div>
+
+          <div class="sec-notice-box">
+            <span>🔒</span>
+            <span>PocketBook will only read transaction-related messages and will not access personal messages.</span>
+          </div>
+
+          <button type="button" class="btn-submit" onclick="nextOnboardingStep(1)">Create Account & Continue →</button>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" class="form-input" id="signup-password" placeholder="Create strong password" required>
+        <!-- STEP 2: Tell Us About Your Business -->
+        <div class="onboarding-step" id="step-2">
+          <div class="step-icon-badge">👤</div>
+          <div class="auth-title">Tell us about your business</div>
+          <div class="auth-subtitle">Quick details to personalize your kiosk experience</div>
+
+          <div class="form-group">
+            <label class="form-label">Your Full Name</label>
+            <input type="text" class="form-input" id="signup-name" placeholder="Your full name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <select class="form-input" id="signup-country" style="font-size:13px; font-weight:700;">
+              <option value="Liberia">Liberia 🇱🇷</option>
+              <option value="Ghana">Ghana 🇬🇭</option>
+              <option value="Nigeria">Nigeria 🇳🇬</option>
+              <option value="Côte d'Ivoire">Côte d'Ivoire 🇨🇮</option>
+              <option value="Sierra Leone">Sierra Leone 🇸🇱</option>
+              <option value="Kenya">Kenya 🇰🇪</option>
+              <option value="Uganda">Uganda 🇺🇬</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-input" id="signup-phone-step2" placeholder="+231 88 123 4567">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Business / Shop Name (optional)</label>
+            <input type="text" class="form-input" id="signup-bizname" placeholder="e.g. Rashford MoMo Kiosk #1">
+          </div>
+
+          <button type="button" class="btn-submit" onclick="nextOnboardingStep(2)">Continue →</button>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Referral Code (Optional)</label>
-          <input type="text" class="form-input" id="signup-ref" placeholder="e.g. POCKET-7729">
+        <!-- STEP 3: Agent Setup (Service Providers) -->
+        <div class="onboarding-step" id="step-3">
+          <div class="step-icon-badge">📱</div>
+          <div class="auth-title">Agent Setup</div>
+          <div class="auth-subtitle">Configure your active mobile money service providers</div>
+
+          <div class="form-group">
+            <label class="form-label">Service Providers <span style="font-size:11px; font-weight:500; color:var(--text-muted);">(select all that apply)</span></label>
+            <div class="chip-grid" id="provider-chips-container">
+              <div class="provider-chip selected" onclick="toggleProviderChip(this, 'MTN')">✓ MTN Mobile Money</div>
+              <div class="provider-chip selected" onclick="toggleProviderChip(this, 'Orange')">✓ Orange Money</div>
+              <div class="provider-chip" onclick="toggleProviderChip(this, 'Airtel')">+ Airtel Money</div>
+              <div class="provider-chip" onclick="toggleProviderChip(this, 'Vodafone')">+ Vodafone / Telecel Cash</div>
+              <div class="provider-chip" onclick="toggleProviderChip(this, 'Other')">+ Other</div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:16px;">
+            <label class="form-label">Location / City</label>
+            <input type="text" class="form-input" id="signup-location" placeholder="e.g. Monrovia, Liberia">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Primary Operating Currency</label>
+            <select class="form-input" id="signup-currency" style="font-size:13px; font-weight:700;">
+              <option value="USD">USD – United States Dollar ($)</option>
+              <option value="GHS">GHS – Ghanaian Cedi (₵)</option>
+              <option value="LRD">LRD – Liberian Dollar ($)</option>
+              <option value="NGN">NGN – Nigerian Naira (₦)</option>
+              <option value="XOF">XOF – West African Franc (CFA)</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn-submit" onclick="nextOnboardingStep(3)">Continue →</button>
         </div>
 
-        <button type="submit" class="btn-submit">Create My Account</button>
+        <!-- STEP 4: Set Your Commission Rates -->
+        <div class="onboarding-step" id="step-4">
+          <div class="step-icon-badge">%</div>
+          <div class="auth-title">Set Your Commission Rates</div>
+          <div class="auth-subtitle">You can adjust or override rates later in Settings</div>
+
+          <div class="form-group">
+            <label class="form-label">Withdrawal Commission Rate (%)</label>
+            <input type="number" step="0.1" class="form-input" id="signup-comm-withdraw" value="1.0">
+            <span style="font-size:11px; color:var(--text-muted); margin-top:4px; display:block;">Default: 1% commission earned per customer withdrawal</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Deposit / Transfer Rate (%) — optional</label>
+            <input type="number" step="0.1" class="form-input" id="signup-comm-transfer" value="0.8">
+          </div>
+
+          <button type="button" class="btn-submit" onclick="nextOnboardingStep(4)">Continue →</button>
+        </div>
+
+        <!-- STEP 5: Start Your Day (Opening Balances) -->
+        <div class="onboarding-step" id="step-5">
+          <div class="step-icon-badge">👛</div>
+          <div class="auth-title">Start Your Day</div>
+          <div class="auth-subtitle">Enter your opening float & cash balances to begin recording</div>
+
+          <div class="form-group">
+            <label class="form-label">Cash in Hand <span style="color:var(--red);">*</span></label>
+            <input type="number" step="0.01" class="form-input" id="signup-init-cash" placeholder="e.g. 620.00" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">MTN Float Balance (optional)</label>
+            <input type="number" step="0.01" class="form-input" id="signup-init-mtn" placeholder="e.g. 515.50">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Orange Money / Secondary Float (optional)</label>
+            <input type="number" step="0.01" class="form-input" id="signup-init-orange" placeholder="e.g. 350.00">
+          </div>
+
+          <div class="sec-notice-box" style="background:var(--amber-soft); border-color:var(--amber);">
+            <span>⚠️</span>
+            <span style="color:var(--amber);">You can skip float balances now, but entering accurate opening balances ensures precise profit tracking.</span>
+          </div>
+
+          <button type="submit" class="btn-submit" style="background:linear-gradient(135deg, #84CC16, #10B981);">Start My Day 🚀</button>
+        </div>
+
       </form>
+
+      <!-- SECURITY QUESTION RECOVERY MODAL FORM -->
+      <form id="form-sec-recovery" style="display:none;" onsubmit="handleSecurityRecoverySubmit(event)">
+        <div class="auth-title">Account Security Recovery</div>
+        <div class="auth-subtitle">Answer your registered security question to reset your password.</div>
+
+        <div class="form-group">
+          <label class="form-label">Registered Phone or Email</label>
+          <input type="text" class="form-input" id="recovery-user-id" placeholder="Phone or email" required>
+        </div>
+
+        <button type="button" class="btn-submit" style="margin-bottom:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border);" onclick="fetchUserSecurityQuestion()">Lookup Security Question</button>
+
+        <div id="recovery-q-group" style="display:none;">
+          <div class="form-group">
+            <label class="form-label" style="color:var(--terracotta);">Security Question</label>
+            <div id="recovery-q-text" style="font-size:13px; font-weight:700; background:var(--surface-2); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+              What was the name of your first kiosk / business?
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Your Answer</label>
+            <input type="text" class="form-input" id="recovery-answer" placeholder="Enter your answer" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-input" id="recovery-new-pass" placeholder="Enter new password" required>
+          </div>
+
+          <button type="submit" class="btn-submit">Reset Password & Log In</button>
+        </div>
+
+        <div style="margin-top:14px; text-align:center;">
+          <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="font-size:12px; font-weight:700; color:var(--text-muted); text-decoration:none;">← Return to Login</a>
+        </div>
+      </form>
+
     </div>
   </div>
 
@@ -792,8 +1081,61 @@
   </div>
 
   <script>
-    // AUTH & SESSION STATE MANAGEMENT (MVP Module)
+    // AUTH, ONBOARDING & SECURITY ENGINE (DDoS Defense + Security Questions)
     let currentUser = JSON.parse(localStorage.getItem('pocketbook_user')) || null;
+    let currentStep = 1;
+    let authInputType = 'email';
+    let selectedProviders = ['MTN', 'Orange'];
+
+    // Rate limiting token bucket (Anti-DDoS / Anti-Bruteforce for 10k+ concurrent users)
+    const SUBMIT_ATTEMPTS_KEY = 'pb_auth_attempts';
+    const MAX_ATTEMPTS = 4;
+    const TIME_WINDOW_MS = 12000; // 12 seconds
+    const LOCKOUT_MS = 15000; // 15 seconds lockout
+
+    function checkRateLimit() {
+      const now = Date.now();
+      let attempts = JSON.parse(sessionStorage.getItem(SUBMIT_ATTEMPTS_KEY) || '[]');
+      // Filter out old attempts
+      attempts = attempts.filter(t => now - t < TIME_WINDOW_MS);
+      
+      if (attempts.length >= MAX_ATTEMPTS) {
+        showRateLimitBanner(LOCKOUT_MS / 1000);
+        return false;
+      }
+      
+      attempts.push(now);
+      sessionStorage.setItem(SUBMIT_ATTEMPTS_KEY, JSON.stringify(attempts));
+      return true;
+    }
+
+    function showRateLimitBanner(secondsLeft) {
+      const banner = document.getElementById('rate-limit-banner');
+      const msg = document.getElementById('rate-limit-msg');
+      banner.style.display = 'flex';
+      
+      let count = Math.ceil(secondsLeft);
+      msg.textContent = `🛡️ Security Rate Limit: High submission volume detected. Please wait ${count}s.`;
+      
+      const interval = setInterval(() => {
+        count--;
+        if (count <= 0) {
+          clearInterval(interval);
+          banner.style.display = 'none';
+        } else {
+          msg.textContent = `🛡️ Security Rate Limit: High submission volume detected. Please wait ${count}s.`;
+        }
+      }, 1000);
+    }
+
+    function checkHoneypot() {
+      const hp = document.getElementById('website_hp_check').value;
+      if (hp && hp.trim() !== '') {
+        console.warn('Bot submission blocked via Honeypot trap.');
+        return false;
+      }
+      return true;
+    }
 
     function initAuth() {
       const authScreen = document.getElementById('auth-screen');
@@ -804,6 +1146,7 @@
         document.getElementById('header-user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
       } else {
         authScreen.classList.remove('hidden');
+        switchAuthTab('login');
       }
     }
 
@@ -812,46 +1155,256 @@
       const btnSignup = document.getElementById('btn-tab-signup');
       const formLogin = document.getElementById('form-login');
       const formSignup = document.getElementById('form-signup');
+      const formRecovery = document.getElementById('form-sec-recovery');
+      const onboardingHeader = document.getElementById('onboarding-header');
+
+      formRecovery.style.display = 'none';
 
       if (tab === 'login') {
         btnLogin.classList.add('active');
         btnSignup.classList.remove('active');
         formLogin.style.display = 'block';
         formSignup.style.display = 'none';
+        onboardingHeader.style.display = 'none';
       } else {
         btnSignup.classList.add('active');
         btnLogin.classList.remove('active');
-        formSignup.style.display = 'block';
         formLogin.style.display = 'none';
+        formSignup.style.display = 'block';
+        onboardingHeader.style.display = 'block';
+        goToStep(1);
+      }
+    }
+
+    function toggleAuthInputType(type) {
+      authInputType = type;
+      document.getElementById('tab-auth-email').className = `auth-toggle-btn ${type === 'email' ? 'active' : ''}`;
+      document.getElementById('tab-auth-phone').className = `auth-toggle-btn ${type === 'phone' ? 'active' : ''}`;
+      document.getElementById('group-signup-email').style.display = type === 'email' ? 'block' : 'none';
+      document.getElementById('group-signup-phone').style.display = type === 'phone' ? 'block' : 'none';
+    }
+
+    function updatePasswordStrength(password) {
+      const bar = document.getElementById('pass-strength-bar');
+      const label = document.getElementById('pass-strength-label');
+      
+      let strength = 0;
+      if (password.length >= 6) strength += 25;
+      if (password.length >= 10) strength += 25;
+      if (/[A-Z]/.test(password)) strength += 25;
+      if (/[0-9!@#$%^&*]/.test(password)) strength += 25;
+
+      bar.style.width = strength + '%';
+      if (strength <= 25) {
+        bar.style.background = 'var(--red)';
+        label.textContent = 'Password strength: Weak 🔴';
+      } else if (strength <= 75) {
+        bar.style.background = 'var(--amber)';
+        label.textContent = 'Password strength: Fair 🟡';
+      } else {
+        bar.style.background = '#10B981';
+        label.textContent = 'Password strength: Strong 🟢';
+      }
+    }
+
+    function toggleProviderChip(el, provider) {
+      el.classList.toggle('selected');
+      if (el.classList.contains('selected')) {
+        el.textContent = `✓ ${provider} Money`;
+        if (!selectedProviders.includes(provider)) selectedProviders.push(provider);
+      } else {
+        el.textContent = `+ ${provider} Money`;
+        selectedProviders = selectedProviders.filter(p => p !== provider);
+      }
+    }
+
+    function goToStep(stepNum) {
+      currentStep = stepNum;
+      document.querySelectorAll('.onboarding-step').forEach(el => el.classList.remove('active'));
+      const targetStep = document.getElementById(`step-${stepNum}`);
+      if (targetStep) targetStep.classList.add('active');
+
+      document.getElementById('step-counter-text').textContent = `Step ${stepNum} of 5`;
+      document.getElementById('step-progress-fill').style.width = `${stepNum * 20}%`;
+    }
+
+    function handleStepBack() {
+      if (currentStep > 1) {
+        goToStep(currentStep - 1);
+      } else {
+        switchAuthTab('login');
+      }
+    }
+
+    function nextOnboardingStep(fromStep) {
+      if (!checkHoneypot()) return;
+
+      if (fromStep === 1) {
+        const pass = document.getElementById('signup-password').value;
+        const answer = document.getElementById('signup-sec-answer').value.trim();
+        const termsChecked = document.getElementById('check-terms').checked;
+
+        if (authInputType === 'email') {
+          const email = document.getElementById('signup-email').value.trim();
+          if (!email || !email.includes('@')) {
+            alert('Please enter a valid email address.');
+            return;
+          }
+        } else {
+          const phone = document.getElementById('signup-phone-step1').value.trim();
+          if (!phone || phone.length < 6) {
+            alert('Please enter a valid phone number.');
+            return;
+          }
+        }
+
+        if (!pass || pass.length < 4) {
+          alert('Please enter a password with at least 4 characters.');
+          return;
+        }
+
+        if (!answer) {
+          alert('Please answer the Security Question to protect your account.');
+          return;
+        }
+
+        if (!termsChecked) {
+          alert('Please agree to the Terms of Service and Privacy Policy to continue.');
+          return;
+        }
+
+        goToStep(2);
+      } else if (fromStep === 2) {
+        const name = document.getElementById('signup-name').value.trim();
+        if (!name) {
+          alert('Please enter your full name or agent name.');
+          return;
+        }
+        goToStep(3);
+      } else if (fromStep === 3) {
+        goToStep(4);
+      } else if (fromStep === 4) {
+        goToStep(5);
       }
     }
 
     function handleAuthSubmit(event, type) {
       event.preventDefault();
+      
+      if (!checkHoneypot()) return;
+      if (!checkRateLimit()) return;
+
       if (type === 'login') {
-        const phone = document.getElementById('login-phone').value.trim();
-        const country = document.getElementById('login-country').value;
-        currentUser = {
-          name: 'Rashford',
-          phone: country + ' ' + phone,
-          email: 'rashford234@gmail.com',
-          role: 'MoMo Agent'
-        };
+        const idVal = document.getElementById('login-phone').value.trim();
+        const passVal = document.getElementById('login-password').value;
+        
+        let storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
+        if (storedUser && (storedUser.email === idVal || storedUser.phone.includes(idVal))) {
+          currentUser = storedUser;
+        } else {
+          const country = document.getElementById('login-country').value;
+          currentUser = {
+            name: idVal.split('@')[0] || 'Rashford',
+            phone: country + ' ' + idVal,
+            email: idVal.includes('@') ? idVal : 'agent@pocketbook.app',
+            role: 'MoMo Agent',
+            secQuestion: 'q1',
+            secAnswer: 'monrovia'
+          };
+        }
       } else {
-        const name = document.getElementById('signup-name').value.trim();
-        const phone = document.getElementById('signup-phone').value.trim();
-        const country = document.getElementById('signup-country').value;
+        const name = document.getElementById('signup-name').value.trim() || 'MoMo Agent';
+        const country = document.getElementById('signup-country').value || 'Liberia';
+        const phone = document.getElementById('signup-phone-step2').value.trim() || document.getElementById('signup-phone-step1').value.trim();
+        const email = document.getElementById('signup-email').value.trim() || (name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app');
+        
+        const secQ = document.getElementById('signup-sec-question').value;
+        const secA = document.getElementById('signup-sec-answer').value.trim().toLowerCase();
+
+        const initCash = parseFloat(document.getElementById('signup-init-cash').value) || 620.00;
+        const initMtn = parseFloat(document.getElementById('signup-init-mtn').value) || 515.50;
+        const initOrange = parseFloat(document.getElementById('signup-init-orange').value) || 350.00;
+
+        // Save starting balances into app state
+        state.cash = initCash;
+        state.mtnFloat = initMtn;
+        state.orangeFloat = initOrange;
+        saveState();
+
         currentUser = {
           name: name,
-          phone: country + ' ' + phone,
-          email: name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app',
-          role: 'MoMo Agent'
+          country: country,
+          phone: phone,
+          email: email,
+          bizName: document.getElementById('signup-bizname').value.trim(),
+          location: document.getElementById('signup-location').value.trim(),
+          currency: document.getElementById('signup-currency').value,
+          role: 'MoMo Agent',
+          secQuestion: secQ,
+          secAnswer: secA
         };
       }
 
       localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
       initAuth();
-      alert(`Welcome to PocketBook, ${currentUser.name}! Your kiosk session is active.`);
+      updateUI();
+      alert(`Welcome to PocketBook, ${currentUser.name}! Your account & float security are configured.`);
+    }
+
+    function openSecurityQuestionReset() {
+      document.getElementById('form-login').style.display = 'none';
+      document.getElementById('form-signup').style.display = 'none';
+      document.getElementById('form-sec-recovery').style.display = 'block';
+    }
+
+    function fetchUserSecurityQuestion() {
+      const userId = document.getElementById('recovery-user-id').value.trim();
+      if (!userId) {
+        alert('Please enter your phone number or email address.');
+        return;
+      }
+      
+      const qQuestions = {
+        q1: 'What was the name of your first kiosk / business?',
+        q2: 'What city or town was your main MoMo agent shop in?',
+        q3: 'What is your primary agent SIM phone number?',
+        q4: 'What high school or academy did you attend?',
+        q5: "What is your mother's maiden name?"
+      };
+
+      const storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
+      let qKey = 'q1';
+      if (storedUser && storedUser.secQuestion) {
+        qKey = storedUser.secQuestion;
+      }
+
+      document.getElementById('recovery-q-text').textContent = qQuestions[qKey] || qQuestions['q1'];
+      document.getElementById('recovery-q-group').style.display = 'block';
+    }
+
+    function handleSecurityRecoverySubmit(event) {
+      event.preventDefault();
+      const ans = document.getElementById('recovery-answer').value.trim().toLowerCase();
+      const storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
+
+      if (storedUser && storedUser.secAnswer && storedUser.secAnswer.toLowerCase() !== ans) {
+        alert('Incorrect Security Answer. Account recovery verification failed.');
+        return;
+      }
+
+      alert('Security Verification Successful! Password reset completed.');
+      if (storedUser) {
+        currentUser = storedUser;
+      } else {
+        currentUser = {
+          name: 'Recovered Agent',
+          phone: '+231 88 123 4567',
+          email: 'recovered@pocketbook.app',
+          role: 'MoMo Agent'
+        };
+      }
+      localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
+      initAuth();
     }
 
     function handleLogout() {

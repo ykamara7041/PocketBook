@@ -21,3 +21,20 @@ Open `index.html` directly in any web browser, or launch a local server:
 ```bash
 npm run dev
 ```
+
+## 🌐 Deploying on Render
+
+### Option A: Automatic Blueprint (Recommended)
+1. Push your repository to GitHub / GitLab.
+2. Go to [Render Dashboard](https://dashboard.render.com/) -> **New** -> **Blueprint**.
+3. Connect your repository. Render will automatically pick up `render.yaml` and deploy your site!
+
+### Option B: Manual Static Site Setup
+1. Go to **Render Dashboard** -> **New** -> **Static Site**.
+2. Connect your GitHub repository.
+3. Set the following settings:
+   - **Name:** `pocketbook-app`
+   - **Build Command:** *(leave empty)*
+   - **Publish Directory:** `./` (or `.` depending on repo root)
+4. Click **Create Static Site**.
+

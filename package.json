@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "dev": "npx -y serve .",
-    "start": "npx -y serve ."
+    "build": "echo 'No build step required for static site'",
+    "start": "npx -y serve -s . -p $PORT"
   },
   "keywords": [
     "mobile-money",

@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: pocketbook-app
+    env: static
+    buildCommand: ""
+    staticPublishPath: ./
