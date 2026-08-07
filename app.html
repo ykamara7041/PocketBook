@@ -1463,19 +1463,68 @@
       else if (fromStep === 4) goToStep(5);
     }
 
+    function getStorageKey(user) {
+      if (!user) return 'pocketbook_state_demo';
+      return 'pocketbook_state_' + (user.email || user.phone || 'demo').replace(/[^a-zA-Z0-9]/g, '_');
+    }
+
+    function loadUserState() {
+      const key = getStorageKey(currentUser);
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        state = JSON.parse(saved);
+      } else {
+        state = {
+          cash: 620.00, openingCash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00,
+          transactions: [
+            { id: 1, type: 'deposit', carrier: 'MTN', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
+            { id: 2, type: 'withdrawal', carrier: 'Orange', amount: 100.00, phone: '0770987654', comm: 1.50, time: '09:15 AM' },
+            { id: 3, type: 'deposit', carrier: 'MTN', amount: 200.00, phone: '0880555444', comm: 2.20, time: '08:30 AM' }
+          ]
+        };
+      }
+    }
+
+    function saveState() {
+      const key = getStorageKey(currentUser);
+      localStorage.setItem(key, JSON.stringify(state));
+    }
+
     function handleAuthSubmit(event, type) {
       event.preventDefault();
       if (type === 'login') {
         const idVal = document.getElementById('login-phone').value.trim();
         let storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
         currentUser = storedUser || { name: idVal.split('@')[0] || 'Rashford', phone: idVal, email: 'agent@pocketbook.app', role: 'MoMo Agent' };
+        loadUserState();
       } else {
         const name = document.getElementById('signup-name').value.trim() || 'MoMo Agent';
-        currentUser = { name: name, phone: document.getElementById('signup-phone-step2').value.trim() || '+231 88 123 4567', email: 'agent@pocketbook.app', role: 'MoMo Agent' };
+        const email = document.getElementById('signup-email').value.trim() || (name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app');
+        const phone = document.getElementById('signup-phone-step2').value.trim() || document.getElementById('signup-phone-step1').value.trim() || '+231 88 123 4567';
+
+        currentUser = { name: name, phone: phone, email: email, role: 'MoMo Agent' };
+        localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
+
+        // Read exact opening balances entered by user in Step 5
+        const initCash = parseFloat(document.getElementById('signup-init-cash').value) || 0.00;
+        const initMtn = parseFloat(document.getElementById('signup-init-mtn').value) || 0.00;
+        const initOrange = parseFloat(document.getElementById('signup-init-orange').value) || 0.00;
+
+        state = {
+          cash: initCash,
+          openingCash: initCash,
+          mtnFloat: initMtn,
+          orangeFloat: initOrange,
+          transactions: [
+            { id: Date.now(), type: 'deposit', carrier: 'MTN', amount: initMtn, phone: 'Opening Float Configured', comm: 0, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+          ]
+        };
+        saveState();
       }
-      localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
+
       closeAuthModal();
       switchAppView('app');
+      showToast(`Welcome, ${currentUser.name}! Your balances have been loaded.`, 'success');
     }
 
     function openSecurityQuestionReset() {
@@ -1494,6 +1543,7 @@
       alert('Security Verification Successful!');
       currentUser = { name: 'Recovered Agent', phone: '+231 88 123 4567', email: 'recovered@pocketbook.app', role: 'MoMo Agent' };
       localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
+      loadUserState();
       closeAuthModal();
       switchAppView('app');
     }
@@ -1511,17 +1561,8 @@
     let activeCarrier = 'MTN';
     let sessionOpen = true;
     let minFloatThreshold = 500;
+    let state = { cash: 620.00, openingCash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00, transactions: [] };
 
-    let state = JSON.parse(localStorage.getItem('pocketbook_state')) || {
-      cash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00,
-      transactions: [
-        { id: 1, type: 'deposit', carrier: 'MTN', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
-        { id: 2, type: 'withdrawal', carrier: 'Orange', amount: 100.00, phone: '0770987654', comm: 1.50, time: '09:15 AM' },
-        { id: 3, type: 'deposit', carrier: 'MTN', amount: 200.00, phone: '0880555444', comm: 2.20, time: '08:30 AM' }
-      ]
-    };
-
-    function saveState() { localStorage.setItem('pocketbook_state', JSON.stringify(state)); }
     function toggleProfileDropdown() { document.getElementById('profile-menu').classList.toggle('active'); }
     const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -1536,13 +1577,27 @@
       const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
       const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
 
+      const openingCash = state.openingCash !== undefined ? state.openingCash : (state.cash - deps + wds);
       document.getElementById('cash-main-val').textContent = fmt(state.cash);
-      document.getElementById('cash-opening-val').textContent = fmt(state.cash - deps + wds);
+      document.getElementById('cash-opening-val').textContent = fmt(openingCash);
       document.getElementById('cash-dep-val').textContent = fmt(deps);
       document.getElementById('cash-wd-val').textContent = fmt(wds);
 
       document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
       document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
+
+      // Status badges & float alert
+      const mtnBadge = document.getElementById('mtn-status-badge');
+      if (state.mtnFloat < 200) { mtnBadge.textContent = '● Critical'; }
+      else if (state.mtnFloat < minFloatThreshold) { mtnBadge.textContent = '● Warning'; }
+      else { mtnBadge.textContent = '● Healthy'; }
+
+      const floatAlertCard = document.getElementById('dashboard-float-alert');
+      if (state.mtnFloat < minFloatThreshold || state.orangeFloat < 400) {
+        floatAlertCard.style.display = 'block';
+      } else {
+        floatAlertCard.style.display = 'none';
+      }
 
       const totalComm = state.transactions.reduce((acc, item) => acc + item.comm, 0);
       document.getElementById('est-commission').textContent = fmt(totalComm);
@@ -1755,6 +1810,7 @@
     }
 
     if (currentUser) {
+      loadUserState();
       switchAppView('app');
     } else {
       switchAppView('landing');
