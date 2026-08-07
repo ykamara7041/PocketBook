@@ -887,7 +887,13 @@
             </div>
           </div>
 
-          <div class="form-group" style="margin-top:16px;">
+          <div class="form-group" style="margin-top:14px;">
+            <label class="form-label">Registered Agent SIM Numbers (for SMS Auto-Recording)</label>
+            <input type="text" class="form-input" id="signup-agent-sims" placeholder="e.g. 0886123456, 0770987654, 0880112233" value="0886123456, 0770987654">
+            <div style="font-size:10.5px; color:var(--text-muted); margin-top:4px;">Enter all your official Lonestar MTN & Orange Agent SIM numbers (separated by commas) so PocketBook authorizes SMS recording without manual typing.</div>
+          </div>
+
+          <div class="form-group" style="margin-top:14px;">
             <label class="form-label">Location / City</label>
             <input type="text" class="form-input" id="signup-location" placeholder="e.g. Monrovia, Liberia">
           </div>
@@ -1400,6 +1406,12 @@
       <div class="form-group">
         <label class="form-label">Business / Kiosk Name</label>
         <input type="text" class="form-input" id="setting-biz-name" placeholder="e.g. Rashford MoMo Kiosk #1">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Registered Agent SIM Numbers (Auto-Record Permission)</label>
+        <input type="text" class="form-input" id="setting-agent-sims" placeholder="e.g. 0886123456, 0770987654, 0880112233">
+        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">Comma-separated Lonestar MTN and Orange Agent SIM numbers authorized for auto-recording.</div>
       </div>
 
       <div class="form-group">
@@ -2053,17 +2065,28 @@
     function parseSMS() {
       const input = document.getElementById('sms-input').value.trim();
       if (!input) { alert("Please paste SMS text."); return; }
-      const amtMatch = input.match(/(?:GHS|USD|\$)\s*([0-9]+(?:\.[0-9]{1,2})?)/i) || input.match(/([0-9]+(?:\.[0-9]{1,2})?)\s*(?:USD|GHS)/i);
+      const amtMatch = input.match(/(?:GHS|USD|LRD|L\$|\$)\s*([0-9]+(?:\.[0-9]{1,2})?)/i) || input.match(/([0-9]+(?:\.[0-9]{1,2})?)\s*(?:USD|GHS|LRD)/i);
       const phoneMatch = input.match(/(088\d{7}|077\d{7}|024\d{7}|\d{10})/);
       let type = /received|cash in|credited|deposit/i.test(input) ? 'deposit' : 'withdrawal';
       const carrier = /orange/i.test(input) ? 'Orange' : 'MTN';
+      const isLrd = /lrd|l\$/i.test(input);
+
+      // Verify if incoming SMS matches one of the Agent's registered SIM numbers
+      const mySims = (currentUser && currentUser.agentSims && currentUser.agentSims.length) ? currentUser.agentSims : ["0886123456", "0770987654"];
+      const matchedSim = mySims.find(sim => input.includes(sim));
 
       if (amtMatch) {
         activeType = type; activeCarrier = carrier;
+        selectTxCurrency(isLrd ? 'LRD' : 'USD');
         document.getElementById('tx-amount-input').value = parseFloat(amtMatch[1]);
         document.getElementById('tx-phone-input').value = phoneMatch ? phoneMatch[0] : '';
         openModal(type);
-        showToast("💬 SMS parsed successfully! Verify details below.", "success");
+
+        if (matchedSim) {
+          showToast(`🟢 Verified Agent SIM (${matchedSim}) Approved! Auto-recorded details.`, "success");
+        } else {
+          showToast("💬 SMS parsed successfully! Verify details below.", "success");
+        }
       } else {
         alert("Could not extract amount from SMS.");
       }
@@ -2078,7 +2101,7 @@
       document.getElementById('rep-dep-val').textContent = fmt(deps);
       document.getElementById('rep-wd-val').textContent = fmt(wds);
       document.getElementById('rep-comm-val').textContent = fmt(comms);
-      document.getElementById('rep-cash-val').textContent = fmt(state.cash);
+      document.getElementById('rep-cash-val').textContent = fmt(state.cashUSD || 0);
       if (currentUser) document.getElementById('report-agent-name').textContent = currentUser.name;
       
       document.getElementById('daily-report-modal').classList.add('active');
@@ -2094,9 +2117,9 @@
         alert("No transaction entries to export today.");
         return;
       }
-      let csvContent = "data:text/csv;charset=utf-8,ID,Time,Type,Carrier,Amount,CustomerPhone,Commission\n";
+      let csvContent = "data:text/csv;charset=utf-8,ID,Time,Type,Carrier,Currency,Amount,CustomerPhone,Commission\n";
       state.transactions.forEach(tx => {
-        csvContent += `${tx.id},"${tx.time}","${tx.type}","${tx.carrier}",${tx.amount},"${tx.phone || ''}",${tx.comm}\n`;
+        csvContent += `${tx.id},"${tx.time}","${tx.type}","${tx.carrier}","${tx.curr || 'USD'}",${tx.amount},"${tx.phone || ''}",${tx.comm}\n`;
       });
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
@@ -2149,6 +2172,7 @@
     function openSettingsModal() {
       if (currentUser) {
         document.getElementById('setting-biz-name').value = currentUser.bizName || currentUser.name + " Kiosk";
+        document.getElementById('setting-agent-sims').value = (currentUser.agentSims || ["0886123456", "0770987654"]).join(', ');
       }
       document.getElementById('setting-min-threshold').value = state.minThreshold || 500;
       document.getElementById('settings-modal').classList.add('active');
@@ -2157,19 +2181,21 @@
 
     function saveSettings() {
       const bizName = document.getElementById('setting-biz-name').value.trim();
+      const simsStr = document.getElementById('setting-agent-sims').value.trim();
       const minThresh = parseFloat(document.getElementById('setting-min-threshold').value) || 500;
       const currency = document.getElementById('setting-currency').value;
 
       state.minThreshold = minThresh;
       if (currentUser) {
         currentUser.bizName = bizName;
+        currentUser.agentSims = simsStr.split(',').map(s => s.trim()).filter(Boolean);
         currentUser.currency = currency;
         localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
       }
       saveState();
       updateUI();
       closeSettingsModal();
-      showToast("⚙️ Kiosk Settings saved successfully!", "success");
+      showToast("⚙️ Kiosk Settings & Agent SIM permissions saved!", "success");
     }
 
     // NOTIFICATIONS DRAWER HANDLERS
