@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#FAF7F2">
-  <title>PocketBook — Complete Mobile Money Operating System for Africa</title>
+  <meta name="theme-color" content="#0B0F19">
+  <title>PocketBook — Your Mobile Money Operating System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FAF7F2;
-      --surface: #FFFFFF;
-      --surface-2: #FFFDF9;
-      --text: #2D241E;
-      --text-muted: #786C62;
-      --border: #EAE3D9;
-      --border-light: #F4EEE5;
+      --bg: #0B0F19;
+      --surface: #131B2E;
+      --surface-2: #1A243B;
+      --text: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --border: #1F2D4A;
+      --border-light: #28385C;
+      --lime: #84CC16;
+      --lime-glow: rgba(132, 204, 22, 0.18);
+      --lime-hover: #65A30D;
       --terracotta: #C65D3B;
-      --terracotta-soft: rgba(198, 93, 59, 0.08);
-      --terracotta-hover: #AA4B2B;
-      --amber: #D97706;
-      --amber-soft: rgba(217, 119, 6, 0.12);
-      --cocoa: #4A2E1B;
+      --amber: #F59E0B;
+      --amber-soft: rgba(245, 158, 11, 0.12);
+      --red: #EF4444;
       --radius-sm: 12px;
       --radius: 18px;
       --radius-lg: 26px;
-      --shadow: 0 4px 20px rgba(45, 36, 30, 0.06);
-      --shadow-lg: 0 12px 36px rgba(45, 36, 30, 0.10);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
       --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
     }
@@ -37,21 +38,21 @@
 
     /* Navigation Bar */
     .navbar {
-      position: sticky; top: 0; z-index: 100; background: rgba(250, 247, 242, 0.92);
-      backdrop-filter: blur(14px); border-bottom: 1px solid var(--border-light);
-      padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;
+      position: sticky; top: 0; z-index: 100; background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+      padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; max-width: 1240px; margin: 0 auto;
     }
-    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
     .brand-mark {
-      width: 42px; height: 42px; background: linear-gradient(135deg, var(--terracotta), var(--amber));
-      border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;
-      box-shadow: 0 4px 14px rgba(198, 93, 59, 0.3);
+      width: 42px; height: 42px; background: linear-gradient(135deg, var(--lime), #10B981);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #0B0F19;
+      box-shadow: 0 4px 16px rgba(132, 204, 22, 0.35); font-weight: 800;
     }
     .brand-name { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
 
     .nav-links { display: flex; gap: 28px; align-items: center; }
-    .nav-link { color: var(--text-muted); font-size: 14px; font-weight: 700; text-decoration: none; transition: color 0.15s ease; }
-    .nav-link:hover { color: var(--terracotta); }
+    .nav-link { color: var(--text-muted); font-size: 14px; font-weight: 700; text-decoration: none; transition: color 0.18s ease; }
+    .nav-link:hover { color: var(--lime); }
 
     .nav-actions { display: flex; gap: 12px; align-items: center; }
     .btn-secondary {
@@ -59,306 +60,347 @@
       background: var(--surface); color: var(--text); font-weight: 700; font-size: 13px;
       cursor: pointer; text-decoration: none; transition: all 0.2s ease;
     }
+    .btn-secondary:hover { border-color: var(--lime); color: var(--lime); }
+
     .btn-primary {
       padding: 10px 22px; border-radius: var(--radius-sm); border: none;
-      background: linear-gradient(135deg, var(--terracotta), var(--terracotta-hover));
-      color: white; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none;
-      box-shadow: 0 4px 14px rgba(198, 93, 59, 0.28); transition: all 0.2s ease;
+      background: linear-gradient(135deg, var(--lime), var(--lime-hover));
+      color: #0B0F19; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 16px rgba(132, 204, 22, 0.3); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
     }
-    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(132, 204, 22, 0.45); }
 
     /* Hero Section */
-    .hero-container { max-width: 1200px; margin: 0 auto; padding: 70px 32px 60px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+    .hero-container { max-width: 1240px; margin: 0 auto; padding: 72px 32px 64px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 54px; align-items: center; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px;
-      background: var(--terracotta-soft); border: 1px solid rgba(198, 93, 59, 0.2);
-      color: var(--terracotta); font-size: 12px; font-weight: 800; margin-bottom: 20px;
+      background: var(--lime-glow); border: 1px solid rgba(132, 204, 22, 0.3);
+      color: var(--lime); font-size: 12px; font-weight: 800; margin-bottom: 22px;
     }
-    .hero-title { font-size: 48px; font-weight: 800; line-height: 1.15; letter-spacing: -1.2px; color: var(--text); margin-bottom: 20px; }
-    .hero-title span { color: var(--terracotta); }
-    .hero-subtitle { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; max-width: 520px; }
-    
-    .stats-row { display: flex; gap: 24px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-light); }
-    .stat-box .number { font-size: 26px; font-weight: 800; color: var(--text); font-family: var(--font-mono); }
-    .stat-box .label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
-    /* Interactive Live Kiosk Mockup Card */
-    .kiosk-mockup-card {
+    .hero-title { font-size: 52px; font-weight: 800; line-height: 1.12; letter-spacing: -1.4px; color: var(--text); margin-bottom: 22px; }
+    .hero-title span { color: var(--lime); }
+    .hero-subtitle { font-size: 17px; color: var(--text-muted); line-height: 1.6; margin-bottom: 34px; max-width: 540px; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--border); }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-sm); }
+    .stat-card .number { font-size: 24px; font-weight: 800; color: var(--lime); font-family: var(--font-mono); }
+    .stat-card .label { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
+
+    /* Live Interactive Preview Card */
+    .preview-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
       padding: 24px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
     }
-    .mockup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
-    .mockup-title { font-size: 14px; font-weight: 800; color: var(--text); }
-    .mockup-status { font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.1); color: #059669; padding: 4px 10px; border-radius: 12px; }
+    .preview-card::before {
+      content: ''; position: absolute; top: -80px; right: -80px; width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(132, 204, 22, 0.15) 0%, rgba(0,0,0,0) 70%); pointer-events: none;
+    }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .preview-title { font-size: 14px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .live-tag { font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10B981; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .preview-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .metric-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+    .metric-box .m-label { font-size: 11px; color: var(--text-muted); font-weight: 700; }
+    .metric-box .m-value { font-size: 22px; font-weight: 800; font-family: var(--font-mono); color: var(--text); margin-top: 4px; }
 
     /* Features Grid */
-    .section-container { max-width: 1200px; margin: 0 auto; padding: 80px 32px; }
-    .section-tag { text-align: center; font-size: 12px; font-weight: 800; color: var(--terracotta); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .section-heading { text-align: center; font-size: 34px; font-weight: 800; color: var(--text); letter-spacing: -0.8px; margin-bottom: 48px; }
+    .section-container { max-width: 1240px; margin: 0 auto; padding: 88px 32px; }
+    .section-tag { text-align: center; font-size: 12px; font-weight: 800; color: var(--lime); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+    .section-heading { text-align: center; font-size: 38px; font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 56px; }
+    .section-heading span { color: var(--lime); }
 
     .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     .feature-card {
-      background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius);
-      padding: 28px 24px; box-shadow: var(--shadow); transition: all 0.22s ease;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 24px; transition: all 0.25s ease; position: relative; overflow: hidden;
     }
-    .feature-card:hover { transform: translateY(-4px); border-color: var(--terracotta); }
-    .feature-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--terracotta-soft); color: var(--terracotta); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; font-size: 20px; }
-    .feature-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
-    .feature-card p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .feature-card:hover { transform: translateY(-4px); border-color: var(--lime); box-shadow: 0 10px 30px rgba(132, 204, 22, 0.12); }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 14px; background: var(--lime-glow); color: var(--lime);
+      display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px; font-weight: 800;
+    }
+    .feature-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
 
-    /* Process Flow Step Cards */
-    .steps-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; }
-    .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 18px; text-align: center; }
-    .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--amber-soft); color: var(--amber); font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
-    .step-card h4 { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
-    .step-card p { font-size: 11px; color: var(--text-muted); }
+    /* How It Works Steps */
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px 20px; text-align: center; position: relative;
+    }
+    .step-number {
+      width: 44px; height: 44px; border-radius: 50%; background: var(--lime-glow); border: 2px solid var(--lime);
+      color: var(--lime); font-size: 16px; font-weight: 800; font-family: var(--font-mono);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+    }
+    .step-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-    /* Testimonials */
-    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .testimonial-card { background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-    .testimonial-text { font-size: 13px; color: var(--text); font-style: italic; line-height: 1.6; margin-bottom: 16px; }
-    .testimonial-user { display: flex; align-items: center; gap: 10px; }
-    .user-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
-    .user-name { font-size: 12px; font-weight: 800; }
-    .user-role { font-size: 10px; color: var(--text-muted); }
+    /* Testimonials Grid */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px; position: relative;
+    }
+    .testimonial-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; font-style: italic; margin-bottom: 18px; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--lime); color: #0B0F19;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;
+    }
+    .author-name { font-size: 13px; font-weight: 800; color: var(--text); }
+    .author-role { font-size: 11px; color: var(--text-muted); }
 
     /* CTA Banner */
     .cta-banner {
-      max-width: 1200px; margin: 0 auto 80px; padding: 50px; background: linear-gradient(135deg, var(--cocoa), #2D1B10);
-      border-radius: var(--radius-lg); color: white; text-align: center; box-shadow: var(--shadow-lg);
+      background: linear-gradient(135deg, #1A2E05, #0B0F19); border: 1px solid var(--lime);
+      border-radius: var(--radius-lg); padding: 56px 40px; text-align: center; max-width: 1240px; margin: 0 auto 88px;
+      box-shadow: 0 0 60px rgba(132, 204, 22, 0.15);
     }
-    .cta-banner h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.6px; }
-    .cta-banner p { font-size: 15px; opacity: 0.85; margin-bottom: 28px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .cta-title { font-size: 36px; font-weight: 800; color: var(--text); margin-bottom: 14px; letter-spacing: -0.8px; }
+    .cta-desc { font-size: 15px; color: var(--text-muted); max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
 
     /* Footer */
-    .footer { border-top: 1px solid var(--border-light); background: var(--surface-2); padding: 40px 32px; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .footer { border-top: 1px solid var(--border); padding: 48px 32px; max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
     .footer-text { font-size: 12px; color: var(--text-muted); }
-
-    @media (max-width: 860px) {
-      .hero-container { grid-template-columns: 1fr; }
-      .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
-      .steps-row { grid-template-columns: 1fr 1fr; }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Landing Header / Navbar -->
+  <!-- Navigation -->
   <nav class="navbar">
-    <div class="brand">
-      <div class="brand-mark">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/><path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
-      </div>
-      <span class="brand-name">PocketBook</span>
-    </div>
-
+    <a href="index.html" class="brand">
+      <div class="brand-mark">P</div>
+      <div class="brand-name">PocketBook</div>
+    </a>
     <div class="nav-links">
       <a href="#features" class="nav-link">Features</a>
-      <a href="#process" class="nav-link">How It Works</a>
+      <a href="#how-it-works" class="nav-link">How It Works</a>
       <a href="#testimonials" class="nav-link">Testimonials</a>
+      <a href="#faq" class="nav-link">FAQ</a>
     </div>
-
     <div class="nav-actions">
-      <a href="./index.html" class="btn-secondary">Log In</a>
-      <a href="./index.html" class="btn-primary">Start Free →</a>
+      <a href="index.html" class="btn-secondary">Log In</a>
+      <a href="index.html" class="btn-primary">Launch Operating System →</a>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <header class="hero-container">
+  <section class="hero-container">
     <div>
       <div class="hero-badge">
-        <span>🌍</span> PAN-AFRICAN MOBILE MONEY OS
+        <span class="pulse-dot"></span>
+        PAN-AFRICAN MoMo OPERATING SYSTEM
       </div>
-      <h1 class="hero-title">Your Kiosk Business, <span>Brilliantly Managed.</span></h1>
+      <h1 class="hero-title">Your Kiosk Business, <span>Brilliantly Automated.</span></h1>
       <p class="hero-subtitle">
-        PocketBook is the all-in-one financial operating platform for Mobile Money agents across Africa. Track dual-wallet float, auto-read transaction SMS messages, and unlock real-time profit analytics right from your phone or web browser.
+        PocketBook is the complete AI-powered operating system for Mobile Money Agents, money exchangers, and kiosk operators across Africa. Track dual-wallets, auto-parse SMS notifications, and lock shift closing reconciled in real time.
       </p>
-
-      <div style="display:flex; gap:14px;">
-        <a href="./index.html" class="btn-primary" style="padding:14px 28px; font-size:15px;">Launch Operating System →</a>
-        <a href="./index.html" class="btn-secondary" style="padding:14px 24px; font-size:15px;">Log In to Account</a>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <a href="index.html" class="btn-primary" style="padding:14px 28px; font-size:15px;">Start Free Trial Now →</a>
+        <a href="index.html" class="btn-secondary" style="padding:14px 24px; font-size:15px;">Open Demo Kiosk</a>
       </div>
 
-      <div class="stats-row">
-        <div class="stat-box">
+      <div class="stats-grid">
+        <div class="stat-card">
           <div class="number">10K+</div>
-          <div class="label">Active Agents Targeted</div>
+          <div class="label">Targeted Agents</div>
         </div>
-        <div class="stat-box">
-          <div class="number">$5M+</div>
-          <div class="label">Float Activity Logged</div>
+        <div class="stat-card">
+          <div class="number">$50M+</div>
+          <div class="label">Vol Tracked</div>
         </div>
-        <div class="stat-box">
-          <div class="number">100%</div>
-          <div class="label">Mobile & Web First</div>
+        <div class="stat-card">
+          <div class="number">0.2s</div>
+          <div class="label">SMS Parser</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">99.9%</div>
+          <div class="label">Uptime</div>
         </div>
       </div>
     </div>
 
-    <!-- Live Kiosk Mockup Visual Card -->
-    <div class="kiosk-mockup-card">
-      <div class="mockup-header">
-        <div class="mockup-title">Today's Kiosk Summary</div>
-        <div class="mockup-status">🟢 Live Session</div>
+    <!-- Interactive Live Preview Card -->
+    <div class="preview-card">
+      <div class="preview-header">
+        <div class="preview-title">
+          <span>📱</span> PocketBook Agent Terminal
+        </div>
+        <span class="live-tag">● Live Session Active</span>
       </div>
 
-      <div style="margin-bottom:16px;">
-        <div style="font-size:11px; color:var(--text-muted); font-weight:700;">TOTAL LIQUIDITY ON HAND</div>
-        <div style="font-size:32px; font-weight:800; font-family:var(--font-mono); color:var(--text); margin-top:2px;">$1,485.50</div>
-      </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px;">
-        <div style="background:var(--surface-2); padding:10px; border-radius:10px; border:1px solid var(--border-light);">
-          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">Cash</div>
-          <div style="font-size:13px; font-weight:800; font-family:var(--font-mono);">$620.00</div>
+      <div class="preview-metrics">
+        <div class="metric-box">
+          <div class="m-label">Float Balance (MTN)</div>
+          <div class="m-value" style="color:var(--amber);">$1,250.00</div>
         </div>
-        <div style="background:var(--surface-2); padding:10px; border-radius:10px; border:1px solid var(--border-light);">
-          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">MTN Float</div>
-          <div style="font-size:13px; font-weight:800; font-family:var(--font-mono); color:var(--amber);">$515.50</div>
-        </div>
-        <div style="background:var(--surface-2); padding:10px; border-radius:10px; border:1px solid var(--border-light);">
-          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">Orange Float</div>
-          <div style="font-size:13px; font-weight:800; font-family:var(--font-mono); color:var(--terracotta);">$350.00</div>
+        <div class="metric-box">
+          <div class="m-label">Cash in Drawer</div>
+          <div class="m-value" style="color:var(--lime);">$840.00</div>
         </div>
       </div>
 
-      <div style="background:var(--terracotta-soft); border:1px solid rgba(198,93,59,0.2); padding:12px; border-radius:12px; font-size:11px; font-weight:700; color:var(--terracotta);">
-        ⚡ <strong>AI Float Advisor:</strong> Orange Float balance is down to $350. Recommend rebalance before 4 PM peak.
-      </div>
-    </div>
-  </header>
-
-  <!-- Platform Features Section -->
-  <section class="section-container" id="features">
-    <div class="section-tag">Platform Features</div>
-    <h2 class="section-heading">Everything You Need to Run Smarter</h2>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">💬</div>
-        <h3>SMS Auto-Recording</h3>
-        <p>Paste raw mobile money SMS notifications to auto-detect transaction amounts, customer numbers, and provider channels.</p>
+      <!-- Simulated Alert Card -->
+      <div style="background:rgba(245, 158, 11, 0.1); border:1px solid rgba(245, 158, 11, 0.3); padding:12px 14px; border-radius:var(--radius-sm); margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:800; color:var(--amber); display:flex; justify-content:space-between;">
+          <span>⚠️ AI Float Advisor</span>
+          <span style="font-weight:700;">Safety Threshold: $500</span>
+        </div>
+        <div style="font-size:11px; color:var(--text); margin-top:4px;">
+          Orange Money float is low ($350.00). Rebalance before peak customer hours.
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">💳</div>
-        <h3>Dual-Wallet Float Ledger</h3>
-        <p>Track Lonestar MTN, Orange Money, and drawer cash simultaneously in real time. Always know your liquidity state.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Automated Profit Analytics</h3>
-        <p>Calculate gross transaction volume, estimated commission earnings, and download instant register CSV audit files.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>AI Smart Advisor</h3>
-        <p>Proactive AI alerts warning kiosk agents before float depletion so you never lose customer cash-out revenue.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <h3>EOD Drawer Audit</h3>
-        <p>End-of-Day reconciliation calculator matching physical drawer cash against system float movements to catch errors.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🔗</div>
-        <h3>Referral & Branch Growth</h3>
-        <p>Manage multi-kiosk operator permissions with join codes and earn commissions by inviting neighboring agents.</p>
+      <!-- Action Simulation -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div style="background:var(--surface-2); border:1px solid var(--border); padding:10px; border-radius:10px; font-size:11px; font-weight:700; text-align:center; color:var(--lime);">
+          ✓ SMS Auto-Recorded
+        </div>
+        <div style="background:var(--surface-2); border:1px solid var(--border); padding:10px; border-radius:10px; font-size:11px; font-weight:700; text-align:center; color:var(--text-muted);">
+          🔒 EOD Shift Audit Ready
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Process Flow Section -->
-  <section class="section-container" id="process" style="background:var(--surface); border-radius:var(--radius-lg); border:1px solid var(--border-light);">
-    <div class="section-tag">Simple Process</div>
-    <h2 class="section-heading">Up and Running in Minutes</h2>
+  <!-- Platform Features Section -->
+  <section class="section-container" id="features">
+    <div class="section-tag">Platform Features</div>
+    <h2 class="section-heading">Everything You Need to <span>Run Smarter</span></h2>
 
-    <div class="steps-row">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <h4>Sign Up in Seconds</h4>
-        <p>Create your PocketBook account using your agent phone number. No complex bank paperwork required.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <h3 class="feature-title">Dual-Wallet & Cash Ledger</h3>
+        <p class="feature-desc">Simultaneous balance tracking for Lonestar MTN, Orange Money, Airtel, and physical kiosk cash. No more scattered notebooks or notebook miscalculations.</p>
       </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <h4>Record Transactions</h4>
-        <p>Log deposits, withdrawals, and float rebalances in one tap, or auto-parse transaction SMS messages.</p>
+
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3 class="feature-title">SMS Auto-Recording</h3>
+        <p class="feature-desc">Intelligent AI parser auto-detects transaction amounts, mobile carriers, and customer phone numbers directly from notification SMS messages.</p>
       </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <h4>Get Real-Time Insights</h4>
-        <p>View total liquidity, expected commissions, and drawer cash audit match at a single glance.</p>
+
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">AI Smart Float Advisor</h3>
+        <p class="feature-desc">Proactive float alerts warn agents before float runs low, suggesting exact cash rebalancing amounts before missing customer cash-out requests.</p>
       </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3 class="feature-title">EOD Drawer Reconciliation</h3>
+        <p class="feature-desc">End-of-day audit assistant comparing drawer cash against system float movements, highlighting surplus or missing cash instantly.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">Security & Recovery Shield</h3>
+        <p class="feature-desc">Protected by security questions, anti-bot honeypot traps, and client-side rate limiting built to withstand 10,000+ concurrent kiosk requests.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3 class="feature-title">Multi-Branch & Referrals</h3>
+        <p class="feature-desc">Manage sub-agents and branch join codes while earning referral commissions by inviting fellow kiosk operators across your network.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple Process Section -->
+  <section class="section-container" id="how-it-works" style="background:var(--surface-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="section-tag">Simple Process</div>
+    <h2 class="section-heading">Up and Running in <span>Minutes</span></h2>
+
+    <div class="steps-grid">
       <div class="step-card">
-        <div class="step-num">04</div>
-        <h4>Scale With Confidence</h4>
-        <p>Use data-driven float insights to scale multi-kiosk branches sustainably across emerging markets.</p>
+        <div class="step-number">01</div>
+        <h3 class="step-title">Sign Up in 60s</h3>
+        <div class="step-desc">Create your agent account with phone/email, set your security question, and choose your operating currency.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <h3 class="step-title">Configure Balances</h3>
+        <div class="step-desc">Set your opening cash-in-hand and wallet float numbers for MTN, Orange, and Airtel Money.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <h3 class="step-title">Log & Parse SMS</h3>
+        <div class="step-desc">Record deposits and withdrawals with 1 tap or paste SMS messages for automatic instant parsing.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">04</div>
+        <h3 class="step-title">Reconcile Daily</h3>
+        <div class="step-desc">Perform End-of-Day cash drawer audit, review net commission earnings, and lock shift with confidence.</div>
       </div>
     </div>
   </section>
 
   <!-- Testimonials Section -->
   <section class="section-container" id="testimonials">
-    <div class="section-tag">Community Trust</div>
-    <h2 class="section-heading">Trusted by Agents Across Africa</h2>
+    <div class="section-tag">Early Users</div>
+    <h2 class="section-heading">Trusted by Agents Across <span>Africa</span></h2>
 
-    <div class="testimonials-grid">
+    <div class="testimonial-grid">
       <div class="testimonial-card">
-        <p class="testimonial-text">"Recording transactions is now super fast. I no longer write anything down in paper notebooks. PocketBook keeps my MoMo float crystal clear."</p>
-        <div class="testimonial-user">
-          <div class="user-avatar">SN</div>
+        <p class="testimonial-text">"Recording transactions is now very fast and accurate. I don't write anything down in physical books anymore. PocketBook keeps my daily float clear."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SN</div>
           <div>
-            <div class="user-name">Sarah Ntow</div>
-            <div class="user-role">Mobile Money Agent</div>
+            <div class="author-name">Sarah Ntow</div>
+            <div class="author-role">MoMo Kiosk Agent • Liberia</div>
           </div>
         </div>
       </div>
 
       <div class="testimonial-card">
-        <p class="testimonial-text">"I used to run out of Orange float without even realizing it during peak hours. PocketBook's AI warning alerts me right before float drops."</p>
-        <div class="testimonial-user">
-          <div class="user-avatar">BT</div>
+        <p class="testimonial-text">"I used to run out of float without even realizing it. With the AI Float Advisor, I see warnings early and know when to top up. It keeps me in complete control."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">BT</div>
           <div>
-            <div class="user-name">Bismarck Tetteh</div>
-            <div class="user-role">Kiosk Operator</div>
+            <div class="author-name">Bismarck Tetteh</div>
+            <div class="author-role">Mobile Money Operator • Ghana</div>
           </div>
         </div>
       </div>
 
       <div class="testimonial-card">
-        <p class="testimonial-text">"Before PocketBook, I spent 2 hours every evening reconciling drawer cash manually. Now I see everything instantly after closing my shift."</p>
-        <div class="testimonial-user">
-          <div class="user-avatar">FA</div>
+        <p class="testimonial-text">"The End-of-Day Close Day audit saves me 2 hours every evening. I compare actual cash drawer counts with expected balances in 30 seconds."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">FA</div>
           <div>
-            <div class="user-name">Florence Adarkwa</div>
-            <div class="user-role">Agent Business Owner</div>
+            <div class="author-name">Florence Adarkwa</div>
+            <div class="author-role">Agent Banking Owner • Nigeria</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Call to Action Banner -->
+  <!-- CTA Banner -->
   <div class="cta-banner">
-    <h2>Be Among the First to Experience PocketBook</h2>
-    <p>Join thousands of mobile money agents and kiosk entrepreneurs who are transforming how they manage their businesses across Africa.</p>
-    <a href="./index.html" class="btn-primary" style="padding:16px 36px; font-size:16px; background:var(--terracotta);">Get Early Access →</a>
+    <h2 class="cta-title">Be Among the First to Experience PocketBook</h2>
+    <p class="cta-desc">Join thousands of mobile money agents and kiosk entrepreneurs who are transforming how they manage float and daily cash across Africa.</p>
+    <a href="index.html" class="btn-primary" style="padding:16px 36px; font-size:16px;">Launch Operating System Free →</a>
   </div>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="brand">
-      <div class="brand-mark" style="width:32px; height:32px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/><path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
-      </div>
-      <span class="brand-name" style="font-size:16px;">PocketBook</span>
+    <div class="footer-text">
+      © 2026 PocketBook Inc. All rights reserved. Built with ❤️ for African Entrepreneurs.
     </div>
-    <div class="footer-text">© 2026 PocketBook Inc. Built for Africa. 🌍</div>
+    <div style="display:flex; gap:20px;">
+      <a href="index.html" style="color:var(--text-muted); font-size:12px; text-decoration:none;">Privacy Policy</a>
+      <a href="index.html" style="color:var(--text-muted); font-size:12px; text-decoration:none;">Terms of Service</a>
+    </div>
   </footer>
 
 </body>
