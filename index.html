@@ -729,47 +729,96 @@
 
     <!-- TAB 1: LEDGER / MY BOOK -->
     <main id="tab-ledger" class="tab-content active">
-      <!-- Summary Card -->
-      <div class="summary-card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div class="summary-label">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 10h.01"/><path d="M10 10h.01"/></svg>
-            Money in my hand today
-          </div>
-          <div id="session-status-tag" class="session-badge open" onclick="toggleSessionLock()">
-            <span>🟢 Shift Open</span>
-          </div>
-        </div>
-        <div class="summary-amount">
-          <span class="currency">$</span><span id="total-balance">1,485.50</span>
-        </div>
-
-        <div class="float-row">
-          <div class="float-cell">
-            <div class="label"><span class="dot dot-cash"></span>Cash</div>
-            <div class="value" id="val-cash">620.00</div>
-          </div>
-          <div class="float-cell">
-            <div class="label"><span class="dot dot-mtn"></span>MTN Float</div>
-            <div class="value" id="val-mtn">515.50</div>
-          </div>
-          <div class="float-cell">
-            <div class="label"><span class="dot dot-orange"></span>Orange Float</div>
-            <div class="value" id="val-orange">350.00</div>
+      
+      <!-- Greeting Banner -->
+      <div style="margin: 14px 16px 10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:18px; font-weight:800; color:var(--text);">Good day, <span id="dash-user-firstname">Agent</span> 👋</div>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+            <div id="session-status-tag" class="session-badge open" onclick="toggleSessionLock()" style="font-size:10px;">
+              <span>🟢 Shift Active</span>
+            </div>
+            <span style="font-size:11px; font-weight:700; color:var(--terracotta);" id="dash-user-carriers">MTN & Orange</span>
           </div>
         </div>
       </div>
 
-      <!-- AI Banner -->
-      <div class="ai-banner">
-        <div class="ai-icon">⚡</div>
-        <div class="ai-text">
-          <div class="title">AI Float Advisor</div>
-          <div class="desc" id="ai-alert-text">Orange Float is down to $350. Recommend rebalancing before peak hours.</div>
+      <!-- PROMINENT FLOAT ALERT BANNER (MATCHING USER SCREENSHOT) -->
+      <div class="card-box" id="dashboard-float-alert" style="margin: 0 16px 14px; padding: 14px 16px; background: rgba(217, 119, 6, 0.08); border: 1px solid rgba(217, 119, 6, 0.3);">
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="font-size: 20px;">⚠️</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-size: 13px; font-weight: 800; color: var(--amber);" id="float-alert-title">Float Alert</div>
+              <span style="font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 10px; background: rgba(220, 38, 38, 0.15); color: var(--red);" id="float-alert-badge">Critical</span>
+            </div>
+            <div style="font-size: 11px; color: var(--text); margin-top: 4px; line-height: 1.4;" id="float-alert-body">
+              MTN Mobile Money balance is low (<span id="alert-mtn-val">$515.50</span>). You may not be able to process deposits or transfers.
+            </div>
+            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(217, 119, 6, 0.2); font-size: 11px; font-weight: 700; color: var(--amber);">
+              💡 Suggestions:<br>
+              <span style="color: var(--text-muted); font-weight: 600;" id="float-alert-suggest">→ Deposit cash into your MTN Mobile Money wallet to increase wallet float.</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- SMS Auto-Recording Feature (From BizAssist Video) -->
+      <!-- CASH BALANCE CARD (MATCHING USER SCREENSHOT) -->
+      <div class="card-box" style="margin: 0 16px 14px; padding: 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+          <div style="font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+            <span>📗</span> Cash Balance
+          </div>
+          <span class="session-badge open" style="font-size:10px;" id="cash-status-badge">● Healthy</span>
+        </div>
+        <div style="font-size: 32px; font-weight: 800; font-family: var(--font-mono); color: var(--text); letter-spacing: -1px;">
+          $<span id="cash-main-val">620.00</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
+          Opening: $<span id="cash-opening-val">620.00</span> · Deposits: +$<span id="cash-dep-val">250.00</span> · Withdrawals: -$<span id="cash-wd-val">100.00</span>
+        </div>
+      </div>
+
+      <!-- WALLET BALANCES SECTION (MATCHING USER SCREENSHOT) -->
+      <div class="card-box" style="margin: 0 16px 18px; padding: 18px;">
+        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.8px; margin-bottom: 12px;">
+          Wallet Balances
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+          <!-- MTN WALLET CARD -->
+          <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+              <div style="font-size:11px; font-weight:800; color:var(--amber);">📱 Lonestar MTN</div>
+              <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(217,119,6,0.15); color:var(--amber);" id="mtn-status-badge">● Warning</span>
+            </div>
+            <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-mtn">515.50</span></div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $500.00</div>
+          </div>
+
+          <!-- ORANGE WALLET CARD -->
+          <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+              <div style="font-size:11px; font-weight:800; color:var(--terracotta);">📱 Orange Money</div>
+              <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(220,38,38,0.15); color:var(--red);" id="orange-status-badge">● Critical</span>
+            </div>
+            <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-orange">350.00</span></div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $400.00</div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS: UPDATE WALLET & CLOSE DAY -->
+        <div style="display:flex; gap: 10px;">
+          <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openUpdateWalletModal()">
+            <span>🔄</span> Update Wallet
+          </button>
+          <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--red-soft); color:var(--red); border:1px solid rgba(220,38,38,0.3); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openCloseDayModal()">
+            <span>🔒</span> Close Day
+          </button>
+        </div>
+      </div>
+
+      <!-- SMS Auto-Recording Feature -->
       <div class="card-box" style="margin: 0 16px 18px; padding: 16px;">
         <div style="font-size: 13px; font-weight: 800; color: var(--terracotta); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
         <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Paste a mobile money SMS notification below to auto-detect and record transaction.</div>
@@ -1077,6 +1126,77 @@
       </div>
 
       <button class="btn-submit" onclick="submitTransaction()">Record in my book</button>
+    </div>
+  </div>
+
+  <!-- UPDATE WALLET MODAL -->
+  <div class="modal-overlay" id="wallet-update-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">🔄 Update Wallet & Cash Balances</span>
+        <button class="close-btn" onclick="closeUpdateWalletModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">MTN Mobile Money Float ($)</label>
+        <input type="number" step="0.01" class="form-input" id="update-mtn-input" placeholder="0.00">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Orange Money Float ($)</label>
+        <input type="number" step="0.01" class="form-input" id="update-orange-input" placeholder="0.00">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Physical Cash in Hand ($)</label>
+        <input type="number" step="0.01" class="form-input" id="update-cash-input" placeholder="0.00">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Min Safety Float Threshold ($)</label>
+        <input type="number" step="1" class="form-input" id="update-threshold-input" value="500">
+        <span style="font-size:11px; color:var(--text-muted); margin-top:4px; display:block;">Triggers Float Alert when wallet drops below this value.</span>
+      </div>
+
+      <button class="btn-submit" onclick="saveWalletUpdates()">Save Updated Balances</button>
+    </div>
+  </div>
+
+  <!-- CLOSE DAY & EOD RECONCILIATION MODAL -->
+  <div class="modal-overlay" id="close-day-modal">
+    <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
+      <div class="modal-header">
+        <span class="modal-title">🔒 Close Day — EOD Audit</span>
+        <button class="close-btn" onclick="closeCloseDayModal()">✕</button>
+      </div>
+
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+        Perform your end-of-day drawer count and lock your kiosk shift to finalize today's ledger.
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Actual Cash in Drawer ($)</label>
+        <input type="number" step="0.01" class="form-input" id="eod-actual-cash" placeholder="e.g. 620.00" oninput="calculateEODAudit()">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">MTN SIM Terminal Balance ($)</label>
+        <input type="number" step="0.01" class="form-input" id="eod-actual-mtn" placeholder="e.g. 515.50" oninput="calculateEODAudit()">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Orange SIM Terminal Balance ($)</label>
+        <input type="number" step="0.01" class="form-input" id="eod-actual-orange" placeholder="e.g. 350.00" oninput="calculateEODAudit()">
+      </div>
+
+      <!-- AUDIT RECONCILIATION SUMMARY BOX -->
+      <div class="card-box" id="eod-audit-result-box" style="padding:14px; margin-bottom:16px; background:var(--surface-2); border:1px solid var(--border);">
+        <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Reconciliation Audit Result</div>
+        <div style="font-size:16px; font-weight:800; color:var(--text);" id="eod-status-text">Enter actual balances above to compute variance</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;" id="eod-diff-text">Expected total: $<span id="eod-expected-val">1,485.50</span></div>
+      </div>
+
+      <button class="btn-submit" style="background:var(--red);" onclick="confirmCloseDay()">Lock Shift & Finalize EOD Close</button>
     </div>
   </div>
 
@@ -1453,13 +1573,82 @@
 
     const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+    let minFloatThreshold = 500;
+
     function updateUI() {
+      if (currentUser) {
+        document.getElementById('dash-user-firstname').textContent = currentUser.name.split(' ')[0];
+      }
+
       const total = state.cash + state.mtnFloat + state.orangeFloat;
-      document.getElementById('total-balance').textContent = fmt(total);
-      document.getElementById('val-cash').textContent = fmt(state.cash);
+      
+      // Update Cash Card Breakdown
+      const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
+      const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
+      const trs = state.transactions.filter(t => t.type === 'transfer' || t.type === 'rebalance').reduce((acc, t) => acc + t.amount, 0);
+
+      document.getElementById('cash-main-val').textContent = fmt(state.cash);
+      document.getElementById('cash-opening-val').textContent = fmt(state.cash - deps + wds);
+      document.getElementById('cash-dep-val').textContent = fmt(deps);
+      document.getElementById('cash-wd-val').textContent = fmt(wds);
+
+      const cashBadge = document.getElementById('cash-status-badge');
+      if (state.cash < 200) {
+        cashBadge.className = 'session-badge closed';
+        cashBadge.textContent = '● Low Cash';
+      } else {
+        cashBadge.className = 'session-badge open';
+        cashBadge.textContent = '● Healthy';
+      }
+
+      // Update Wallet Values & Badges
       document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
       document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
 
+      const mtnBadge = document.getElementById('mtn-status-badge');
+      if (state.mtnFloat < 200) {
+        mtnBadge.style.background = 'rgba(220,38,38,0.15)'; mtnBadge.style.color = 'var(--red)'; mtnBadge.textContent = '● Critical';
+      } else if (state.mtnFloat < minFloatThreshold) {
+        mtnBadge.style.background = 'rgba(217,119,6,0.15)'; mtnBadge.style.color = 'var(--amber)'; mtnBadge.textContent = '● Warning';
+      } else {
+        mtnBadge.style.background = 'rgba(16,185,129,0.15)'; mtnBadge.style.color = '#059669'; mtnBadge.textContent = '● Healthy';
+      }
+
+      const orangeBadge = document.getElementById('orange-status-badge');
+      if (state.orangeFloat < 200) {
+        orangeBadge.style.background = 'rgba(220,38,38,0.15)'; orangeBadge.style.color = 'var(--red)'; orangeBadge.textContent = '● Critical';
+      } else if (state.orangeFloat < 400) {
+        orangeBadge.style.background = 'rgba(217,119,6,0.15)'; orangeBadge.style.color = 'var(--amber)'; orangeBadge.textContent = '● Warning';
+      } else {
+        orangeBadge.style.background = 'rgba(16,185,129,0.15)'; orangeBadge.style.color = '#059669'; orangeBadge.textContent = '● Healthy';
+      }
+
+      // Dynamic Float Alert Banner Updates (Matching Screenshot)
+      const floatAlertCard = document.getElementById('dashboard-float-alert');
+      const floatAlertBadge = document.getElementById('float-alert-badge');
+      const floatAlertBody = document.getElementById('float-alert-body');
+      const floatAlertSuggest = document.getElementById('float-alert-suggest');
+
+      if (state.mtnFloat < minFloatThreshold || state.orangeFloat < 400) {
+        floatAlertCard.style.display = 'block';
+        if (state.mtnFloat < 200 || state.orangeFloat < 200) {
+          floatAlertBadge.textContent = 'Critical';
+          floatAlertBadge.style.background = 'rgba(220,38,38,0.15)'; floatAlertBadge.style.color = 'var(--red)';
+        } else {
+          floatAlertBadge.textContent = 'Warning';
+          floatAlertBadge.style.background = 'rgba(217,119,6,0.15)'; floatAlertBadge.style.color = 'var(--amber)';
+        }
+
+        let lowCarrier = state.mtnFloat < state.orangeFloat ? 'MTN Mobile Money' : 'Orange Money';
+        let lowVal = state.mtnFloat < state.orangeFloat ? state.mtnFloat : state.orangeFloat;
+
+        floatAlertBody.innerHTML = `${lowCarrier} balance is low (<b>$${fmt(lowVal)}</b>). You may not be able to process deposits or transfers.`;
+        floatAlertSuggest.textContent = `→ Deposit cash into your ${lowCarrier} wallet or visit super-agent to increase float.`;
+      } else {
+        floatAlertCard.style.display = 'none';
+      }
+
+      // Update Reports & Commission
       const totalComm = state.transactions.reduce((acc, item) => acc + item.comm, 0);
       document.getElementById('est-commission').textContent = fmt(totalComm);
 
@@ -1471,22 +1660,9 @@
       document.getElementById('report-rev').textContent = '$' + fmt(grossVol);
       document.getElementById('report-comm').textContent = '$' + fmt(totalComm);
 
-      const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
-      const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
-      const trs = state.transactions.filter(t => t.type === 'transfer' || t.type === 'rebalance').reduce((acc, t) => acc + t.amount, 0);
-
       document.getElementById('report-dep-val').textContent = '$' + fmt(deps);
       document.getElementById('report-wd-val').textContent = '$' + fmt(wds);
       document.getElementById('report-tr-val').textContent = '$' + fmt(trs);
-
-      const aiText = document.getElementById('ai-alert-text');
-      if (state.orangeFloat < 400) {
-        aiText.textContent = `Orange Float is low ($${fmt(state.orangeFloat)}). Rebalance soon to avoid missing cash-out requests.`;
-      } else if (state.mtnFloat < 400) {
-        aiText.textContent = `MTN Float is low ($${fmt(state.mtnFloat)}). Rebalance float with bank or super-agent.`;
-      } else {
-        aiText.textContent = `Liquidity is healthy across Cash and Float. Ready for peak transaction hours.`;
-      }
 
       const container = document.getElementById('tx-container');
       container.innerHTML = '';
@@ -1522,6 +1698,88 @@
       });
 
       saveState();
+    }
+
+    // UPDATE WALLET MODAL CONTROLLERS
+    function openUpdateWalletModal() {
+      document.getElementById('update-mtn-input').value = state.mtnFloat;
+      document.getElementById('update-orange-input').value = state.orangeFloat;
+      document.getElementById('update-cash-input').value = state.cash;
+      document.getElementById('update-threshold-input').value = minFloatThreshold;
+      document.getElementById('wallet-update-modal').classList.add('active');
+    }
+
+    function closeUpdateWalletModal() {
+      document.getElementById('wallet-update-modal').classList.remove('active');
+    }
+
+    function saveWalletUpdates() {
+      const mtn = parseFloat(document.getElementById('update-mtn-input').value);
+      const orange = parseFloat(document.getElementById('update-orange-input').value);
+      const cash = parseFloat(document.getElementById('update-cash-input').value);
+      const thresh = parseFloat(document.getElementById('update-threshold-input').value);
+
+      if (!isNaN(mtn)) state.mtnFloat = mtn;
+      if (!isNaN(orange)) state.orangeFloat = orange;
+      if (!isNaN(cash)) state.cash = cash;
+      if (!isNaN(thresh)) minFloatThreshold = thresh;
+
+      updateUI();
+      closeUpdateWalletModal();
+      alert('Wallet balances and safety threshold updated successfully!');
+    }
+
+    // CLOSE DAY & EOD AUDIT MODAL CONTROLLERS
+    function openCloseDayModal() {
+      const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
+      document.getElementById('eod-expected-val').textContent = fmt(expectedTotal);
+      document.getElementById('eod-actual-cash').value = state.cash;
+      document.getElementById('eod-actual-mtn').value = state.mtnFloat;
+      document.getElementById('eod-actual-orange').value = state.orangeFloat;
+      calculateEODAudit();
+      document.getElementById('close-day-modal').classList.add('active');
+    }
+
+    function closeCloseDayModal() {
+      document.getElementById('close-day-modal').classList.remove('active');
+    }
+
+    function calculateEODAudit() {
+      const actualCash = parseFloat(document.getElementById('eod-actual-cash').value) || 0;
+      const actualMtn = parseFloat(document.getElementById('eod-actual-mtn').value) || 0;
+      const actualOrange = parseFloat(document.getElementById('eod-actual-orange').value) || 0;
+
+      const totalActual = actualCash + actualMtn + actualOrange;
+      const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
+      const diff = totalActual - expectedTotal;
+
+      const statusText = document.getElementById('eod-status-text');
+      const diffText = document.getElementById('eod-diff-text');
+
+      if (Math.abs(diff) < 0.01) {
+        statusText.style.color = '#059669';
+        statusText.textContent = '✅ Perfect Match! ($+0.00 Variance)';
+      } else if (diff > 0) {
+        statusText.style.color = 'var(--amber)';
+        statusText.textContent = `📈 Cash Surplus: +$${fmt(diff)}`;
+      } else {
+        statusText.style.color = 'var(--red)';
+        statusText.textContent = `📉 Cash Shortage: -$${fmt(Math.abs(diff))}`;
+      }
+
+      diffText.textContent = `Actual Total: $${fmt(totalActual)} vs Expected: $${fmt(expectedTotal)}`;
+    }
+
+    function confirmCloseDay() {
+      if (confirm('Lock shift and close day? This will close today\'s agent session.')) {
+        sessionOpen = false;
+        const tag = document.getElementById('session-status-tag');
+        tag.className = 'session-badge closed';
+        tag.innerHTML = '<span>🔒 Shift Closed</span>';
+        
+        closeCloseDayModal();
+        alert('Shift closed successfully! Daily register summary saved.');
+      }
     }
 
     function parseSMS() {
