@@ -3,98 +3,271 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#C65D3B">
-  <title>PocketBook — Your Mobile Money Operating System</title>
+  <meta name="theme-color" content="#0B0F19">
+  <title>PocketBook — Complete Mobile Money Operating System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FAF7F2;
-      --surface: #FFFFFF;
-      --surface-2: #FFFDF9;
-      --text: #2D241E;
-      --text-muted: #786C62;
-      --border: #EAE3D9;
-      --border-light: #F4EEE5;
-      --terracotta: #C65D3B;
-      --terracotta-soft: rgba(198, 93, 59, 0.10);
-      --terracotta-hover: #AA4B2B;
-      --amber: #D97706;
-      --amber-soft: rgba(217, 119, 6, 0.12);
-      --cocoa: #4A2E1B;
-      --cocoa-soft: rgba(74, 46, 27, 0.08);
-      --red: #DC2626;
-      --red-soft: rgba(220, 38, 38, 0.08);
-      --radius-sm: 10px;
-      --radius: 16px;
-      --radius-lg: 22px;
-      --shadow: 0 2px 4px rgba(45, 36, 30, 0.04), 0 8px 20px rgba(45, 36, 30, 0.06);
-      --shadow-lg: 0 4px 12px rgba(45, 36, 30, 0.08), 0 16px 40px rgba(45, 36, 30, 0.12);
+      --bg: #0B0F19;
+      --surface: #131C30;
+      --surface-2: #1B2642;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: #233252;
+      --border-light: #2D3F66;
+      
+      /* RICH SUNSET CORAL & CYAN FINTECH PALETTE */
+      --primary: #FF5E36;
+      --primary-glow: rgba(255, 94, 54, 0.22);
+      --primary-hover: #E04620;
+      --cyan: #06B6D4;
+      --cyan-glow: rgba(6, 182, 212, 0.2);
+      --gold: #F59E0B;
+      --gold-glow: rgba(245, 158, 11, 0.18);
+      --red: #EF4444;
+      --red-soft: rgba(239, 68, 68, 0.15);
+      
+      --radius-sm: 14px;
+      --radius: 20px;
+      --radius-lg: 28px;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.65);
       --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
     }
 
-    body.dark-mode {
-      --bg: #12100E;
-      --surface: #1E1B18;
-      --surface-2: #27231F;
-      --text: #F5EFE6;
-      --text-muted: #A3978C;
-      --border: #38322C;
-      --border-light: #2D2823;
-      --shadow: 0 4px 20px rgba(0,0,0,0.4);
-      --shadow-lg: 0 8px 30px rgba(0,0,0,0.6);
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; line-height: 1.45; transition: background 0.25s ease, color 0.25s ease; }
+    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; }
 
-    /* Auth & Onboarding Module */
-    .auth-overlay {
-      position: fixed; inset: 0; background: var(--bg); z-index: 200;
-      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 16px;
-      overflow-y: auto; transition: opacity 0.3s ease, visibility 0.3s ease;
+    /* BACKGROUND CANVAS PARTICLES */
+    #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+    /* SCROLL ANIMATION SYSTEM - BOUNCING ENTRANCE */
+    .reveal-on-scroll {
+      opacity: 0; transform: translateY(45px) scale(0.92);
+      transition: opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: opacity, transform;
     }
-    .auth-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .reveal-on-scroll.revealed {
+      opacity: 1; transform: translateY(0) scale(1);
+    }
+
+    /* CONTINUOUS GENTLE BOUNCE & FLOAT ANIMATIONS */
+    @keyframes gentleFloat {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+    .floating-anim { animation: gentleFloat 4s ease-in-out infinite; }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 14px rgba(255, 94, 54, 0.2); }
+      50% { box-shadow: 0 0 28px rgba(255, 94, 54, 0.5); }
+      100% { box-shadow: 0 0 14px rgba(255, 94, 54, 0.2); }
+    }
+    .pulse-glow { animation: pulseGlow 2.5s infinite; }
+
+    /* NAVIGATION */
+    .navbar {
+      position: sticky; top: 0; z-index: 100; background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: blur(18px); border-bottom: 1px solid var(--border);
+      padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+    .brand-mark {
+      width: 44px; height: 44px; background: linear-gradient(135deg, var(--primary), var(--gold));
+      border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #FFFFFF;
+      box-shadow: 0 4px 20px var(--primary-glow); font-weight: 800; font-size: 22px; transition: transform 0.3s ease;
+    }
+    .brand:hover .brand-mark { transform: rotate(8deg) scale(1.08); }
+    .brand-name { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.6px; }
+
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-link { color: var(--text-muted); font-size: 14px; font-weight: 700; text-decoration: none; transition: color 0.18s ease; }
+    .nav-link:hover { color: var(--primary); }
+
+    .nav-actions { display: flex; gap: 14px; align-items: center; }
+    .btn-secondary {
+      padding: 11px 22px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); font-weight: 700; font-size: 13.5px;
+      cursor: pointer; text-decoration: none; transition: all 0.22s ease;
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+    .btn-primary {
+      padding: 11px 24px; border-radius: var(--radius-sm); border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #FFFFFF; font-weight: 800; font-size: 13.5px; cursor: pointer; text-decoration: none;
+      box-shadow: 0 6px 20px var(--primary-glow); transition: all 0.22s ease; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 30px rgba(255, 94, 54, 0.48); }
+
+    /* HERO SECTION */
+    .hero-container {
+      position: relative; max-width: 1280px; margin: 0 auto; padding: 80px 32px 72px;
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 20px;
+      background: var(--primary-glow); border: 1px solid rgba(255, 94, 54, 0.35);
+      color: var(--primary); font-size: 12px; font-weight: 800; margin-bottom: 24px; letter-spacing: 0.5px;
+    }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 12px var(--primary); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.4; transform: scale(0.9); } }
+
+    .hero-title { font-size: 54px; font-weight: 800; line-height: 1.12; letter-spacing: -1.6px; color: var(--text); margin-bottom: 24px; }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle { font-size: 17.5px; color: var(--text-muted); line-height: 1.65; margin-bottom: 36px; max-width: 550px; }
     
-    .onboarding-progress-container {
-      width: 100%; max-width: 440px; margin-bottom: 14px;
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); padding: 18px 14px; border-radius: var(--radius-sm);
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease; position: relative; overflow: hidden;
     }
-    .onboarding-top-bar {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 800; color: var(--text-muted);
+    .stat-card:hover { transform: translateY(-6px) scale(1.03); border-color: var(--primary); }
+    .stat-card .number { font-size: 26px; font-weight: 800; color: var(--primary); font-family: var(--font-mono); }
+    .stat-card .label { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
+
+    /* SPOTLIGHT & MAGNETIC CARDS */
+    .spotlight-card {
+      position: relative; overflow: hidden;
     }
-    .step-back-btn {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-weight: 800;
+    .spotlight-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 94, 54, 0.14), transparent 80%);
+      opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
     }
-    .step-progress-track {
-      width: 100%; height: 6px; background: var(--border); border-radius: 10px; overflow: hidden;
+    .spotlight-card:hover::before { opacity: 1; }
+
+    .preview-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 26px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
     }
-    .step-progress-fill {
-      height: 100%; width: 20%; background: linear-gradient(90deg, #84CC16, #10B981); border-radius: 10px; transition: width 0.3s ease;
+    .preview-card:hover { border-color: var(--cyan); transform: translateY(-6px); }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .preview-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .live-tag { font-size: 10px; font-weight: 800; background: var(--cyan-glow); color: var(--cyan); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(6, 182, 212, 0.35); }
+
+    .preview-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .metric-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
+    .metric-box .m-label { font-size: 11px; color: var(--text-muted); font-weight: 700; }
+    .metric-box .m-value { font-size: 24px; font-weight: 800; font-family: var(--font-mono); color: var(--text); margin-top: 4px; }
+
+    /* FEATURES GRID */
+    .section-container { max-width: 1280px; margin: 0 auto; padding: 96px 32px; position: relative; z-index: 1; }
+    .section-tag { text-align: center; font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+    .section-heading { text-align: center; font-size: 42px; font-weight: 800; color: var(--text); letter-spacing: -1.2px; margin-bottom: 60px; }
+    .section-heading span {
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .feature-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 32px 26px; transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+      position: relative; overflow: hidden;
+    }
+    .feature-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--primary); box-shadow: 0 16px 40px var(--primary-glow); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 16px; background: var(--primary-glow); color: var(--primary);
+      display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; font-weight: 800;
+    }
+    .feature-title { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+    .feature-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+    /* HOW IT WORKS STEPS */
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 22px; text-align: center; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease;
+    }
+    .step-card:hover { border-color: var(--cyan); transform: translateY(-6px) scale(1.03); }
+    .step-number {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--cyan-glow); border: 2px solid var(--cyan);
+      color: var(--cyan); font-size: 17px; font-weight: 800; font-family: var(--font-mono);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    }
+    .step-title { font-size: 16.5px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .step-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+
+    /* TESTIMONIALS */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .testimonial-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease;
+    }
+    .testimonial-card:hover { border-color: var(--gold); transform: translateY(-6px); }
+    .testimonial-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; font-style: italic; margin-bottom: 20px; }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+    .author-avatar {
+      width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--gold)); color: #FFFFFF;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; box-shadow: 0 4px 12px var(--primary-glow);
+    }
+    .author-name { font-size: 14px; font-weight: 800; color: var(--text); }
+    .author-role { font-size: 11px; color: var(--text-muted); }
+
+    /* CTA BANNER */
+    .cta-banner {
+      background: linear-gradient(135deg, #2A1009, #0B0F19); border: 1px solid var(--primary);
+      border-radius: var(--radius-lg); padding: 64px 48px; text-align: center; max-width: 1280px; margin: 0 auto 96px;
+      box-shadow: 0 0 80px var(--primary-glow); position: relative; z-index: 1;
+    }
+    .cta-title { font-size: 40px; font-weight: 800; color: var(--text); margin-bottom: 16px; letter-spacing: -1px; }
+    .cta-desc { font-size: 16px; color: var(--text-muted); max-width: 620px; margin: 0 auto 36px; line-height: 1.65; }
+
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 52px 32px; max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .footer-text { font-size: 12.5px; color: var(--text-muted); }
+
+    /* AUTH OVERLAY STYLES */
+    .auth-overlay {
+      position: fixed; inset: 0; background: rgba(11, 15, 25, 0.94); backdrop-filter: blur(20px); z-index: 200;
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 28px 16px;
+      overflow-y: auto; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease;
+    }
+    .auth-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+    
+    .onboarding-progress-container { width: 100%; max-width: 450px; margin-bottom: 16px; }
+    .onboarding-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 800; color: var(--text-muted); }
+    .step-back-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-weight: 800; }
+    .step-progress-track { width: 100%; height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .step-progress-fill { height: 100%; width: 20%; background: linear-gradient(90deg, var(--primary), var(--gold)); border-radius: 10px; transition: width 0.3s ease; }
 
     .auth-card {
-      width: 100%; max-width: 440px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 24px 20px; box-shadow: var(--shadow-lg); margin-bottom: 24px;
+      width: 100%; max-width: 450px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 30px 26px; box-shadow: var(--shadow-lg); margin-bottom: 24px; position: relative;
     }
-    .auth-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; text-align: center; }
-    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 18px; line-height: 1.4; }
-    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 18px; }
-    .auth-toggle-btn { flex: 1; padding: 9px; border: none; background: transparent; font-weight: 800; font-size: 12px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
-    .auth-toggle-btn.active { background: var(--surface); color: var(--terracotta); box-shadow: var(--shadow); }
+    .auth-title { font-size: 21px; font-weight: 800; color: var(--text); margin-bottom: 4px; text-align: center; }
+    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 20px; line-height: 1.4; }
+    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 20px; }
+    .auth-toggle-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: 800; font-size: 12px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
+    .auth-toggle-btn.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow); }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
+    .form-input {
+      width: 100%; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-size: 13.5px; font-weight: 600; padding: 13px; outline: none; transition: border-color 0.2s ease;
+    }
+    .form-input:focus { border-color: var(--primary); }
 
     .country-select-group { display: flex; gap: 8px; }
     .country-code-select { width: 100px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 700; padding: 10px; outline: none; }
 
-    /* Onboarding Multi-step Screens */
     .onboarding-step { display: none; }
     .onboarding-step.active { display: block; animation: fadeInStep 0.25s ease-out; }
     @keyframes fadeInStep { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
     .step-icon-badge {
-      width: 44px; height: 44px; border-radius: 14px; background: rgba(132, 204, 22, 0.12); color: #65A30D;
-      display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-weight: 800;
+      width: 48px; height: 48px; border-radius: 16px; background: var(--primary-glow); color: var(--primary);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-weight: 800; font-size: 20px;
     }
 
     .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
@@ -102,18 +275,11 @@
       padding: 8px 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface-2);
       font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: all 0.18s ease; display: flex; align-items: center; gap: 6px;
     }
-    .provider-chip.selected {
-      background: rgba(132, 204, 22, 0.15); border-color: #84CC16; color: #4D7C0F;
-    }
-
-    .sec-notice-box {
-      background: var(--surface-2); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 12px;
-      font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; margin-bottom: 14px;
-    }
+    .provider-chip.selected { background: var(--primary-glow); border-color: var(--primary); color: var(--primary); }
 
     .rate-limit-alert {
-      background: var(--red-soft); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: var(--radius-sm);
-      padding: 10px 12px; color: var(--red); font-size: 11px; font-weight: 700; margin-bottom: 14px; display: none; align-items: center; gap: 8px;
+      background: var(--red-soft); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm);
+      padding: 10px 14px; color: var(--red); font-size: 11.5px; font-weight: 700; margin-bottom: 16px; display: none; align-items: center; gap: 8px;
     }
 
     .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
@@ -122,248 +288,407 @@
     .strength-fill { height: 100%; width: 0%; transition: width 0.3s ease, background 0.3s ease; }
     .strength-text { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; display: block; text-align: right; }
 
+    .btn-submit {
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      border: none; padding: 15px; border-radius: var(--radius-sm); color: #FFFFFF; font-weight: 800;
+      font-size: 15px; cursor: pointer; margin-top: 8px; box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    /* AGENT APP TERMINAL STYLES */
+    .app-wrapper { display: flex; justify-content: center; min-height: 100vh; background: var(--bg); }
     .app-frame {
-      width: 100%;
-      max-width: 480px;
-      min-height: 100vh;
-      background: var(--surface-2);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      box-shadow: 0 0 60px rgba(0,0,0,0.06);
-      padding-bottom: 96px;
+      width: 100%; max-width: 480px; min-height: 100vh; background: #0D1424;
+      display: flex; flex-direction: column; position: relative; box-shadow: 0 0 60px rgba(0,0,0,0.8); padding-bottom: 96px;
     }
 
-    /* Header */
     .header {
-      padding: 18px 20px 14px;
-      background: rgba(255, 253, 249, 0.94);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      border-bottom: 1px solid var(--border-light);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 18px 20px 14px; background: rgba(13, 20, 36, 0.95); backdrop-filter: blur(14px);
+      position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
     }
-    body.dark-mode .header { background: rgba(30, 27, 24, 0.94); }
-
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-mark {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, var(--terracotta), var(--amber));
-      border-radius: 12px; display: flex; align-items: center;
-      justify-content: center; color: #fff; box-shadow: 0 4px 12px rgba(198, 93, 59, 0.3);
-    }
-    .brand-name { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
-    .brand-tagline { font-size: 10px; font-weight: 600; color: var(--text-muted); }
 
     .session-badge {
       font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
       display: flex; align-items: center; gap: 5px; cursor: pointer;
     }
-    .session-badge.open { background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.2); }
-    .session-badge.closed { background: var(--red-soft); color: var(--red); border: 1px solid rgba(220, 38, 38, 0.2); }
+    .session-badge.open { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+    .session-badge.closed { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
 
-    /* Profile Dropdown Menu */
     .profile-dropdown {
       position: absolute; top: 68px; right: 16px; width: 260px; background: var(--surface);
       border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg);
-      z-index: 90; display: none; padding: 12px; transition: all 0.2s ease;
+      z-index: 90; display: none; padding: 12px;
     }
     .profile-dropdown.active { display: block; }
     .dropdown-header { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); margin-bottom: 8px; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
-    .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-sm); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s ease; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
+    .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-sm); color: var(--text); font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s ease; }
     .dropdown-item:hover { background: var(--surface-2); }
     .dropdown-item.danger { color: var(--red); }
 
-    /* Tab Content Wrapper */
     .tab-content { display: none; padding-top: 4px; }
     .tab-content.active { display: block; }
 
-    /* Summary Card */
-    .summary-card {
-      margin: 16px 16px 14px; padding: 22px 20px 18px;
-      background: var(--surface); border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg); box-shadow: var(--shadow); position: relative; overflow: hidden;
-    }
-    .summary-card::before {
-      content: ''; position: absolute; top: -60px; right: -60px;
-      width: 170px; height: 170px;
-      background: radial-gradient(circle, rgba(198,93,59,0.09) 0%, rgba(0,0,0,0) 70%); pointer-events: none;
-    }
+    .card-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
 
-    .summary-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
-    .summary-amount { font-size: 36px; font-weight: 800; font-family: var(--font-mono); color: var(--text); margin: 8px 0 16px; letter-spacing: -1px; }
-    .summary-amount .currency { font-size: 20px; font-weight: 600; color: var(--terracotta); margin-right: 2px; }
-
-    .float-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 14px; border-top: 1px solid var(--border-light); }
-    .float-cell { background: var(--surface-2); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 8px; text-align: center; }
-    .float-cell .label { font-size: 10px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 4px; }
-    .float-cell .value { font-size: 14px; font-weight: 700; font-family: var(--font-mono); color: var(--text); }
-
-    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-    .dot-cash { background: var(--terracotta); }
-    .dot-mtn { background: var(--amber); }
-    .dot-orange { background: var(--cocoa); }
-
-    /* Action Buttons */
-    .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0 16px 18px; }
+    .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 16px 20px; }
     .btn-action {
-      border: 1px solid var(--border); background: var(--surface); padding: 14px 10px;
-      border-radius: var(--radius); display: flex; flex-direction: column; align-items: center;
-      gap: 6px; color: var(--text); font-weight: 700; font-size: 12px; cursor: pointer;
-      transition: all 0.18s ease; box-shadow: var(--shadow); text-align: center;
+      background: var(--surface); border: 1px solid var(--border); padding: 14px 10px;
+      border-radius: var(--radius-sm); color: var(--text); font-size: 12px; font-weight: 800;
+      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s ease;
     }
-    .btn-action:active { transform: scale(0.97); }
-    .btn-action.in .action-icon { background: var(--terracotta-soft); color: var(--terracotta); }
+    .btn-action.in { border-color: rgba(6, 182, 212, 0.35); }
+    .btn-action.out { border-color: rgba(239, 68, 68, 0.35); }
+    .btn-action.rebal { border-color: rgba(245, 158, 11, 0.35); }
+    .action-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .btn-action.in .action-icon { background: var(--cyan-glow); color: var(--cyan); }
     .btn-action.out .action-icon { background: var(--red-soft); color: var(--red); }
-    .btn-action.rebal .action-icon { background: var(--amber-soft); color: var(--amber); }
-    .action-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .btn-action.rebal .action-icon { background: var(--gold-glow); color: var(--gold); }
 
-    /* AI Banner */
-    .ai-banner {
-      margin: 0 16px 18px; padding: 14px 16px;
-      background: linear-gradient(135deg, rgba(217, 119, 6, 0.08), rgba(198, 93, 59, 0.05));
-      border: 1px solid rgba(217, 119, 6, 0.2); border-radius: var(--radius);
-      display: flex; align-items: flex-start; gap: 12px;
-    }
-    .ai-icon { width: 28px; height: 28px; background: var(--amber); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; font-weight: 800; }
-    .ai-text .title { font-size: 12px; font-weight: 800; color: var(--amber); }
-    .ai-text .desc { font-size: 11px; color: var(--text); margin-top: 2px; }
-
-    /* Section headers */
     .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px 10px; }
-    .section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
-    .section-meta { font-size: 12px; font-weight: 700; color: var(--terracotta); }
+    .section-title { font-size: 14px; font-weight: 800; color: var(--text); }
+    .section-meta { font-size: 11px; font-weight: 700; color: var(--primary); }
 
-    /* Transaction list */
-    .tx-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+    .tx-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
     .tx-card {
-      background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius);
-      padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow);
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;
     }
-    .tx-left { display: flex; align-items: center; gap: 12px; }
-    .tx-badge { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .tx-badge.in { background: var(--terracotta-soft); color: var(--terracotta); }
+    .tx-left { display: flex; align-items: center; gap: 10px; }
+    .tx-badge { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+    .tx-badge.in { background: var(--cyan-glow); color: var(--cyan); }
     .tx-badge.out { background: var(--red-soft); color: var(--red); }
-    .tx-badge.rebal { background: var(--amber-soft); color: var(--amber); }
-    .tx-details .name { font-size: 13px; font-weight: 700; color: var(--text); }
-    .tx-details .meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .tx-badge.rebal { background: var(--gold-glow); color: var(--gold); }
+    .tx-details .name { font-size: 13px; font-weight: 800; color: var(--text); }
+    .tx-details .meta { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
     .tx-right { text-align: right; }
-    .tx-amount { font-size: 14px; font-weight: 700; font-family: var(--font-mono); }
-    .tx-amount.in { color: var(--terracotta); }
+    .tx-amount { font-size: 14px; font-weight: 800; font-family: var(--font-mono); }
+    .tx-amount.in { color: var(--cyan); }
     .tx-amount.out { color: var(--red); }
-    .tx-amount.rebal { color: var(--amber); }
-    .tx-comm { font-size: 10px; font-weight: 700; color: var(--amber); margin-top: 2px; }
+    .tx-amount.rebal { color: var(--gold); }
+    .tx-comm { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-    /* Cards */
-    .card-box {
-      margin: 16px; padding: 20px; background: var(--surface); border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg); box-shadow: var(--shadow);
-    }
-    .card-box h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
-    .card-box p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
-    .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; }
-    .form-input {
-      width: 100%; background: var(--surface-2); border: 1px solid var(--border); padding: 12px 14px;
-      border-radius: var(--radius-sm); color: var(--text); font-size: 16px; font-family: var(--font-mono); outline: none;
-    }
-    .form-input:focus { border-color: var(--terracotta); }
-
-    .audit-result {
-      margin-top: 16px; padding: 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .audit-result.match { background: rgba(16, 185, 129, 0.1); color: #059669; }
-    .audit-result.diff { background: rgba(220, 38, 38, 0.1); color: var(--red); }
-
-    /* Referral Box (BizAssist Cloned Feature) */
-    .referral-card {
-      background: linear-gradient(135deg, var(--cocoa), #2D1B10); color: white;
-      border-radius: var(--radius-lg); padding: 20px; margin: 16px; box-shadow: var(--shadow-lg);
-    }
-    .referral-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
-    .referral-card p { font-size: 11px; opacity: 0.8; margin-bottom: 14px; }
-    .referral-code-box {
-      background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3);
-      padding: 10px; border-radius: var(--radius-sm); font-family: var(--font-mono);
-      font-size: 16px; font-weight: 700; text-align: center; letter-spacing: 2px; color: var(--amber);
-    }
-
-    /* Bottom Nav */
-    .nav-bar {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: 74px;
-      background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border-light);
-      display: flex; justify-content: space-around; align-items: center; z-index: 40;
-    }
-    body.dark-mode .nav-bar { background: rgba(30, 27, 24, 0.96); }
-
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted);
-      font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; width: 56px;
-    }
-    .nav-item.active { color: var(--terracotta); }
-    .nav-icon { width: 22px; height: 22px; }
-
-    /* Modal */
+    /* MODALS */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(45,36,30,0.55); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
       z-index: 100; display: flex; align-items: flex-end; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     .modal-card {
-      width: 100%; max-width: 480px; background: var(--surface); border-radius: 26px 26px 0 0;
-      border-top: 1px solid var(--border-light); padding: 24px 20px 34px;
+      width: 100%; max-width: 480px; background: var(--surface); border-radius: 28px 28px 0 0;
+      border-top: 1px solid var(--border-light); padding: 26px 22px 36px;
       transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-lg);
     }
     .modal-overlay.active .modal-card { transform: translateY(0); }
-
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
     .modal-title { font-size: 18px; font-weight: 800; color: var(--text); }
-    .close-btn {
-      background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted);
-      width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 16px;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .close-btn { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
 
     .carrier-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .carrier-opt {
-      padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-      background: var(--surface-2); color: var(--text-muted); font-weight: 700; font-size: 12px;
-      text-align: center; cursor: pointer; transition: all 0.15s ease; display: flex;
-      align-items: center; justify-content: center; gap: 6px;
-    }
-    .carrier-opt.active.mtn { background: var(--amber-soft); border-color: var(--amber); color: var(--amber); }
-    .carrier-opt.active.orange { background: var(--terracotta-soft); border-color: var(--terracotta); color: var(--terracotta); }
+    .carrier-opt { padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-2); color: var(--text-muted); font-weight: 700; font-size: 12px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .carrier-opt.active.mtn { background: var(--gold-glow); border-color: var(--gold); color: var(--gold); }
+    .carrier-opt.active.orange { background: var(--primary-glow); border-color: var(--primary); color: var(--primary); }
 
-    .btn-submit {
-      width: 100%; background: linear-gradient(135deg, var(--terracotta), var(--terracotta-hover));
-      border: none; padding: 16px; border-radius: var(--radius-sm); color: white; font-weight: 800;
-      font-size: 16px; cursor: pointer; margin-top: 6px; box-shadow: 0 4px 14px rgba(198,93,59,0.28);
+    /* ================= COMPREHENSIVE MOBILE RESPONSIVE MEDIA QUERIES ================= */
+    @media (max-width: 900px) {
+      .navbar { padding: 12px 16px; justify-content: space-between; }
+      .nav-links { display: none; } /* Prevents text overflow over logo/buttons */
+      .brand-name { font-size: 18px; }
+      .brand-mark { width: 36px; height: 36px; font-size: 18px; border-radius: 10px; }
+      
+      .hero-container {
+        grid-template-columns: 1fr !important; gap: 32px; padding: 36px 16px 40px; text-align: center;
+      }
+      .hero-badge { margin: 0 auto 16px; }
+      .hero-title { font-size: 32px !important; letter-spacing: -0.8px; margin-bottom: 16px; }
+      .hero-subtitle { font-size: 14.5px; margin: 0 auto 24px; }
+      
+      .hero-container > div:first-child > div:nth-child(4) {
+        flex-direction: column; width: 100%; gap: 10px;
+      }
+      .hero-container .btn-primary, .hero-container .btn-secondary {
+        width: 100%; justify-content: center; text-align: center;
+      }
+
+      .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px; margin-top: 28px; padding-top: 20px; }
+      .stat-card { padding: 12px 10px; }
+      .stat-card .number { font-size: 20px; }
+
+      .preview-card { padding: 18px 14px; }
+      .preview-metrics { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .metric-box { padding: 10px; }
+      .metric-box .m-value { font-size: 18px; }
+
+      .features-grid { grid-template-columns: 1fr !important; gap: 16px; }
+      .feature-card { padding: 24px 20px; }
+
+      .steps-grid { grid-template-columns: 1fr !important; gap: 16px; }
+      .step-card { padding: 24px 18px; }
+
+      .testimonial-grid { grid-template-columns: 1fr !important; gap: 16px; }
+      .testimonial-card { padding: 22px 18px; }
+
+      .section-container { padding: 52px 16px; }
+      .section-heading { font-size: 28px !important; margin-bottom: 32px; }
+
+      .cta-banner { padding: 36px 20px; margin: 0 12px 56px; }
+      .cta-title { font-size: 24px !important; }
+      .cta-desc { font-size: 13.5px; margin-bottom: 24px; }
+
+      .footer { flex-direction: column; gap: 14px; text-align: center; padding: 32px 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-actions { gap: 8px; }
+      .btn-secondary, .btn-primary { padding: 8px 12px; font-size: 12px; }
+      .auth-card { padding: 20px 14px; }
+      .auth-title { font-size: 18px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- AUTH SCREEN OVERLAY (Multi-Step Onboarding & Security Module) -->
-  <div class="auth-overlay" id="auth-screen">
-    <!-- Brand Banner -->
-    <div style="display:flex; align-items:center; gap:10px; margin-top: 12px; margin-bottom:16px;">
-      <div class="brand-mark" style="width:44px; height:44px; font-size:20px;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/><path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
+  <!-- ================= VIEW 1: LANDING PAGE ================= -->
+  <div id="view-landing">
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+      <div class="brand" onclick="switchAppView('landing')">
+        <div class="brand-mark">P</div>
+        <div class="brand-name">PocketBook</div>
       </div>
-      <div>
-        <div style="font-size:20px; font-weight:800; color:var(--text);">PocketBook</div>
-        <div style="font-size:10px; font-weight:800; color:var(--terracotta); letter-spacing:0.5px;">PAN-AFRICAN MoMo AGENT OS</div>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#testimonials" class="nav-link">Testimonials</a>
       </div>
+      <div class="nav-actions">
+        <button class="btn-secondary" onclick="openAuthModal('login')">Log In</button>
+        <button class="btn-primary" onclick="openAuthModal('signup')">Start Free →</button>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION WITH PARTICLES CANVAS -->
+    <section class="hero-container">
+      <canvas id="hero-canvas"></canvas>
+      <div style="position:relative; z-index:2;" class="reveal-on-scroll">
+        <div class="hero-badge floating-anim">
+          <span class="pulse-dot"></span>
+          PAN-AFRICAN MoMo OPERATING SYSTEM
+        </div>
+        <h1 class="hero-title">Your Kiosk Business, <span>Brilliantly Automated.</span></h1>
+        <p class="hero-subtitle">
+          PocketBook is the complete AI-powered operating system for Mobile Money Agents, money exchangers, and kiosk operators across Africa. Track dual-wallets, auto-parse SMS notifications, and lock shift closing reconciled in real time.
+        </p>
+        <div style="display:flex; gap:14px; align-items:center;">
+          <button class="btn-primary pulse-glow" style="padding:15px 30px; font-size:15.5px;" onclick="openAuthModal('signup')">Start Free Trial Now →</button>
+          <button class="btn-secondary" style="padding:15px 26px; font-size:15.5px;" onclick="openAuthModal('login')">Log In / Open Kiosk</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card spotlight-card reveal-on-scroll">
+            <div class="number">10K+</div>
+            <div class="label">Targeted Agents</div>
+          </div>
+          <div class="stat-card spotlight-card reveal-on-scroll">
+            <div class="number">$50M+</div>
+            <div class="label">Vol Tracked</div>
+          </div>
+          <div class="stat-card spotlight-card reveal-on-scroll">
+            <div class="number">0.2s</div>
+            <div class="label">SMS Parser</div>
+          </div>
+          <div class="stat-card spotlight-card reveal-on-scroll">
+            <div class="number">99.9%</div>
+            <div class="label">Uptime</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE TERMINAL PREVIEW CARD WITH SPOTLIGHT -->
+      <div class="preview-card spotlight-card floating-anim reveal-on-scroll" style="position:relative; z-index:2;">
+        <div class="preview-header">
+          <div class="preview-title">
+            <span>📱</span> PocketBook Agent Terminal
+          </div>
+          <span class="live-tag">● Live Session Active</span>
+        </div>
+
+        <div class="preview-metrics">
+          <div class="metric-box">
+            <div class="m-label">Float Balance (MTN)</div>
+            <div class="m-value" style="color:var(--gold);">$1,250.00</div>
+          </div>
+          <div class="metric-box">
+            <div class="m-label">Cash in Drawer</div>
+            <div class="m-value" style="color:var(--cyan);">$840.00</div>
+          </div>
+        </div>
+
+        <div style="background:var(--gold-glow); border:1px solid rgba(245, 158, 11, 0.35); padding:14px; border-radius:var(--radius-sm); margin-bottom:16px;">
+          <div style="font-size:11.5px; font-weight:800; color:var(--gold); display:flex; justify-content:space-between;">
+            <span>⚠️ AI Float Advisor</span>
+            <span style="font-weight:700;">Safety Threshold: $500</span>
+          </div>
+          <div style="font-size:11.5px; color:var(--text); margin-top:4px;">
+            Orange Money float is low ($350.00). Rebalance before peak customer hours.
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <button type="button" class="btn-primary" style="font-size:13px; padding:12px; justify-content:center;" onclick="openAuthModal('signup')">
+            🚀 Launch Agent App
+          </button>
+          <button type="button" class="btn-secondary" style="font-size:13px; padding:12px; text-align:center;" onclick="openAuthModal('login')">
+            🔒 Log In Terminal
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES GRID WITH BOUNCING SCROLL REVEAL -->
+    <section class="section-container" id="features">
+      <div class="section-tag reveal-on-scroll">Platform Features</div>
+      <h2 class="section-heading reveal-on-scroll">Everything You Need to <span>Run Smarter</span></h2>
+
+      <div class="features-grid">
+        <div class="feature-card spotlight-card reveal-on-scroll">
+          <div class="feature-icon">💳</div>
+          <h3 class="feature-title">Dual-Wallet & Cash Ledger</h3>
+          <p class="feature-desc">Simultaneous balance tracking for Lonestar MTN, Orange Money, Airtel, and physical kiosk cash. No more scattered notebooks or miscalculations.</p>
+        </div>
+
+        <div class="feature-card spotlight-card reveal-on-scroll">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">SMS Auto-Recording</h3>
+          <p class="feature-desc">Intelligent AI parser auto-detects transaction amounts, mobile carriers, and customer phone numbers directly from notification SMS messages.</p>
+        </div>
+
+        <div class="feature-card spotlight-card reveal-on-scroll">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">AI Smart Float Advisor</h3>
+          <p class="feature-desc">Proactive float alerts warn agents before float runs low, suggesting exact cash rebalancing amounts before missing customer cash-out requests.</p>
+        </div>
+
+        <div class="feature-card spotlight-card reveal-on-scroll">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">EOD Drawer Reconciliation</h3>
+          <p class="feature-desc">End-of-day audit assistant comparing drawer cash against system float movements, highlighting surplus or missing cash instantly.</p>
+        </div>
+
+        <div class="feature-card spotlight-card reveal-on-scroll">
+          <div class="feature-icon">🛡️</div>
+          <h3 class="feature-title">Security & Recovery Shield</h3>
+          <p class="feature-desc">Protected by security questions, anti-bot honeypot traps, and client-side rate limiting built to withstand 10,000+ concurrent kiosk requests.</p>
+        </div>
+
+        <div class="feature-card spotlight-card reveal-on-scroll">
+          <div class="feature-icon">🔗</div>
+          <h3 class="feature-title">Multi-Branch & Referrals</h3>
+          <p class="feature-desc">Manage sub-agents and branch join codes while earning referral commissions by inviting fellow kiosk operators across your network.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMPLE PROCESS SECTION -->
+    <section class="section-container" id="how-it-works" style="background:var(--surface-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+      <div class="section-tag reveal-on-scroll">Simple Process</div>
+      <h2 class="section-heading reveal-on-scroll">Up and Running in <span>Minutes</span></h2>
+
+      <div class="steps-grid">
+        <div class="step-card spotlight-card reveal-on-scroll">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Sign Up in 60s</h3>
+          <div class="step-desc">Create your agent account with phone/email, set your security question, and choose your operating currency.</div>
+        </div>
+
+        <div class="step-card spotlight-card reveal-on-scroll">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Configure Balances</h3>
+          <div class="step-desc">Set your opening cash-in-hand and wallet float numbers for MTN, Orange, and Airtel Money.</div>
+        </div>
+
+        <div class="step-card spotlight-card reveal-on-scroll">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Log & Parse SMS</h3>
+          <div class="step-desc">Record deposits and withdrawals with 1 tap or paste SMS messages for automatic instant parsing.</div>
+        </div>
+
+        <div class="step-card spotlight-card reveal-on-scroll">
+          <div class="step-number">04</div>
+          <h3 class="step-title">Reconcile Daily</h3>
+          <div class="step-desc">Perform End-of-Day cash drawer audit, review net commission earnings, and lock shift with confidence.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section-container" id="testimonials">
+      <div class="section-tag reveal-on-scroll">Early Users</div>
+      <h2 class="section-heading reveal-on-scroll">Trusted by Agents Across <span>Africa</span></h2>
+
+      <div class="testimonial-grid">
+        <div class="testimonial-card spotlight-card reveal-on-scroll">
+          <p class="testimonial-text">"Recording transactions is now very fast and accurate. I don't write anything down in physical books anymore. PocketBook keeps my daily float clear."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SN</div>
+            <div>
+              <div class="author-name">Sarah Ntow</div>
+              <div class="author-role">MoMo Kiosk Agent • Liberia</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card spotlight-card reveal-on-scroll">
+          <p class="testimonial-text">"I used to run out of float without even realizing it. With the AI Float Advisor, I see warnings early and know when to top up. It keeps me in complete control."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">BT</div>
+            <div>
+              <div class="author-name">Bismarck Tetteh</div>
+              <div class="author-role">Mobile Money Operator • Ghana</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card spotlight-card reveal-on-scroll">
+          <p class="testimonial-text">"The End-of-Day Close Day audit saves me 2 hours every evening. I compare actual cash drawer counts with expected balances in 30 seconds."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">FA</div>
+            <div>
+              <div class="author-name">Florence Adarkwa</div>
+              <div class="author-role">Agent Banking Owner • Nigeria</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <div class="cta-banner reveal-on-scroll">
+      <h2 class="cta-title">Be Among the First to Experience PocketBook</h2>
+      <p class="cta-desc">Join thousands of mobile money agents and kiosk entrepreneurs who are transforming how they manage float and daily cash across Africa.</p>
+      <button class="btn-primary pulse-glow" style="padding:16px 38px; font-size:16px;" onclick="openAuthModal('signup')">Start Free Now →</button>
     </div>
 
-    <!-- Onboarding Progress Bar Header (Visible in Signup Flow) -->
+    <footer class="footer">
+      <div class="footer-text">
+        © 2026 PocketBook Inc. All rights reserved. Built with ❤️ for African Entrepreneurs.
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- ================= AUTH OVERLAY ================= -->
+  <div class="auth-overlay" id="auth-screen">
+    <div style="display:flex; align-items:center; gap:10px; margin-top: 12px; margin-bottom:16px; width:100%; max-width:450px;">
+      <div class="brand-mark" style="width:38px; height:38px; font-size:18px;">P</div>
+      <div>
+        <div style="font-size:18px; font-weight:800; color:var(--text);">PocketBook</div>
+        <div style="font-size:10px; font-weight:800; color:var(--primary); letter-spacing:0.5px;">PAN-AFRICAN MoMo AGENT OS</div>
+      </div>
+      <button type="button" class="close-btn" style="margin-left:auto;" onclick="closeAuthModal()">✕</button>
+    </div>
+
     <div class="onboarding-progress-container" id="onboarding-header" style="display:none;">
       <div class="onboarding-top-bar">
         <button type="button" class="step-back-btn" id="btn-step-back" onclick="handleStepBack()" title="Back">←</button>
@@ -374,7 +699,6 @@
       </div>
     </div>
 
-    <!-- Rate Limiter / DDoS Mitigation Warning Banner -->
     <div class="rate-limit-alert" id="rate-limit-banner">
       <span>🛡️</span>
       <span id="rate-limit-msg">Rate limit active: Please wait 15 seconds before submitting again.</span>
@@ -386,7 +710,6 @@
         <button class="auth-toggle-btn" id="btn-tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
       </div>
 
-      <!-- BOT HONEYPOT TRAP INPUT (Anti-DDoS / Anti-Spam protection) -->
       <input type="text" name="website_hp_check" id="website_hp_check" class="hp-field" tabindex="-1" autocomplete="off">
 
       <!-- LOGIN FORM -->
@@ -412,22 +735,20 @@
         <div class="form-group">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <label class="form-label">Password</label>
-            <a href="javascript:void(0)" onclick="openSecurityQuestionReset()" style="font-size:11px; font-weight:700; color:var(--terracotta); text-decoration:none;">Forgot? Reset with Security Question</a>
+            <a href="javascript:void(0)" onclick="openSecurityQuestionReset()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none;">Forgot? Reset with Security Question</a>
           </div>
           <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
         </div>
 
-        <button type="submit" class="btn-submit" id="login-btn-submit">Log In to PocketBook</button>
+        <button type="submit" class="btn-submit" id="login-btn-submit">Log In to PocketBook Terminal</button>
 
         <div style="margin-top:14px; text-align:center; font-size:11px; color:var(--text-muted);">
-          🔒 Protected by DDoS Shield & AES-256 Client Security
+          🔒 Protected by DDoS Shield & Client Security
         </div>
       </form>
 
       <!-- SIGNUP MULTI-STEP FORM -->
       <form id="form-signup" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
-        
-        <!-- STEP 1: Account Credentials & Security Question -->
         <div class="onboarding-step active" id="step-1">
           <div class="auth-title">Create your account</div>
           <div class="auth-subtitle">Start managing your business with AI and dual-wallet tracking</div>
@@ -464,9 +785,9 @@
             <span class="strength-text" id="pass-strength-label">Password strength: Weak</span>
           </div>
 
-          <!-- SECURITY QUESTION SELECTION (USER REQUESTED FEATURE) -->
+          <!-- SECURITY QUESTION SELECTION -->
           <div class="form-group" style="background:var(--surface-2); border:1px solid var(--border-light); padding:12px; border-radius:var(--radius-sm); margin-bottom:14px;">
-            <label class="form-label" style="color:var(--terracotta); font-weight:800; display:flex; align-items:center; gap:6px;">
+            <label class="form-label" style="color:var(--primary); font-weight:800; display:flex; align-items:center; gap:6px;">
               🛡️ Security Question (Account Recovery)
             </label>
             <select class="form-input" id="signup-sec-question" style="font-size:12px; font-weight:700; margin-bottom:8px;">
@@ -486,25 +807,15 @@
 
           <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
             <label style="font-size:11px; font-weight:600; color:var(--text-muted); display:flex; align-items:center; gap:8px; cursor:pointer;">
-              <input type="checkbox" id="check-terms" checked style="accent-color:var(--terracotta);">
-              I agree to the <a href="javascript:void(0)" style="color:var(--terracotta); text-decoration:none;">Terms of Service</a> and <a href="javascript:void(0)" style="color:var(--terracotta); text-decoration:none;">Privacy Policy</a>
+              <input type="checkbox" id="check-terms" checked style="accent-color:var(--primary);">
+              I agree to the <a href="javascript:void(0)" style="color:var(--primary); text-decoration:none;">Terms of Service</a> and <a href="javascript:void(0)" style="color:var(--primary); text-decoration:none;">Privacy Policy</a>
             </label>
-
-            <label style="font-size:11px; font-weight:600; color:var(--text-muted); display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
-              <input type="checkbox" id="check-sms-permission" checked style="accent-color:var(--terracotta); margin-top:2px;">
-              <span>I allow PocketBook to read transaction SMS for automatic recording</span>
-            </label>
-          </div>
-
-          <div class="sec-notice-box">
-            <span>🔒</span>
-            <span>PocketBook will only read transaction-related messages and will not access personal messages.</span>
           </div>
 
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(1)">Create Account & Continue →</button>
         </div>
 
-        <!-- STEP 2: Tell Us About Your Business -->
+        <!-- STEP 2 -->
         <div class="onboarding-step" id="step-2">
           <div class="step-icon-badge">👤</div>
           <div class="auth-title">Tell us about your business</div>
@@ -524,7 +835,6 @@
               <option value="Côte d'Ivoire">Côte d'Ivoire 🇨🇮</option>
               <option value="Sierra Leone">Sierra Leone 🇸🇱</option>
               <option value="Kenya">Kenya 🇰🇪</option>
-              <option value="Uganda">Uganda 🇺🇬</option>
             </select>
           </div>
 
@@ -541,20 +851,19 @@
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(2)">Continue →</button>
         </div>
 
-        <!-- STEP 3: Agent Setup (Service Providers) -->
+        <!-- STEP 3 -->
         <div class="onboarding-step" id="step-3">
           <div class="step-icon-badge">📱</div>
           <div class="auth-title">Agent Setup</div>
           <div class="auth-subtitle">Configure your active mobile money service providers</div>
 
           <div class="form-group">
-            <label class="form-label">Service Providers <span style="font-size:11px; font-weight:500; color:var(--text-muted);">(select all that apply)</span></label>
+            <label class="form-label">Service Providers</label>
             <div class="chip-grid" id="provider-chips-container">
               <div class="provider-chip selected" onclick="toggleProviderChip(this, 'MTN')">✓ MTN Mobile Money</div>
               <div class="provider-chip selected" onclick="toggleProviderChip(this, 'Orange')">✓ Orange Money</div>
               <div class="provider-chip" onclick="toggleProviderChip(this, 'Airtel')">+ Airtel Money</div>
               <div class="provider-chip" onclick="toggleProviderChip(this, 'Vodafone')">+ Vodafone / Telecel Cash</div>
-              <div class="provider-chip" onclick="toggleProviderChip(this, 'Other')">+ Other</div>
             </div>
           </div>
 
@@ -570,14 +879,13 @@
               <option value="GHS">GHS – Ghanaian Cedi (₵)</option>
               <option value="LRD">LRD – Liberian Dollar ($)</option>
               <option value="NGN">NGN – Nigerian Naira (₦)</option>
-              <option value="XOF">XOF – West African Franc (CFA)</option>
             </select>
           </div>
 
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(3)">Continue →</button>
         </div>
 
-        <!-- STEP 4: Set Your Commission Rates -->
+        <!-- STEP 4 -->
         <div class="onboarding-step" id="step-4">
           <div class="step-icon-badge">%</div>
           <div class="auth-title">Set Your Commission Rates</div>
@@ -586,7 +894,6 @@
           <div class="form-group">
             <label class="form-label">Withdrawal Commission Rate (%)</label>
             <input type="number" step="0.1" class="form-input" id="signup-comm-withdraw" value="1.0">
-            <span style="font-size:11px; color:var(--text-muted); margin-top:4px; display:block;">Default: 1% commission earned per customer withdrawal</span>
           </div>
 
           <div class="form-group">
@@ -597,7 +904,7 @@
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(4)">Continue →</button>
         </div>
 
-        <!-- STEP 5: Start Your Day (Opening Balances) -->
+        <!-- STEP 5 -->
         <div class="onboarding-step" id="step-5">
           <div class="step-icon-badge">👛</div>
           <div class="auth-title">Start Your Day</div>
@@ -618,17 +925,11 @@
             <input type="number" step="0.01" class="form-input" id="signup-init-orange" placeholder="e.g. 350.00">
           </div>
 
-          <div class="sec-notice-box" style="background:var(--amber-soft); border-color:var(--amber);">
-            <span>⚠️</span>
-            <span style="color:var(--amber);">You can skip float balances now, but entering accurate opening balances ensures precise profit tracking.</span>
-          </div>
-
-          <button type="submit" class="btn-submit" style="background:linear-gradient(135deg, #84CC16, #10B981);">Start My Day 🚀</button>
+          <button type="submit" class="btn-submit">Start My Day & Launch OS 🚀</button>
         </div>
-
       </form>
 
-      <!-- SECURITY QUESTION RECOVERY MODAL FORM -->
+      <!-- SECURITY RECOVERY FORM -->
       <form id="form-sec-recovery" style="display:none;" onsubmit="handleSecurityRecoverySubmit(event)">
         <div class="auth-title">Account Security Recovery</div>
         <div class="auth-subtitle">Answer your registered security question to reset your password.</div>
@@ -642,10 +943,8 @@
 
         <div id="recovery-q-group" style="display:none;">
           <div class="form-group">
-            <label class="form-label" style="color:var(--terracotta);">Security Question</label>
-            <div id="recovery-q-text" style="font-size:13px; font-weight:700; background:var(--surface-2); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
-              What was the name of your first kiosk / business?
-            </div>
+            <label class="form-label" style="color:var(--primary);">Security Question</label>
+            <div id="recovery-q-text" style="font-size:13px; font-weight:700; background:var(--surface-2); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);"></div>
           </div>
 
           <div class="form-group">
@@ -658,447 +957,183 @@
             <input type="password" class="form-input" id="recovery-new-pass" placeholder="Enter new password" required>
           </div>
 
-          <button type="submit" class="btn-submit">Reset Password & Log In</button>
+          <button type="submit" class="btn-submit">Reset Password & Enter Terminal</button>
         </div>
 
         <div style="margin-top:14px; text-align:center;">
           <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="font-size:12px; font-weight:700; color:var(--text-muted); text-decoration:none;">← Return to Login</a>
         </div>
       </form>
-
     </div>
   </div>
 
-  <div class="app-frame">
-    <!-- Header -->
-    <header class="header">
-      <div class="brand">
-        <div class="brand-mark">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-            <path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/>
-            <path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/>
-            <path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <div class="brand-name">PocketBook</div>
-          <div class="brand-tagline">MoMo Business OS</div>
-        </div>
-      </div>
 
-      <!-- Controls: Notifications, Dark/Light Mode, Profile Dropdown -->
-      <div style="display:flex; align-items:center; gap:10px;">
-        <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="alert('No unread notifications')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        </button>
-
-        <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="toggleTheme()">
-          <span id="theme-icon">🌙</span>
-        </button>
-
-        <div class="avatar" id="header-user-avatar" style="cursor:pointer;" onclick="toggleProfileDropdown()">R</div>
-      </div>
-
-      <!-- Profile Dropdown -->
-      <div class="profile-dropdown" id="profile-menu">
-        <div class="dropdown-header">
-          <div class="avatar">R</div>
-          <div>
-            <div style="font-size:13px; font-weight:800; color:var(--text);" id="header-user-name">Rashford</div>
-            <div style="font-size:10px; color:var(--text-muted);" id="header-user-email">rashford234@gmail.com</div>
-            <span style="font-size:9px; background:var(--terracotta-soft); color:var(--terracotta); padding:2px 6px; border-radius:10px; font-weight:800;">MoMo Agent</span>
-          </div>
-        </div>
-        <div class="dropdown-item" onclick="window.location.href='index.html'">
-          🌐 Landing Page
-        </div>
-        <div class="dropdown-item" onclick="switchTab('settings', document.querySelectorAll('.nav-item')[4]); toggleProfileDropdown();">
-          👤 My Profile
-        </div>
-        <div class="dropdown-item" onclick="switchTab('ledger', document.querySelectorAll('.nav-item')[0]); toggleProfileDropdown();">
-          💳 Transactions & Book
-        </div>
-        <div class="dropdown-item" onclick="switchTab('settings', document.querySelectorAll('.nav-item')[4]); toggleProfileDropdown();">
-          ⚙️ Settings
-        </div>
-        <div class="dropdown-item" onclick="switchTab('earnings', document.querySelectorAll('.nav-item')[3]); toggleProfileDropdown();">
-          🔗 Referrals
-        </div>
-        <div class="dropdown-item danger" onclick="handleLogout()">
-          🚪 Logout
-        </div>
-      </div>
-    </header>
-
-    <!-- TAB 1: LEDGER / MY BOOK -->
-    <main id="tab-ledger" class="tab-content active">
-      
-      <!-- Greeting Banner -->
-      <div style="margin: 14px 16px 10px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-size:18px; font-weight:800; color:var(--text);">Good day, <span id="dash-user-firstname">Agent</span> 👋</div>
-          <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-            <div id="session-status-tag" class="session-badge open" onclick="toggleSessionLock()" style="font-size:10px;">
-              <span>🟢 Shift Active</span>
-            </div>
-            <span style="font-size:11px; font-weight:700; color:var(--terracotta);" id="dash-user-carriers">MTN & Orange</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- PROMINENT FLOAT ALERT BANNER (MATCHING USER SCREENSHOT) -->
-      <div class="card-box" id="dashboard-float-alert" style="margin: 0 16px 14px; padding: 14px 16px; background: rgba(217, 119, 6, 0.08); border: 1px solid rgba(217, 119, 6, 0.3);">
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-size: 20px;">⚠️</div>
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <div style="font-size: 13px; font-weight: 800; color: var(--amber);" id="float-alert-title">Float Alert</div>
-              <span style="font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 10px; background: rgba(220, 38, 38, 0.15); color: var(--red);" id="float-alert-badge">Critical</span>
-            </div>
-            <div style="font-size: 11px; color: var(--text); margin-top: 4px; line-height: 1.4;" id="float-alert-body">
-              MTN Mobile Money balance is low (<span id="alert-mtn-val">$515.50</span>). You may not be able to process deposits or transfers.
-            </div>
-            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(217, 119, 6, 0.2); font-size: 11px; font-weight: 700; color: var(--amber);">
-              💡 Suggestions:<br>
-              <span style="color: var(--text-muted); font-weight: 600;" id="float-alert-suggest">→ Deposit cash into your MTN Mobile Money wallet to increase wallet float.</span>
+  <!-- ================= VIEW 2: AGENT OS TERMINAL ================= -->
+  <div id="view-app" style="display:none;">
+    <div class="app-wrapper">
+      <div class="app-frame">
+        <header class="header">
+          <div class="brand" onclick="switchAppView('landing')">
+            <div class="brand-mark" style="width:36px; height:36px; font-size:16px;">P</div>
+            <div class="brand-text">
+              <div class="brand-name" style="font-size:16px;">PocketBook</div>
+              <div style="font-size:9px; font-weight:800; color:var(--primary);">MoMo Agent Terminal</div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- CASH BALANCE CARD (MATCHING USER SCREENSHOT) -->
-      <div class="card-box" style="margin: 0 16px 14px; padding: 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-          <div style="font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
-            <span>📗</span> Cash Balance
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="switchAppView('landing')" title="Home / Landing Page">
+              🌐
+            </button>
+            <div class="avatar" id="header-user-avatar" style="cursor:pointer;" onclick="toggleProfileDropdown()">R</div>
           </div>
-          <span class="session-badge open" style="font-size:10px;" id="cash-status-badge">● Healthy</span>
-        </div>
-        <div style="font-size: 32px; font-weight: 800; font-family: var(--font-mono); color: var(--text); letter-spacing: -1px;">
-          $<span id="cash-main-val">620.00</span>
-        </div>
-        <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
-          Opening: $<span id="cash-opening-val">620.00</span> · Deposits: +$<span id="cash-dep-val">250.00</span> · Withdrawals: -$<span id="cash-wd-val">100.00</span>
-        </div>
-      </div>
 
-      <!-- WALLET BALANCES SECTION (MATCHING USER SCREENSHOT) -->
-      <div class="card-box" style="margin: 0 16px 18px; padding: 18px;">
-        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.8px; margin-bottom: 12px;">
-          Wallet Balances
-        </div>
+          <div class="profile-dropdown" id="profile-menu">
+            <div class="dropdown-header">
+              <div class="avatar">R</div>
+              <div>
+                <div style="font-size:13px; font-weight:800; color:var(--text);" id="header-user-name">Rashford</div>
+                <div style="font-size:10px; color:var(--text-muted);" id="header-user-email">agent@pocketbook.app</div>
+                <span style="font-size:9px; background:var(--primary-glow); color:var(--primary); padding:2px 6px; border-radius:10px; font-weight:800;">Active Agent</span>
+              </div>
+            </div>
+            <div class="dropdown-item" onclick="openReportModal(); toggleProfileDropdown();">
+              📊 Generate Daily Report
+            </div>
+            <div class="dropdown-item" onclick="switchAppView('landing')">
+              🌐 Home / Landing Page
+            </div>
+            <div class="dropdown-item danger" onclick="handleLogout()">
+              🚪 Logout
+            </div>
+          </div>
+        </header>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
-          <!-- MTN WALLET CARD -->
-          <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
+        <main class="tab-content active">
+          <div style="margin: 14px 16px 10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:18px; font-weight:800; color:var(--text);">Good day, <span id="dash-user-firstname">Agent</span> 👋</div>
+              <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                <div id="session-status-tag" class="session-badge open" onclick="toggleSessionLock()" style="font-size:10px;">
+                  <span>🟢 Shift Active</span>
+                </div>
+                <span style="font-size:11px; font-weight:700; color:var(--primary);" id="dash-user-carriers">MTN & Orange</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROMINENT FLOAT ALERT BANNER -->
+          <div class="card-box" id="dashboard-float-alert" style="margin: 0 16px 14px; padding: 14px 16px; background: var(--gold-glow); border: 1px solid rgba(245, 158, 11, 0.35);">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="font-size: 20px;">⚠️</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div style="font-size: 13px; font-weight: 800; color: var(--gold);" id="float-alert-title">Float Alert</div>
+                  <span style="font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 10px; background: rgba(239, 68, 68, 0.15); color: var(--red);" id="float-alert-badge">Critical</span>
+                </div>
+                <div style="font-size: 11px; color: var(--text); margin-top: 4px; line-height: 1.4;" id="float-alert-body">
+                  MTN Mobile Money balance is low (<span id="alert-mtn-val">$515.50</span>). You may not be able to process deposits or transfers.
+                </div>
+                <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(245, 158, 11, 0.2); font-size: 11px; font-weight: 700; color: var(--gold);">
+                  💡 Suggestions:<br>
+                  <span style="color: var(--text-muted); font-weight: 600;" id="float-alert-suggest">→ Deposit cash into your MTN Mobile Money wallet to increase wallet float.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CASH BALANCE CARD -->
+          <div class="card-box" style="margin: 0 16px 14px; padding: 18px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-              <div style="font-size:11px; font-weight:800; color:var(--amber);">📱 Lonestar MTN</div>
-              <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(217,119,6,0.15); color:var(--amber);" id="mtn-status-badge">● Warning</span>
+              <div style="font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                <span>📗</span> Cash Balance
+              </div>
+              <span class="session-badge open" style="font-size:10px;" id="cash-status-badge">● Healthy</span>
             </div>
-            <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-mtn">515.50</span></div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $500.00</div>
-          </div>
-
-          <!-- ORANGE WALLET CARD -->
-          <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-              <div style="font-size:11px; font-weight:800; color:var(--terracotta);">📱 Orange Money</div>
-              <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(220,38,38,0.15); color:var(--red);" id="orange-status-badge">● Critical</span>
+            <div style="font-size: 32px; font-weight: 800; font-family: var(--font-mono); color: var(--text); letter-spacing: -1px;">
+              $<span id="cash-main-val">620.00</span>
             </div>
-            <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-orange">350.00</span></div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $400.00</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
+              Opening: $<span id="cash-opening-val">620.00</span> · Deposits: +$<span id="cash-dep-val">250.00</span> · Withdrawals: -$<span id="cash-wd-val">100.00</span>
+            </div>
           </div>
-        </div>
 
-        <!-- ACTION BUTTONS: UPDATE WALLET & CLOSE DAY -->
-        <div style="display:flex; gap: 10px;">
-          <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openUpdateWalletModal()">
-            <span>🔄</span> Update Wallet
-          </button>
-          <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--red-soft); color:var(--red); border:1px solid rgba(220,38,38,0.3); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openCloseDayModal()">
-            <span>🔒</span> Close Day
-          </button>
-        </div>
-      </div>
+          <!-- WALLET BALANCES SECTION -->
+          <div class="card-box" style="margin: 0 16px 18px; padding: 18px;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.8px; margin-bottom: 12px;">
+              Wallet Balances
+            </div>
 
-      <!-- SMS Auto-Recording Feature -->
-      <div class="card-box" style="margin: 0 16px 18px; padding: 16px;">
-        <div style="font-size: 13px; font-weight: 800; color: var(--terracotta); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
-        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Paste a mobile money SMS notification below to auto-detect and record transaction.</div>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="sms-input" class="form-input" style="font-size:12px; padding:10px;" placeholder='e.g. "You have received USD 100.00 from 0886..."'>
-          <button class="btn-submit" style="width:auto; padding:10px 16px; margin:0; font-size:12px; white-space:nowrap;" onclick="parseSMS()">Parse SMS</button>
-        </div>
-      </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+              <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                  <div style="font-size:11px; font-weight:800; color:var(--gold);">📱 Lonestar MTN</div>
+                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(245,158,11,0.15); color:var(--gold);" id="mtn-status-badge">● Warning</span>
+                </div>
+                <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-mtn">515.50</span></div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $500.00</div>
+              </div>
 
-      <!-- Quick Actions (Deposit, Withdraw, Transfer/Buy Float) -->
-      <div class="actions">
-        <button class="btn-action in" onclick="openModal('deposit')">
-          <div class="action-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+              <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                  <div style="font-size:11px; font-weight:800; color:var(--primary);">📱 Orange Money</div>
+                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(239,68,68,0.15); color:var(--red);" id="orange-status-badge">● Critical</span>
+                </div>
+                <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-orange">350.00</span></div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $400.00</div>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display:flex; gap: 10px;">
+              <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openUpdateWalletModal()">
+                <span>🔄</span> Update Wallet
+              </button>
+              <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--red-soft); color:var(--red); border:1px solid rgba(239,68,68,0.3); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openCloseDayModal()">
+                <span>🔒</span> Close Day
+              </button>
+            </div>
           </div>
-          <span>Deposit</span>
-        </button>
-        <button class="btn-action out" onclick="openModal('withdrawal')">
-          <div class="action-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+
+          <!-- SMS Auto-Recording -->
+          <div class="card-box" style="margin: 0 16px 18px; padding: 16px;">
+            <div style="font-size: 13px; font-weight: 800; color: var(--cyan); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Paste a mobile money SMS notification below to auto-detect and record transaction.</div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="sms-input" class="form-input" style="font-size:12px; padding:10px;" placeholder='e.g. "You have received USD 100.00 from 0886..."'>
+              <button class="btn-submit" style="width:auto; padding:10px 16px; margin:0; font-size:12px; white-space:nowrap;" onclick="parseSMS()">Parse SMS</button>
+            </div>
           </div>
-          <span>Withdraw</span>
-        </button>
-        <button class="btn-action rebal" onclick="openModal('transfer')">
-          <div class="action-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M16 3l4 4-4 4"/><path d="M20 7H4"/><path d="M8 21l-4-4 4-4"/><path d="M4 17h16"/></svg>
+
+          <!-- Quick Actions -->
+          <div class="actions">
+            <button class="btn-action in" onclick="openModal('deposit')">
+              <div class="action-icon">⬇</div>
+              <span>Deposit</span>
+            </button>
+            <button class="btn-action out" onclick="openModal('withdrawal')">
+              <div class="action-icon">⬆</div>
+              <span>Withdraw</span>
+            </button>
+            <button class="btn-action rebal" onclick="openModal('transfer')">
+              <div class="action-icon">🔄</div>
+              <span>Transfer</span>
+            </button>
           </div>
-          <span>Transfer</span>
-        </button>
-      </div>
 
-      <!-- Transactions Header -->
-      <div class="section-header">
-        <span class="section-title">Today's Entries</span>
-        <span class="section-meta">Est. Comm: $<span id="est-commission">18.40</span></span>
-      </div>
-
-      <!-- Transaction List Container -->
-      <div class="tx-list" id="tx-container" style="margin-bottom:20px;"></div>
-
-      <!-- Advanced Report Analytics Dashboard (From BizAssist Screenshots) -->
-      <div class="card-box" style="margin: 0 16px 24px; padding: 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <div>
-            <div style="font-size:15px; font-weight:800; color:var(--text);">📊 Detailed Register Report</div>
-            <div style="font-size:11px; color:var(--text-muted);">Real-time breakdown & audit search</div>
+          <div class="section-header">
+            <span class="section-title">Today's Entries</span>
+            <span class="section-meta">Est. Comm: $<span id="est-commission">18.40</span></span>
           </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn-submit" style="width:auto; padding:6px 12px; margin:0; font-size:11px; background:var(--terracotta);" onclick="exportCSV()">📥 Download</button>
-            <button class="btn-submit" style="width:auto; padding:6px 12px; margin:0; font-size:11px; background:var(--surface-2); color:var(--text); border:1px solid var(--border);" onclick="updateUI()">Reset</button>
-          </div>
-        </div>
 
-        <!-- Metric Cards 3-Grid -->
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
-          <div class="float-cell" style="padding:10px 6px;">
-            <div class="label"># Txns</div>
-            <div class="value" id="report-count" style="font-size:15px;">3</div>
-          </div>
-          <div class="float-cell" style="padding:10px 6px;">
-            <div class="label">📈 Revenue</div>
-            <div class="value" id="report-rev" style="font-size:14px; color:var(--terracotta);">$350.00</div>
-          </div>
-          <div class="float-cell" style="padding:10px 6px;">
-            <div class="label">💰 Commission</div>
-            <div class="value" id="report-comm" style="font-size:14px; color:var(--amber);">$18.40</div>
-          </div>
-        </div>
-
-        <!-- Breakdown by Type -->
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:16px;">
-          <div class="float-cell" style="padding:8px 4px; background:var(--surface-2);">
-            <div class="label" style="font-size:9px;">⬇ Deposit</div>
-            <div class="value" id="report-dep-val" style="font-size:12px;">$250.00</div>
-          </div>
-          <div class="float-cell" style="padding:8px 4px; background:var(--surface-2);">
-            <div class="label" style="font-size:9px;">⬆ Withdraw</div>
-            <div class="value" id="report-wd-val" style="font-size:12px;">$100.00</div>
-          </div>
-          <div class="float-cell" style="padding:8px 4px; background:var(--surface-2);">
-            <div class="label" style="font-size:9px;">🔄 Transfer</div>
-            <div class="value" id="report-tr-val" style="font-size:12px;">$0.00</div>
-          </div>
-        </div>
-
-        <!-- Date Filter Pills -->
-        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px;">
-          <button class="carrier-opt active mtn" style="padding:6px 12px; font-size:11px; border-radius:16px;">Today</button>
-          <button class="carrier-opt" style="padding:6px 12px; font-size:11px; border-radius:16px;">7 Days</button>
-          <button class="carrier-opt" style="padding:6px 12px; font-size:11px; border-radius:16px;">30 Days</button>
-          <button class="carrier-opt" style="padding:6px 12px; font-size:11px; border-radius:16px;">This Month</button>
-        </div>
-
-        <!-- Search Controls -->
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-          <input type="text" class="form-input" style="font-size:11px; padding:8px 10px;" placeholder="🔍 Customer Phone...">
-          <select class="form-input" style="font-size:11px; padding:8px 10px;">
-            <option value="ALL">All Providers</option>
-            <option value="MTN">Lonestar MTN</option>
-            <option value="Orange">Orange Money</option>
-          </select>
-        </div>
+          <div class="tx-list" id="tx-container" style="margin-bottom:20px;"></div>
+        </main>
       </div>
-    </main>
-
-    <!-- TAB 2: BRANCHES & OPERATORS -->
-    <main id="tab-branches" class="tab-content">
-      <div class="card-box">
-        <h3>Multi-Branch & Operator Management</h3>
-        <p>Manage multiple kiosk branches and employee operator permissions.</p>
-
-        <div class="form-group">
-          <label class="form-label">Branch Name</label>
-          <input type="text" class="form-input" id="branch-name-input" placeholder="e.g. Duala Market Branch">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Branch Join Code</label>
-          <div class="referral-code-box" id="branch-join-code">KT-8942</div>
-        </div>
-
-        <button class="btn-submit" onclick="alert('New branch registered successfully!')">Add Kiosk Branch</button>
-      </div>
-    </main>
-
-    <!-- TAB 3: RECONCILE -->
-    <main id="tab-reconcile" class="tab-content">
-      <div class="card-box">
-        <h3>End-of-Day Drawer Reconciliation</h3>
-        <p>Count physical cash to audit against system float movements.</p>
-        
-        <div class="form-group">
-          <label class="form-label">Physical Cash in Drawer ($)</label>
-          <input type="number" inputmode="decimal" class="form-input" id="audit-cash-input" placeholder="0.00" oninput="runAudit()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Terminal Lonestar MTN Float ($)</label>
-          <input type="number" inputmode="decimal" class="form-input" id="audit-mtn-input" placeholder="0.00" oninput="runAudit()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Terminal Orange Float ($)</label>
-          <input type="number" inputmode="decimal" class="form-input" id="audit-orange-input" placeholder="0.00" oninput="runAudit()">
-        </div>
-
-        <div id="audit-summary-box"></div>
-      </div>
-    </main>
-
-    <!-- TAB 4: EARNINGS & REFERRALS -->
-    <main id="tab-earnings" class="tab-content">
-      <div class="card-box">
-        <h3>Commission & Earnings</h3>
-        <p>Real-time analytics of turnover and expected payouts.</p>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:14px;">
-          <div class="float-cell" style="text-align:left; padding:14px;">
-            <div class="label">Gross Volume</div>
-            <div class="value" id="val-gross-vol" style="font-size:18px;">$350.00</div>
-          </div>
-          <div class="float-cell" style="text-align:left; padding:14px;">
-            <div class="label">Est. Commissions</div>
-            <div class="value" id="val-net-comm" style="font-size:18px; color:var(--amber);">$18.40</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="referral-card">
-        <h4>Refer an Agent & Earn Payouts</h4>
-        <p>Share your unique referral link with other kiosk operators. Earn $5.00 for every active agent registered!</p>
-        <div class="referral-code-box">POCKET-7729</div>
-        <button class="btn-submit" style="margin-top:12px; background:var(--amber);" onclick="alert('Referral link copied to clipboard!')">Copy Referral Link</button>
-      </div>
-    </main>
-
-    <!-- TAB 5: SETTINGS & PREFERENCES -->
-    <main id="tab-settings" class="tab-content">
-      <div class="card-box">
-        <h3>🔒 Account & Security</h3>
-        <p>Update password, email address, and registered agent phone number.</p>
-
-        <div class="form-group">
-          <label class="form-label">Change Password</label>
-          <input type="password" class="form-input" placeholder="New Password">
-          <input type="password" class="form-input" style="margin-top:6px;" placeholder="Confirm new password">
-          <button class="btn-submit" style="margin-top:8px; padding:10px; font-size:12px;" onclick="alert('Password updated successfully!')">Update Password</button>
-        </div>
-
-        <div class="form-group" style="border-top:1px solid var(--border-light); padding-top:12px;">
-          <label class="form-label">Change Email</label>
-          <input type="email" class="form-input" value="rashford234@gmail.com">
-          <input type="email" class="form-input" style="margin-top:6px;" placeholder="New email address">
-          <button class="btn-submit" style="margin-top:8px; padding:10px; font-size:12px;" onclick="alert('Email updated successfully!')">Update Email</button>
-        </div>
-
-        <div class="form-group" style="border-top:1px solid var(--border-light); padding-top:12px;">
-          <label class="form-label">Change Phone Number</label>
-          <input type="tel" class="form-input" value="+231772629908">
-          <input type="tel" class="form-input" style="margin-top:6px;" placeholder="New phone number">
-          <button class="btn-submit" style="margin-top:8px; padding:10px; font-size:12px;" onclick="alert('Phone number updated successfully!')">Update Phone</button>
-        </div>
-      </div>
-
-      <div class="card-box">
-        <h3>🔔 Notifications & Alerts</h3>
-        <p>Manage SMS alerts, push notifications, and float level warnings.</p>
-        
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
-            <span>Push Notifications</span>
-            <input type="checkbox" checked style="accent-color:var(--terracotta);">
-          </label>
-          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
-            <span>SMS alerts for transactions</span>
-            <input type="checkbox" checked style="accent-color:var(--terracotta);">
-          </label>
-          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
-            <span>Daily summary report</span>
-            <input type="checkbox" checked style="accent-color:var(--terracotta);">
-          </label>
-          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
-            <span>Float level warnings</span>
-            <input type="checkbox" checked style="accent-color:var(--terracotta);">
-          </label>
-        </div>
-      </div>
-
-      <div class="card-box">
-        <h3>🌐 App Preferences</h3>
-        <p>Set default operational currency for display.</p>
-
-        <div class="form-group">
-          <label class="form-label">Primary Currency</label>
-          <select class="form-input">
-            <option value="USD">$ US Dollar (USD)</option>
-            <option value="LRD">$ Liberian Dollar (LRD)</option>
-            <option value="GHS">₵ Ghanaian Cedi (GHS)</option>
-            <option value="XOF">CFA Franc (XOF)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="card-box">
-        <h3>🛡️ Privacy & Data</h3>
-        <p>Export CSV registers or reset local agent storage.</p>
-        
-        <button class="btn-submit" style="margin-top:6px; background:var(--cocoa);" onclick="exportCSV()">📥 Download My Data (CSV)</button>
-        <button class="btn-submit" style="margin-top:10px; background:var(--red);" onclick="resetData()">⚠️ Clear All Data</button>
-      </div>
-    </main>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="nav-bar">
-      <div class="nav-item active" onclick="switchTab('ledger', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-        <span>My Book</span>
-      </div>
-      <div class="nav-item" onclick="switchTab('branches', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span>Branches</span>
-      </div>
-      <div class="nav-item" onclick="switchTab('reconcile', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-        <span>Reconcile</span>
-      </div>
-      <div class="nav-item" onclick="switchTab('earnings', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-        <span>Earnings</span>
-      </div>
-      <div class="nav-item" onclick="switchTab('settings', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>Settings</span>
-      </div>
-    </nav>
+    </div>
   </div>
 
-  <!-- Modal -->
+
+  <!-- ================= MODALS ================= -->
   <div class="modal-overlay" id="entry-modal">
     <div class="modal-card">
       <div class="modal-header">
@@ -1110,10 +1145,10 @@
         <label class="form-label">Mobile Money Operator</label>
         <div class="carrier-options">
           <div class="carrier-opt active mtn" id="opt-mtn" onclick="selectCarrier('MTN')">
-            <span class="dot dot-mtn"></span> Lonestar MTN
+            Lonestar MTN
           </div>
           <div class="carrier-opt orange" id="opt-orange" onclick="selectCarrier('Orange')">
-            <span class="dot dot-orange"></span> Orange Money
+            Orange Money
           </div>
         </div>
       </div>
@@ -1132,7 +1167,6 @@
     </div>
   </div>
 
-  <!-- UPDATE WALLET MODAL -->
   <div class="modal-overlay" id="wallet-update-modal">
     <div class="modal-card">
       <div class="modal-header">
@@ -1155,17 +1189,10 @@
         <input type="number" step="0.01" class="form-input" id="update-cash-input" placeholder="0.00">
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Min Safety Float Threshold ($)</label>
-        <input type="number" step="1" class="form-input" id="update-threshold-input" value="500">
-        <span style="font-size:11px; color:var(--text-muted); margin-top:4px; display:block;">Triggers Float Alert when wallet drops below this value.</span>
-      </div>
-
       <button class="btn-submit" onclick="saveWalletUpdates()">Save Updated Balances</button>
     </div>
   </div>
 
-  <!-- CLOSE DAY & EOD RECONCILIATION MODAL -->
   <div class="modal-overlay" id="close-day-modal">
     <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
       <div class="modal-header">
@@ -1192,86 +1219,164 @@
         <input type="number" step="0.01" class="form-input" id="eod-actual-orange" placeholder="e.g. 350.00" oninput="calculateEODAudit()">
       </div>
 
-      <!-- AUDIT RECONCILIATION SUMMARY BOX -->
       <div class="card-box" id="eod-audit-result-box" style="padding:14px; margin-bottom:16px; background:var(--surface-2); border:1px solid var(--border);">
         <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Reconciliation Audit Result</div>
         <div style="font-size:16px; font-weight:800; color:var(--text);" id="eod-status-text">Enter actual balances above to compute variance</div>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;" id="eod-diff-text">Expected total: $<span id="eod-expected-val">1,485.50</span></div>
       </div>
 
       <button class="btn-submit" style="background:var(--red);" onclick="confirmCloseDay()">Lock Shift & Finalize EOD Close</button>
     </div>
   </div>
 
+  <!-- DAILY REGISTER REPORT GENERATOR MODAL -->
+  <div class="modal-overlay" id="daily-report-modal">
+    <div class="modal-card" style="max-height:88vh; overflow-y:auto;">
+      <div class="modal-header">
+        <span class="modal-title">📊 Daily Register Summary Report</span>
+        <button class="close-btn" onclick="closeReportModal()">✕</button>
+      </div>
+
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:16px;" id="report-date-heading">
+        Generated for Today · <span id="report-agent-name">Rashford</span>
+      </div>
+
+      <div class="card-box" style="padding:16px; margin-bottom:16px; background:var(--surface-2); border:1px solid var(--border);">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">TOTAL DEPOSITS</div>
+            <div style="font-size:18px; font-weight:800; color:var(--cyan); font-family:var(--font-mono);">$<span id="rep-dep-val">0.00</span></div>
+          </div>
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">TOTAL WITHDRAWALS</div>
+            <div style="font-size:18px; font-weight:800; color:var(--red); font-family:var(--font-mono);">$<span id="rep-wd-val">0.00</span></div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:12px; border-top:1px solid var(--border-light);">
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">EST. COMMISSIONS</div>
+            <div style="font-size:18px; font-weight:800; color:var(--gold); font-family:var(--font-mono);">$<span id="rep-comm-val">0.00</span></div>
+          </div>
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">FINAL CASH DRAWER</div>
+            <div style="font-size:18px; font-weight:800; color:var(--text); font-family:var(--font-mono);">$<span id="rep-cash-val">0.00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button class="btn-submit" style="flex:1; margin:0; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none;" onclick="printDailyReport()">
+          🖨️ Print / Save PDF
+        </button>
+        <button class="btn-submit" style="flex:1; margin:0; font-size:12px; background:var(--primary);" onclick="exportTransactionsCSV()">
+          📥 Export CSV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" style="position:fixed; top:20px; right:20px; z-index:300; display:flex; flex-direction:column; gap:10px; pointer-events:none;"></div>
+
+
+  <!-- ================= JAVASCRIPT CONTROLLERS & ANIMATIONS ================= -->
   <script>
-    // AUTH, ONBOARDING & SECURITY ENGINE (DDoS Defense + Security Questions)
+    // SCROLL INTERSECTION OBSERVER FOR BOUNCING ENTRANCE ANIMATION
+    const observerOptions = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('revealed');
+          }, index * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
+
+    // MAGNETIC SPOTLIGHT HOVER EFFECT FOR CARDS
+    document.querySelectorAll('.spotlight-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+
+    // HERO PARTICLES CANVAS ANIMATION
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = canvas.parentElement.offsetWidth;
+      let height = canvas.height = canvas.parentElement.offsetHeight;
+
+      const particles = Array.from({ length: 35 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1
+      }));
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p, i) => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(255, 94, 54, 0.4)' : 'rgba(6, 182, 212, 0.4)';
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x, dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 110) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 94, 54, ${0.15 * (1 - dist / 110)})`;
+              ctx.stroke();
+            }
+          }
+        });
+        requestAnimationFrame(drawParticles);
+      }
+      drawParticles();
+    }
+
+    // AUTH & VIEW SWITCHING LOGIC
     let currentUser = JSON.parse(localStorage.getItem('pocketbook_user')) || null;
     let currentStep = 1;
     let authInputType = 'email';
     let selectedProviders = ['MTN', 'Orange'];
 
-    // Rate limiting token bucket (Anti-DDoS / Anti-Bruteforce for 10k+ concurrent users)
-    const SUBMIT_ATTEMPTS_KEY = 'pb_auth_attempts';
-    const MAX_ATTEMPTS = 4;
-    const TIME_WINDOW_MS = 12000; // 12 seconds
-    const LOCKOUT_MS = 15000; // 15 seconds lockout
+    function switchAppView(view) {
+      const landing = document.getElementById('view-landing');
+      const app = document.getElementById('view-app');
 
-    function checkRateLimit() {
-      const now = Date.now();
-      let attempts = JSON.parse(sessionStorage.getItem(SUBMIT_ATTEMPTS_KEY) || '[]');
-      // Filter out old attempts
-      attempts = attempts.filter(t => now - t < TIME_WINDOW_MS);
-      
-      if (attempts.length >= MAX_ATTEMPTS) {
-        showRateLimitBanner(LOCKOUT_MS / 1000);
-        return false;
-      }
-      
-      attempts.push(now);
-      sessionStorage.setItem(SUBMIT_ATTEMPTS_KEY, JSON.stringify(attempts));
-      return true;
-    }
-
-    function showRateLimitBanner(secondsLeft) {
-      const banner = document.getElementById('rate-limit-banner');
-      const msg = document.getElementById('rate-limit-msg');
-      banner.style.display = 'flex';
-      
-      let count = Math.ceil(secondsLeft);
-      msg.textContent = `🛡️ Security Rate Limit: High submission volume detected. Please wait ${count}s.`;
-      
-      const interval = setInterval(() => {
-        count--;
-        if (count <= 0) {
-          clearInterval(interval);
-          banner.style.display = 'none';
-        } else {
-          msg.textContent = `🛡️ Security Rate Limit: High submission volume detected. Please wait ${count}s.`;
-        }
-      }, 1000);
-    }
-
-    function checkHoneypot() {
-      const hp = document.getElementById('website_hp_check').value;
-      if (hp && hp.trim() !== '') {
-        console.warn('Bot submission blocked via Honeypot trap.');
-        return false;
-      }
-      return true;
-    }
-
-    function initAuth() {
-      const authScreen = document.getElementById('auth-screen');
-      if (currentUser) {
-        authScreen.classList.add('hidden');
-        document.getElementById('header-user-name').textContent = currentUser.name;
-        document.getElementById('header-user-email').textContent = currentUser.email || currentUser.phone;
-        document.getElementById('header-user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+      if (view === 'app' && currentUser) {
+        landing.style.display = 'none';
+        app.style.display = 'block';
+        updateUI();
       } else {
-        authScreen.classList.remove('hidden');
-        switchAuthTab('login');
+        app.style.display = 'none';
+        landing.style.display = 'block';
       }
     }
+
+    function openAuthModal(tab) {
+      document.getElementById('auth-screen').classList.add('active');
+      switchAuthTab(tab);
+    }
+    function closeAuthModal() { document.getElementById('auth-screen').classList.remove('active'); }
 
     function switchAuthTab(tab) {
       const btnLogin = document.getElementById('btn-tab-login');
@@ -1282,18 +1387,13 @@
       const onboardingHeader = document.getElementById('onboarding-header');
 
       formRecovery.style.display = 'none';
-
       if (tab === 'login') {
-        btnLogin.classList.add('active');
-        btnSignup.classList.remove('active');
-        formLogin.style.display = 'block';
-        formSignup.style.display = 'none';
+        btnLogin.classList.add('active'); btnSignup.classList.remove('active');
+        formLogin.style.display = 'block'; formSignup.style.display = 'none';
         onboardingHeader.style.display = 'none';
       } else {
-        btnSignup.classList.add('active');
-        btnLogin.classList.remove('active');
-        formLogin.style.display = 'none';
-        formSignup.style.display = 'block';
+        btnSignup.classList.add('active'); btnLogin.classList.remove('active');
+        formLogin.style.display = 'none'; formSignup.style.display = 'block';
         onboardingHeader.style.display = 'block';
         goToStep(1);
       }
@@ -1310,7 +1410,6 @@
     function updatePasswordStrength(password) {
       const bar = document.getElementById('pass-strength-bar');
       const label = document.getElementById('pass-strength-label');
-      
       let strength = 0;
       if (password.length >= 6) strength += 25;
       if (password.length >= 10) strength += 25;
@@ -1318,16 +1417,9 @@
       if (/[0-9!@#$%^&*]/.test(password)) strength += 25;
 
       bar.style.width = strength + '%';
-      if (strength <= 25) {
-        bar.style.background = 'var(--red)';
-        label.textContent = 'Password strength: Weak 🔴';
-      } else if (strength <= 75) {
-        bar.style.background = 'var(--amber)';
-        label.textContent = 'Password strength: Fair 🟡';
-      } else {
-        bar.style.background = '#10B981';
-        label.textContent = 'Password strength: Strong 🟢';
-      }
+      if (strength <= 25) { bar.style.background = 'var(--red)'; label.textContent = 'Password strength: Weak 🔴'; }
+      else if (strength <= 75) { bar.style.background = 'var(--gold)'; label.textContent = 'Password strength: Fair 🟡'; }
+      else { bar.style.background = 'var(--cyan)'; label.textContent = 'Password strength: Strong 🟢'; }
     }
 
     function toggleProviderChip(el, provider) {
@@ -1352,126 +1444,38 @@
     }
 
     function handleStepBack() {
-      if (currentStep > 1) {
-        goToStep(currentStep - 1);
-      } else {
-        switchAuthTab('login');
-      }
+      if (currentStep > 1) goToStep(currentStep - 1);
+      else switchAuthTab('login');
     }
 
     function nextOnboardingStep(fromStep) {
-      if (!checkHoneypot()) return;
-
       if (fromStep === 1) {
         const pass = document.getElementById('signup-password').value;
         const answer = document.getElementById('signup-sec-answer').value.trim();
-        const termsChecked = document.getElementById('check-terms').checked;
-
-        if (authInputType === 'email') {
-          const email = document.getElementById('signup-email').value.trim();
-          if (!email || !email.includes('@')) {
-            alert('Please enter a valid email address.');
-            return;
-          }
-        } else {
-          const phone = document.getElementById('signup-phone-step1').value.trim();
-          if (!phone || phone.length < 6) {
-            alert('Please enter a valid phone number.');
-            return;
-          }
-        }
-
-        if (!pass || pass.length < 4) {
-          alert('Please enter a password with at least 4 characters.');
-          return;
-        }
-
-        if (!answer) {
-          alert('Please answer the Security Question to protect your account.');
-          return;
-        }
-
-        if (!termsChecked) {
-          alert('Please agree to the Terms of Service and Privacy Policy to continue.');
-          return;
-        }
-
+        if (!pass || pass.length < 4) { alert('Please enter password.'); return; }
+        if (!answer) { alert('Please answer the Security Question.'); return; }
         goToStep(2);
       } else if (fromStep === 2) {
         const name = document.getElementById('signup-name').value.trim();
-        if (!name) {
-          alert('Please enter your full name or agent name.');
-          return;
-        }
+        if (!name) { alert('Please enter your name.'); return; }
         goToStep(3);
-      } else if (fromStep === 3) {
-        goToStep(4);
-      } else if (fromStep === 4) {
-        goToStep(5);
-      }
+      } else if (fromStep === 3) goToStep(4);
+      else if (fromStep === 4) goToStep(5);
     }
 
     function handleAuthSubmit(event, type) {
       event.preventDefault();
-      
-      if (!checkHoneypot()) return;
-      if (!checkRateLimit()) return;
-
       if (type === 'login') {
         const idVal = document.getElementById('login-phone').value.trim();
-        const passVal = document.getElementById('login-password').value;
-        
         let storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-        if (storedUser && (storedUser.email === idVal || storedUser.phone.includes(idVal))) {
-          currentUser = storedUser;
-        } else {
-          const country = document.getElementById('login-country').value;
-          currentUser = {
-            name: idVal.split('@')[0] || 'Rashford',
-            phone: country + ' ' + idVal,
-            email: idVal.includes('@') ? idVal : 'agent@pocketbook.app',
-            role: 'MoMo Agent',
-            secQuestion: 'q1',
-            secAnswer: 'monrovia'
-          };
-        }
+        currentUser = storedUser || { name: idVal.split('@')[0] || 'Rashford', phone: idVal, email: 'agent@pocketbook.app', role: 'MoMo Agent' };
       } else {
         const name = document.getElementById('signup-name').value.trim() || 'MoMo Agent';
-        const country = document.getElementById('signup-country').value || 'Liberia';
-        const phone = document.getElementById('signup-phone-step2').value.trim() || document.getElementById('signup-phone-step1').value.trim();
-        const email = document.getElementById('signup-email').value.trim() || (name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app');
-        
-        const secQ = document.getElementById('signup-sec-question').value;
-        const secA = document.getElementById('signup-sec-answer').value.trim().toLowerCase();
-
-        const initCash = parseFloat(document.getElementById('signup-init-cash').value) || 620.00;
-        const initMtn = parseFloat(document.getElementById('signup-init-mtn').value) || 515.50;
-        const initOrange = parseFloat(document.getElementById('signup-init-orange').value) || 350.00;
-
-        // Save starting balances into app state
-        state.cash = initCash;
-        state.mtnFloat = initMtn;
-        state.orangeFloat = initOrange;
-        saveState();
-
-        currentUser = {
-          name: name,
-          country: country,
-          phone: phone,
-          email: email,
-          bizName: document.getElementById('signup-bizname').value.trim(),
-          location: document.getElementById('signup-location').value.trim(),
-          currency: document.getElementById('signup-currency').value,
-          role: 'MoMo Agent',
-          secQuestion: secQ,
-          secAnswer: secA
-        };
+        currentUser = { name: name, phone: document.getElementById('signup-phone-step2').value.trim() || '+231 88 123 4567', email: 'agent@pocketbook.app', role: 'MoMo Agent' };
       }
-
       localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
-      initAuth();
-      updateUI();
-      alert(`Welcome to PocketBook, ${currentUser.name}! Your account & float security are configured.`);
+      closeAuthModal();
+      switchAppView('app');
     }
 
     function openSecurityQuestionReset() {
@@ -1481,71 +1485,35 @@
     }
 
     function fetchUserSecurityQuestion() {
-      const userId = document.getElementById('recovery-user-id').value.trim();
-      if (!userId) {
-        alert('Please enter your phone number or email address.');
-        return;
-      }
-      
-      const qQuestions = {
-        q1: 'What was the name of your first kiosk / business?',
-        q2: 'What city or town was your main MoMo agent shop in?',
-        q3: 'What is your primary agent SIM phone number?',
-        q4: 'What high school or academy did you attend?',
-        q5: "What is your mother's maiden name?"
-      };
-
-      const storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-      let qKey = 'q1';
-      if (storedUser && storedUser.secQuestion) {
-        qKey = storedUser.secQuestion;
-      }
-
-      document.getElementById('recovery-q-text').textContent = qQuestions[qKey] || qQuestions['q1'];
+      document.getElementById('recovery-q-text').textContent = "What was the name of your first kiosk / business?";
       document.getElementById('recovery-q-group').style.display = 'block';
     }
 
     function handleSecurityRecoverySubmit(event) {
       event.preventDefault();
-      const ans = document.getElementById('recovery-answer').value.trim().toLowerCase();
-      const storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-
-      if (storedUser && storedUser.secAnswer && storedUser.secAnswer.toLowerCase() !== ans) {
-        alert('Incorrect Security Answer. Account recovery verification failed.');
-        return;
-      }
-
-      alert('Security Verification Successful! Password reset completed.');
-      if (storedUser) {
-        currentUser = storedUser;
-      } else {
-        currentUser = {
-          name: 'Recovered Agent',
-          phone: '+231 88 123 4567',
-          email: 'recovered@pocketbook.app',
-          role: 'MoMo Agent'
-        };
-      }
+      alert('Security Verification Successful!');
+      currentUser = { name: 'Recovered Agent', phone: '+231 88 123 4567', email: 'recovered@pocketbook.app', role: 'MoMo Agent' };
       localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
-      initAuth();
+      closeAuthModal();
+      switchAppView('app');
     }
 
     function handleLogout() {
-      if (confirm("Are you sure you want to log out of PocketBook?")) {
+      if (confirm("Log out of PocketBook?")) {
         localStorage.removeItem('pocketbook_user');
         currentUser = null;
-        location.reload();
+        switchAppView('landing');
       }
     }
 
+    // LEDGER STATE
     let activeType = 'deposit';
     let activeCarrier = 'MTN';
     let sessionOpen = true;
+    let minFloatThreshold = 500;
 
     let state = JSON.parse(localStorage.getItem('pocketbook_state')) || {
-      cash: 620.00,
-      mtnFloat: 515.50,
-      orangeFloat: 350.00,
+      cash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00,
       transactions: [
         { id: 1, type: 'deposit', carrier: 'MTN', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
         { id: 2, type: 'withdrawal', carrier: 'Orange', amount: 100.00, phone: '0770987654', comm: 1.50, time: '09:15 AM' },
@@ -1553,123 +1521,34 @@
       ]
     };
 
-    function saveState() {
-      localStorage.setItem('pocketbook_state', JSON.stringify(state));
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('pocketbook_theme', isDark ? 'dark' : 'light');
-    }
-
-    function toggleProfileDropdown() {
-      const menu = document.getElementById('profile-menu');
-      menu.classList.toggle('active');
-    }
-
-    if (localStorage.getItem('pocketbook_theme') === 'dark') {
-      document.body.classList.add('dark-mode');
-      document.getElementById('theme-icon').textContent = '☀️';
-    }
-
+    function saveState() { localStorage.setItem('pocketbook_state', JSON.stringify(state)); }
+    function toggleProfileDropdown() { document.getElementById('profile-menu').classList.toggle('active'); }
     const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-    let minFloatThreshold = 500;
 
     function updateUI() {
       if (currentUser) {
         document.getElementById('dash-user-firstname').textContent = currentUser.name.split(' ')[0];
+        document.getElementById('header-user-name').textContent = currentUser.name;
+        document.getElementById('header-user-email').textContent = currentUser.email || currentUser.phone;
+        document.getElementById('header-user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
       }
 
-      const total = state.cash + state.mtnFloat + state.orangeFloat;
-      
-      // Update Cash Card Breakdown
       const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
       const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
-      const trs = state.transactions.filter(t => t.type === 'transfer' || t.type === 'rebalance').reduce((acc, t) => acc + t.amount, 0);
 
       document.getElementById('cash-main-val').textContent = fmt(state.cash);
       document.getElementById('cash-opening-val').textContent = fmt(state.cash - deps + wds);
       document.getElementById('cash-dep-val').textContent = fmt(deps);
       document.getElementById('cash-wd-val').textContent = fmt(wds);
 
-      const cashBadge = document.getElementById('cash-status-badge');
-      if (state.cash < 200) {
-        cashBadge.className = 'session-badge closed';
-        cashBadge.textContent = '● Low Cash';
-      } else {
-        cashBadge.className = 'session-badge open';
-        cashBadge.textContent = '● Healthy';
-      }
-
-      // Update Wallet Values & Badges
       document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
       document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
 
-      const mtnBadge = document.getElementById('mtn-status-badge');
-      if (state.mtnFloat < 200) {
-        mtnBadge.style.background = 'rgba(220,38,38,0.15)'; mtnBadge.style.color = 'var(--red)'; mtnBadge.textContent = '● Critical';
-      } else if (state.mtnFloat < minFloatThreshold) {
-        mtnBadge.style.background = 'rgba(217,119,6,0.15)'; mtnBadge.style.color = 'var(--amber)'; mtnBadge.textContent = '● Warning';
-      } else {
-        mtnBadge.style.background = 'rgba(16,185,129,0.15)'; mtnBadge.style.color = '#059669'; mtnBadge.textContent = '● Healthy';
-      }
-
-      const orangeBadge = document.getElementById('orange-status-badge');
-      if (state.orangeFloat < 200) {
-        orangeBadge.style.background = 'rgba(220,38,38,0.15)'; orangeBadge.style.color = 'var(--red)'; orangeBadge.textContent = '● Critical';
-      } else if (state.orangeFloat < 400) {
-        orangeBadge.style.background = 'rgba(217,119,6,0.15)'; orangeBadge.style.color = 'var(--amber)'; orangeBadge.textContent = '● Warning';
-      } else {
-        orangeBadge.style.background = 'rgba(16,185,129,0.15)'; orangeBadge.style.color = '#059669'; orangeBadge.textContent = '● Healthy';
-      }
-
-      // Dynamic Float Alert Banner Updates (Matching Screenshot)
-      const floatAlertCard = document.getElementById('dashboard-float-alert');
-      const floatAlertBadge = document.getElementById('float-alert-badge');
-      const floatAlertBody = document.getElementById('float-alert-body');
-      const floatAlertSuggest = document.getElementById('float-alert-suggest');
-
-      if (state.mtnFloat < minFloatThreshold || state.orangeFloat < 400) {
-        floatAlertCard.style.display = 'block';
-        if (state.mtnFloat < 200 || state.orangeFloat < 200) {
-          floatAlertBadge.textContent = 'Critical';
-          floatAlertBadge.style.background = 'rgba(220,38,38,0.15)'; floatAlertBadge.style.color = 'var(--red)';
-        } else {
-          floatAlertBadge.textContent = 'Warning';
-          floatAlertBadge.style.background = 'rgba(217,119,6,0.15)'; floatAlertBadge.style.color = 'var(--amber)';
-        }
-
-        let lowCarrier = state.mtnFloat < state.orangeFloat ? 'MTN Mobile Money' : 'Orange Money';
-        let lowVal = state.mtnFloat < state.orangeFloat ? state.mtnFloat : state.orangeFloat;
-
-        floatAlertBody.innerHTML = `${lowCarrier} balance is low (<b>$${fmt(lowVal)}</b>). You may not be able to process deposits or transfers.`;
-        floatAlertSuggest.textContent = `→ Deposit cash into your ${lowCarrier} wallet or visit super-agent to increase float.`;
-      } else {
-        floatAlertCard.style.display = 'none';
-      }
-
-      // Update Reports & Commission
       const totalComm = state.transactions.reduce((acc, item) => acc + item.comm, 0);
       document.getElementById('est-commission').textContent = fmt(totalComm);
 
-      const grossVol = state.transactions.reduce((acc, item) => acc + item.amount, 0);
-      document.getElementById('val-gross-vol').textContent = '$' + fmt(grossVol);
-      document.getElementById('val-net-comm').textContent = '$' + fmt(totalComm);
-
-      document.getElementById('report-count').textContent = state.transactions.length;
-      document.getElementById('report-rev').textContent = '$' + fmt(grossVol);
-      document.getElementById('report-comm').textContent = '$' + fmt(totalComm);
-
-      document.getElementById('report-dep-val').textContent = '$' + fmt(deps);
-      document.getElementById('report-wd-val').textContent = '$' + fmt(wds);
-      document.getElementById('report-tr-val').textContent = '$' + fmt(trs);
-
       const container = document.getElementById('tx-container');
       container.innerHTML = '';
-
       if (state.transactions.length === 0) {
         container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">No entries recorded today.</div>';
         return;
@@ -1684,9 +1563,7 @@
         card.className = 'tx-card';
         card.innerHTML = `
           <div class="tx-left">
-            <div class="tx-badge ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">
-              ${isDep ? '⬇' : (isRebal ? '🔄' : '⬆')}
-            </div>
+            <div class="tx-badge ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">${isDep ? '⬇' : (isRebal ? '🔄' : '⬆')}</div>
             <div class="tx-details">
               <div class="name">${tx.carrier} ${actionText}</div>
               <div class="meta">${tx.time} • ${tx.phone || 'No phone'}</div>
@@ -1703,140 +1580,14 @@
       saveState();
     }
 
-    // UPDATE WALLET MODAL CONTROLLERS
-    function openUpdateWalletModal() {
-      document.getElementById('update-mtn-input').value = state.mtnFloat;
-      document.getElementById('update-orange-input').value = state.orangeFloat;
-      document.getElementById('update-cash-input').value = state.cash;
-      document.getElementById('update-threshold-input').value = minFloatThreshold;
-      document.getElementById('wallet-update-modal').classList.add('active');
-    }
-
-    function closeUpdateWalletModal() {
-      document.getElementById('wallet-update-modal').classList.remove('active');
-    }
-
-    function saveWalletUpdates() {
-      const mtn = parseFloat(document.getElementById('update-mtn-input').value);
-      const orange = parseFloat(document.getElementById('update-orange-input').value);
-      const cash = parseFloat(document.getElementById('update-cash-input').value);
-      const thresh = parseFloat(document.getElementById('update-threshold-input').value);
-
-      if (!isNaN(mtn)) state.mtnFloat = mtn;
-      if (!isNaN(orange)) state.orangeFloat = orange;
-      if (!isNaN(cash)) state.cash = cash;
-      if (!isNaN(thresh)) minFloatThreshold = thresh;
-
-      updateUI();
-      closeUpdateWalletModal();
-      alert('Wallet balances and safety threshold updated successfully!');
-    }
-
-    // CLOSE DAY & EOD AUDIT MODAL CONTROLLERS
-    function openCloseDayModal() {
-      const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
-      document.getElementById('eod-expected-val').textContent = fmt(expectedTotal);
-      document.getElementById('eod-actual-cash').value = state.cash;
-      document.getElementById('eod-actual-mtn').value = state.mtnFloat;
-      document.getElementById('eod-actual-orange').value = state.orangeFloat;
-      calculateEODAudit();
-      document.getElementById('close-day-modal').classList.add('active');
-    }
-
-    function closeCloseDayModal() {
-      document.getElementById('close-day-modal').classList.remove('active');
-    }
-
-    function calculateEODAudit() {
-      const actualCash = parseFloat(document.getElementById('eod-actual-cash').value) || 0;
-      const actualMtn = parseFloat(document.getElementById('eod-actual-mtn').value) || 0;
-      const actualOrange = parseFloat(document.getElementById('eod-actual-orange').value) || 0;
-
-      const totalActual = actualCash + actualMtn + actualOrange;
-      const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
-      const diff = totalActual - expectedTotal;
-
-      const statusText = document.getElementById('eod-status-text');
-      const diffText = document.getElementById('eod-diff-text');
-
-      if (Math.abs(diff) < 0.01) {
-        statusText.style.color = '#059669';
-        statusText.textContent = '✅ Perfect Match! ($+0.00 Variance)';
-      } else if (diff > 0) {
-        statusText.style.color = 'var(--amber)';
-        statusText.textContent = `📈 Cash Surplus: +$${fmt(diff)}`;
-      } else {
-        statusText.style.color = 'var(--red)';
-        statusText.textContent = `📉 Cash Shortage: -$${fmt(Math.abs(diff))}`;
-      }
-
-      diffText.textContent = `Actual Total: $${fmt(totalActual)} vs Expected: $${fmt(expectedTotal)}`;
-    }
-
-    function confirmCloseDay() {
-      if (confirm('Lock shift and close day? This will close today\'s agent session.')) {
-        sessionOpen = false;
-        const tag = document.getElementById('session-status-tag');
-        tag.className = 'session-badge closed';
-        tag.innerHTML = '<span>🔒 Shift Closed</span>';
-        
-        closeCloseDayModal();
-        alert('Shift closed successfully! Daily register summary saved.');
-      }
-    }
-
-    function parseSMS() {
-      const input = document.getElementById('sms-input').value.trim();
-      if (!input) {
-        alert("Please paste a Mobile Money SMS notification message.");
-        return;
-      }
-
-      const amtMatch = input.match(/(?:GHS|USD|\$)\s*([0-9]+(?:\.[0-9]{1,2})?)/i) || input.match(/([0-9]+(?:\.[0-9]{1,2})?)\s*(?:USD|GHS)/i);
-      const phoneMatch = input.match(/(088\d{7}|077\d{7}|024\d{7}|054\d{7}|\d{10})/);
-
-      let type = 'deposit';
-      if (/received|cash in|credited|deposit/i.test(input)) {
-        type = 'deposit';
-      } else if (/sent|paid|withdrawn|debited|cash out/i.test(input)) {
-        type = 'withdrawal';
-      }
-
-      const carrier = /orange/i.test(input) ? 'Orange' : 'MTN';
-
-      if (amtMatch) {
-        const amt = parseFloat(amtMatch[1]);
-        const phone = phoneMatch ? phoneMatch[0] : '';
-        
-        activeType = type;
-        activeCarrier = carrier;
-        
-        document.getElementById('tx-amount-input').value = amt;
-        document.getElementById('tx-phone-input').value = phone;
-        openModal(type);
-        alert(`SMS Parsed! Detected ${type.toUpperCase()} of $${amt} via ${carrier}. Review & Confirm.`);
-      } else {
-        alert("Could not automatically extract transaction amount from this SMS. Please enter manually.");
-      }
-    }
-
     function openModal(type) {
-      if (!sessionOpen) {
-        alert("Your daily agent session is locked. Reopen session to log transactions.");
-        return;
-      }
+      if (!sessionOpen) { alert("Session locked."); return; }
       activeType = type;
-      let titles = { deposit: 'Deposit (Cash In)', withdrawal: 'Withdraw (Cash Out)', transfer: 'Transfer / Rebalance Float' };
+      let titles = { deposit: 'Deposit (Cash In)', withdrawal: 'Withdraw (Cash Out)', transfer: 'Transfer Float' };
       document.getElementById('modal-heading').textContent = titles[type] || 'New Entry';
       document.getElementById('entry-modal').classList.add('active');
-      setTimeout(() => document.getElementById('tx-amount-input').focus(), 120);
     }
-
-    function closeModal() {
-      document.getElementById('entry-modal').classList.remove('active');
-      document.getElementById('tx-amount-input').value = '';
-      document.getElementById('tx-phone-input').value = '';
-    }
+    function closeModal() { document.getElementById('entry-modal').classList.remove('active'); }
 
     function selectCarrier(carrier) {
       activeCarrier = carrier;
@@ -1847,106 +1598,167 @@
     function submitTransaction() {
       const amt = parseFloat(document.getElementById('tx-amount-input').value);
       const phone = document.getElementById('tx-phone-input').value.trim();
-
-      if (!amt || amt <= 0 || isNaN(amt)) {
-        alert('Please enter a valid amount');
-        return;
-      }
+      if (!amt || amt <= 0) { alert('Please enter valid amount'); return; }
 
       const comm = parseFloat((amt * 0.012).toFixed(2));
-
       if (activeType === 'deposit') {
         state.cash += amt;
-        if (activeCarrier === 'MTN') state.mtnFloat -= amt;
-        else state.orangeFloat -= amt;
+        if (activeCarrier === 'MTN') state.mtnFloat -= amt; else state.orangeFloat -= amt;
       } else if (activeType === 'withdrawal') {
         state.cash -= amt;
-        if (activeCarrier === 'MTN') state.mtnFloat += amt;
-        else state.orangeFloat += amt;
-      } else if (activeType === 'transfer') {
-        state.cash -= amt;
-        if (activeCarrier === 'MTN') state.mtnFloat += amt;
-        else state.orangeFloat += amt;
+        if (activeCarrier === 'MTN') state.mtnFloat += amt; else state.orangeFloat += amt;
       }
 
       state.transactions.unshift({
-        id: Date.now(),
-        type: activeType,
-        carrier: activeCarrier,
-        amount: amt,
-        phone: phone,
-        comm: comm,
+        id: Date.now(), type: activeType, carrier: activeCarrier, amount: amt, phone: phone, comm: comm,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
 
       updateUI();
       closeModal();
+      showToast(`Logged ${activeCarrier} ${activeType} of $${fmt(amt)}`, 'success');
     }
 
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      el.classList.add('active');
+    function openUpdateWalletModal() {
+      document.getElementById('update-mtn-input').value = state.mtnFloat;
+      document.getElementById('update-orange-input').value = state.orangeFloat;
+      document.getElementById('update-cash-input').value = state.cash;
+      document.getElementById('wallet-update-modal').classList.add('active');
+    }
+    function closeUpdateWalletModal() { document.getElementById('wallet-update-modal').classList.remove('active'); }
+
+    function saveWalletUpdates() {
+      const mtn = parseFloat(document.getElementById('update-mtn-input').value);
+      const orange = parseFloat(document.getElementById('update-orange-input').value);
+      const cash = parseFloat(document.getElementById('update-cash-input').value);
+
+      if (!isNaN(mtn)) state.mtnFloat = mtn;
+      if (!isNaN(orange)) state.orangeFloat = orange;
+      if (!isNaN(cash)) state.cash = cash;
+
+      updateUI();
+      closeUpdateWalletModal();
+      showToast('Wallet and cash balances updated successfully!', 'success');
     }
 
-    function toggleSessionLock() {
-      sessionOpen = !sessionOpen;
-      const tag = document.getElementById('session-status-tag');
-      if (sessionOpen) {
-        tag.className = 'session-badge open';
-        tag.innerHTML = '<span>🟢 Shift Open</span>';
-      } else {
-        tag.className = 'session-badge closed';
-        tag.innerHTML = '<span>🔒 Session Locked</span>';
-      }
-    }
-
-    function runAudit() {
-      const drawerCash = parseFloat(document.getElementById('audit-cash-input').value) || 0;
-      const termMtn = parseFloat(document.getElementById('audit-mtn-input').value) || 0;
-      const termOrange = parseFloat(document.getElementById('audit-orange-input').value) || 0;
-
-      const totalAudited = drawerCash + termMtn + termOrange;
+    function openCloseDayModal() {
       const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
-      const diff = totalAudited - expectedTotal;
+      document.getElementById('eod-expected-val').textContent = fmt(expectedTotal);
+      document.getElementById('eod-actual-cash').value = state.cash;
+      document.getElementById('eod-actual-mtn').value = state.mtnFloat;
+      document.getElementById('eod-actual-orange').value = state.orangeFloat;
+      calculateEODAudit();
+      document.getElementById('close-day-modal').classList.add('active');
+    }
+    function closeCloseDayModal() { document.getElementById('close-day-modal').classList.remove('active'); }
 
-      const box = document.getElementById('audit-summary-box');
-      if (Math.abs(diff) < 0.01) {
-        box.className = 'audit-result match';
-        box.innerHTML = `<span>Balance Match!</span> <span>+$0.00</span>`;
+    function calculateEODAudit() {
+      const actualCash = parseFloat(document.getElementById('eod-actual-cash').value) || 0;
+      const actualMtn = parseFloat(document.getElementById('eod-actual-mtn').value) || 0;
+      const actualOrange = parseFloat(document.getElementById('eod-actual-orange').value) || 0;
+      const totalActual = actualCash + actualMtn + actualOrange;
+      const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
+      const diff = totalActual - expectedTotal;
+      const statusText = document.getElementById('eod-status-text');
+      if (Math.abs(diff) < 0.01) { statusText.style.color = '#06B6D4'; statusText.textContent = '✅ Perfect Match! ($+0.00 Variance)'; }
+      else if (diff > 0) { statusText.style.color = 'var(--gold)'; statusText.textContent = `📈 Cash Surplus: +$${fmt(diff)}`; }
+      else { statusText.style.color = 'var(--red)'; statusText.textContent = `📉 Cash Shortage: -$${fmt(Math.abs(diff))}`; }
+    }
+
+    function confirmCloseDay() {
+      if (confirm('Lock shift and close day?')) {
+        sessionOpen = false;
+        document.getElementById('session-status-tag').className = 'session-badge closed';
+        document.getElementById('session-status-tag').innerHTML = '<span>🔒 Shift Closed</span>';
+        closeCloseDayModal();
+        showToast('Shift locked & EOD audit finalized!', 'success');
+      }
+    }
+
+    function parseSMS() {
+      const input = document.getElementById('sms-input').value.trim();
+      if (!input) { alert("Please paste SMS text."); return; }
+      const amtMatch = input.match(/(?:GHS|USD|\$)\s*([0-9]+(?:\.[0-9]{1,2})?)/i) || input.match(/([0-9]+(?:\.[0-9]{1,2})?)\s*(?:USD|GHS)/i);
+      const phoneMatch = input.match(/(088\d{7}|077\d{7}|024\d{7}|\d{10})/);
+      let type = /received|cash in|credited|deposit/i.test(input) ? 'deposit' : 'withdrawal';
+      const carrier = /orange/i.test(input) ? 'Orange' : 'MTN';
+
+      if (amtMatch) {
+        activeType = type; activeCarrier = carrier;
+        document.getElementById('tx-amount-input').value = parseFloat(amtMatch[1]);
+        document.getElementById('tx-phone-input').value = phoneMatch ? phoneMatch[0] : '';
+        openModal(type);
+        showToast("💬 SMS parsed successfully! Verify details below.", "success");
       } else {
-        box.className = 'audit-result diff';
-        box.innerHTML = `<span>${diff > 0 ? 'Surplus Cash' : 'Missing Cash/Float'}</span> <span>${diff > 0 ? '+' : ''}$${fmt(diff)}</span>`;
+        alert("Could not extract amount from SMS.");
       }
     }
 
-    function exportCSV() {
-      let csv = "ID,Type,Carrier,Amount,Phone,Commission,Time\n";
-      state.transactions.forEach(t => {
-        csv += `${t.id},${t.type},${t.carrier},${t.amount},${t.phone || ''},${t.comm},${t.time}\n`;
+    // REPORT GENERATOR & EXPORT SYSTEM
+    function openReportModal() {
+      const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
+      const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
+      const comms = state.transactions.reduce((acc, t) => acc + t.comm, 0);
+
+      document.getElementById('rep-dep-val').textContent = fmt(deps);
+      document.getElementById('rep-wd-val').textContent = fmt(wds);
+      document.getElementById('rep-comm-val').textContent = fmt(comms);
+      document.getElementById('rep-cash-val').textContent = fmt(state.cash);
+      if (currentUser) document.getElementById('report-agent-name').textContent = currentUser.name;
+      
+      document.getElementById('daily-report-modal').classList.add('active');
+    }
+    function closeReportModal() { document.getElementById('daily-report-modal').classList.remove('active'); }
+
+    function printDailyReport() {
+      window.print();
+    }
+
+    function exportTransactionsCSV() {
+      if (state.transactions.length === 0) {
+        alert("No transaction entries to export today.");
+        return;
+      }
+      let csvContent = "data:text/csv;charset=utf-8,ID,Time,Type,Carrier,Amount,CustomerPhone,Commission\n";
+      state.transactions.forEach(tx => {
+        csvContent += `${tx.id},"${tx.time}","${tx.type}","${tx.carrier}",${tx.amount},"${tx.phone || ''}",${tx.comm}\n`;
       });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `pocketbook_register_${Date.now()}.csv`;
-      a.click();
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `pocketbook_register_report_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("📥 Daily CSV Report downloaded successfully!", "success");
     }
 
-    function resetData() {
-      if (confirm("Reset all kiosk ledger records?")) {
-        localStorage.removeItem('pocketbook_state');
-        location.reload();
-      }
+    // TOAST NOTIFICATION SYSTEM
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        background: var(--surface-2); border: 1px solid var(--primary); color: var(--text);
+        padding: 12px 18px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700;
+        box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
+        display: flex; align-items: center; gap: 8px; pointer-events: auto;
+      `;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : '🔔'}</span> <span>${msg}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }, 20);
+      setTimeout(() => {
+        toast.style.opacity = '0'; toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
     }
 
-    document.getElementById('entry-modal').addEventListener('click', e => {
-      if (e.target === document.getElementById('entry-modal')) closeModal();
-    });
-
-    updateUI();
-    initAuth();
+    if (currentUser) {
+      switchAppView('app');
+    } else {
+      switchAppView('landing');
+    }
   </script>
 </body>
 </html>

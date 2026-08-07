@@ -997,6 +997,9 @@
                 <span style="font-size:9px; background:var(--primary-glow); color:var(--primary); padding:2px 6px; border-radius:10px; font-weight:800;">Active Agent</span>
               </div>
             </div>
+            <div class="dropdown-item" onclick="openReportModal(); toggleProfileDropdown();">
+              📊 Generate Daily Report
+            </div>
             <div class="dropdown-item" onclick="switchAppView('landing')">
               🌐 Home / Landing Page
             </div>
@@ -1224,6 +1227,56 @@
       <button class="btn-submit" style="background:var(--red);" onclick="confirmCloseDay()">Lock Shift & Finalize EOD Close</button>
     </div>
   </div>
+
+  <!-- DAILY REGISTER REPORT GENERATOR MODAL -->
+  <div class="modal-overlay" id="daily-report-modal">
+    <div class="modal-card" style="max-height:88vh; overflow-y:auto;">
+      <div class="modal-header">
+        <span class="modal-title">📊 Daily Register Summary Report</span>
+        <button class="close-btn" onclick="closeReportModal()">✕</button>
+      </div>
+
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:16px;" id="report-date-heading">
+        Generated for Today · <span id="report-agent-name">Rashford</span>
+      </div>
+
+      <div class="card-box" style="padding:16px; margin-bottom:16px; background:var(--surface-2); border:1px solid var(--border);">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">TOTAL DEPOSITS</div>
+            <div style="font-size:18px; font-weight:800; color:var(--cyan); font-family:var(--font-mono);">$<span id="rep-dep-val">0.00</span></div>
+          </div>
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">TOTAL WITHDRAWALS</div>
+            <div style="font-size:18px; font-weight:800; color:var(--red); font-family:var(--font-mono);">$<span id="rep-wd-val">0.00</span></div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:12px; border-top:1px solid var(--border-light);">
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">EST. COMMISSIONS</div>
+            <div style="font-size:18px; font-weight:800; color:var(--gold); font-family:var(--font-mono);">$<span id="rep-comm-val">0.00</span></div>
+          </div>
+          <div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">FINAL CASH DRAWER</div>
+            <div style="font-size:18px; font-weight:800; color:var(--text); font-family:var(--font-mono);">$<span id="rep-cash-val">0.00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button class="btn-submit" style="flex:1; margin:0; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none;" onclick="printDailyReport()">
+          🖨️ Print / Save PDF
+        </button>
+        <button class="btn-submit" style="flex:1; margin:0; font-size:12px; background:var(--primary);" onclick="exportTransactionsCSV()">
+          📥 Export CSV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" style="position:fixed; top:20px; right:20px; z-index:300; display:flex; flex-direction:column; gap:10px; pointer-events:none;"></div>
 
 
   <!-- ================= JAVASCRIPT CONTROLLERS & ANIMATIONS ================= -->
@@ -1563,6 +1616,7 @@
 
       updateUI();
       closeModal();
+      showToast(`Logged ${activeCarrier} ${activeType} of $${fmt(amt)}`, 'success');
     }
 
     function openUpdateWalletModal() {
@@ -1584,7 +1638,7 @@
 
       updateUI();
       closeUpdateWalletModal();
-      alert('Wallet balances updated successfully!');
+      showToast('Wallet and cash balances updated successfully!', 'success');
     }
 
     function openCloseDayModal() {
@@ -1617,7 +1671,7 @@
         document.getElementById('session-status-tag').className = 'session-badge closed';
         document.getElementById('session-status-tag').innerHTML = '<span>🔒 Shift Closed</span>';
         closeCloseDayModal();
-        alert('Shift closed successfully!');
+        showToast('Shift locked & EOD audit finalized!', 'success');
       }
     }
 
@@ -1634,9 +1688,70 @@
         document.getElementById('tx-amount-input').value = parseFloat(amtMatch[1]);
         document.getElementById('tx-phone-input').value = phoneMatch ? phoneMatch[0] : '';
         openModal(type);
+        showToast("💬 SMS parsed successfully! Verify details below.", "success");
       } else {
         alert("Could not extract amount from SMS.");
       }
+    }
+
+    // REPORT GENERATOR & EXPORT SYSTEM
+    function openReportModal() {
+      const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
+      const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
+      const comms = state.transactions.reduce((acc, t) => acc + t.comm, 0);
+
+      document.getElementById('rep-dep-val').textContent = fmt(deps);
+      document.getElementById('rep-wd-val').textContent = fmt(wds);
+      document.getElementById('rep-comm-val').textContent = fmt(comms);
+      document.getElementById('rep-cash-val').textContent = fmt(state.cash);
+      if (currentUser) document.getElementById('report-agent-name').textContent = currentUser.name;
+      
+      document.getElementById('daily-report-modal').classList.add('active');
+    }
+    function closeReportModal() { document.getElementById('daily-report-modal').classList.remove('active'); }
+
+    function printDailyReport() {
+      window.print();
+    }
+
+    function exportTransactionsCSV() {
+      if (state.transactions.length === 0) {
+        alert("No transaction entries to export today.");
+        return;
+      }
+      let csvContent = "data:text/csv;charset=utf-8,ID,Time,Type,Carrier,Amount,CustomerPhone,Commission\n";
+      state.transactions.forEach(tx => {
+        csvContent += `${tx.id},"${tx.time}","${tx.type}","${tx.carrier}",${tx.amount},"${tx.phone || ''}",${tx.comm}\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `pocketbook_register_report_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("📥 Daily CSV Report downloaded successfully!", "success");
+    }
+
+    // TOAST NOTIFICATION SYSTEM
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        background: var(--surface-2); border: 1px solid var(--primary); color: var(--text);
+        padding: 12px 18px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700;
+        box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
+        display: flex; align-items: center; gap: 8px; pointer-events: auto;
+      `;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : '🔔'}</span> <span>${msg}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }, 20);
+      setTimeout(() => {
+        toast.style.opacity = '0'; toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
     }
 
     if (currentUser) {
