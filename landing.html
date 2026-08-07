@@ -168,6 +168,7 @@
     .footer { border-top: 1px solid var(--border); padding: 48px 32px; max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
     .footer-text { font-size: 12px; color: var(--text-muted); }
   </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
@@ -403,5 +404,14 @@
     </div>
   </footer>
 
+  <script src="./node_modules/preline/dist/preline.js"></script>
+  <script type="module">
+    import { HSDropdown } from "./node_modules/preline/dist/non-auto.mjs";
+    // new HSDropdown(document.querySelector("#dropdown"));
+  </script>
+  <script type="module">
+    import HSDropdown from "./node_modules/preline/dist/dropdown.mjs";
+    // new HSDropdown(document.querySelector("#dropdown"));
+  </script>
 </body>
 </html>

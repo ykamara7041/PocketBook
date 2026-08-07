@@ -466,6 +466,7 @@
       .auth-title { font-size: 18px; }
     }
   </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
@@ -2239,6 +2240,15 @@
     } else {
       switchAppView('landing');
     }
+  </script>
+  <script src="./node_modules/preline/dist/preline.js"></script>
+  <script type="module">
+    import { HSDropdown } from "./node_modules/preline/dist/non-auto.mjs";
+    // new HSDropdown(document.querySelector("#dropdown"));
+  </script>
+  <script type="module">
+    import HSDropdown from "./node_modules/preline/dist/dropdown.mjs";
+    // new HSDropdown(document.querySelector("#dropdown"));
   </script>
 </body>
 </html>

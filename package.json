@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "npx -y serve .",
-    "build": "echo 'No build step required for static site'",
+    "build": "npx @tailwindcss/cli -i ./input.css -o ./style.css",
     "start": "npx -y serve -s . -p $PORT"
   },
   "keywords": [
@@ -16,5 +16,11 @@
     "agent-banking"
   ],
   "author": "PocketBook",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "@tailwindcss/forms": "^0.5.11",
+    "preline": "^4.2.0",
+    "tailwindcss": "^4.3.3"
+  }
 }

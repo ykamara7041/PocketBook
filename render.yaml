@@ -2,5 +2,5 @@ services:
   - type: web
     name: pocketbook-app
     env: static
-    buildCommand: ""
+    buildCommand: "npm install && npm run build"
     staticPublishPath: ./
