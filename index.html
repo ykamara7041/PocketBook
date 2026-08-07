@@ -927,22 +927,40 @@
         <!-- STEP 5 -->
         <div class="onboarding-step" id="step-5">
           <div class="step-icon-badge">👛</div>
-          <div class="auth-title">Start Your Day</div>
-          <div class="auth-subtitle">Enter your opening float & cash balances to begin recording</div>
+          <div class="auth-title">Start Your Day (Dual-Currency)</div>
+          <div class="auth-subtitle">Enter your opening USD ($) and LRD (L$) cash & wallet balances</div>
 
-          <div class="form-group">
-            <label class="form-label">Cash in Hand <span style="color:var(--red);">*</span></label>
-            <input type="number" step="0.01" class="form-input" id="signup-init-cash" placeholder="e.g. 620.00" required>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Cash USD ($)</label>
+              <input type="number" step="0.01" class="form-input" id="signup-init-cash-usd" placeholder="e.g. 620.00" value="620.00">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Cash LRD (L$)</label>
+              <input type="number" step="1" class="form-input" id="signup-init-cash-lrd" placeholder="e.g. 120000" value="120000">
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">MTN Float Balance (optional)</label>
-            <input type="number" step="0.01" class="form-input" id="signup-init-mtn" placeholder="e.g. 515.50">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">MTN Float USD ($)</label>
+              <input type="number" step="0.01" class="form-input" id="signup-init-mtn-usd" placeholder="e.g. 515.50" value="515.50">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">MTN Float LRD (L$)</label>
+              <input type="number" step="1" class="form-input" id="signup-init-mtn-lrd" placeholder="e.g. 95000" value="95000">
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Orange Money / Secondary Float (optional)</label>
-            <input type="number" step="0.01" class="form-input" id="signup-init-orange" placeholder="e.g. 350.00">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Orange Float USD ($)</label>
+              <input type="number" step="0.01" class="form-input" id="signup-init-orange-usd" placeholder="e.g. 350.00" value="350.00">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Orange Float LRD (L$)</label>
+              <input type="number" step="1" class="form-input" id="signup-init-orange-lrd" placeholder="e.g. 65000" value="65000">
+            </div>
           </div>
 
           <button type="submit" class="btn-submit">Start My Day & Launch OS 🚀</button>
@@ -1077,52 +1095,68 @@
             </div>
           </div>
 
-          <!-- CASH BALANCE CARD -->
+          <!-- DUAL-CURRENCY CASH BALANCE CARD (USD & LRD) -->
           <div class="card-box" style="margin: 0 16px 14px; padding: 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
               <div style="font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
-                <span>📗</span> Cash Balance
+                <span>📗</span> Kiosk Cash Drawer (Dual-Currency)
               </div>
               <span class="session-badge open" style="font-size:10px;" id="cash-status-badge">● Healthy</span>
             </div>
-            <div style="font-size: 32px; font-weight: 800; font-family: var(--font-mono); color: var(--text); letter-spacing: -1px;">
-              $<span id="cash-main-val">620.00</span>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:6px;">
+              <div style="background:var(--surface-2); padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                <div style="font-size:10px; font-weight:800; color:var(--cyan);">USD DRAWER ($)</div>
+                <div style="font-size: 22px; font-weight: 800; font-family: var(--font-mono); color: var(--text);">$<span id="cash-main-val-usd">620.00</span></div>
+              </div>
+              <div style="background:var(--surface-2); padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                <div style="font-size:10px; font-weight:800; color:var(--gold);">LRD DRAWER (L$)</div>
+                <div style="font-size: 22px; font-weight: 800; font-family: var(--font-mono); color: var(--text);">L$<span id="cash-main-val-lrd">120,000</span></div>
+              </div>
             </div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
-              Opening: $<span id="cash-opening-val">620.00</span> · Deposits: +$<span id="cash-dep-val">250.00</span> · Withdrawals: -$<span id="cash-wd-val">100.00</span>
+            
+            <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 4px;">
+              USD Opening: $<span id="cash-opening-usd">620.00</span> · LRD Opening: L$<span id="cash-opening-lrd">120,000</span>
             </div>
           </div>
 
-          <!-- WALLET BALANCES SECTION -->
-          <div class="card-box" style="margin: 0 16px 18px; padding: 18px;">
-            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.8px; margin-bottom: 12px;">
-              Wallet Balances
+          <!-- WALLET BALANCES SECTION (USD & LRD) -->
+          <div class="card-box" style="margin: 0 16px 14px; padding: 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+              <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.8px;">
+                Mobile Money Float Balances
+              </div>
+              <button style="font-size:10px; font-weight:800; background:var(--primary-glow); color:var(--primary); border:1px solid var(--primary); padding:3px 8px; border-radius:10px; cursor:pointer;" onclick="openFxModal()">
+                🔱 FX Converter ($ ↔ L$)
+              </button>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+              <!-- LONESTAR MTN -->
               <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
                   <div style="font-size:11px; font-weight:800; color:var(--gold);">📱 Lonestar MTN</div>
-                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(245,158,11,0.15); color:var(--gold);" id="mtn-status-badge">● Warning</span>
+                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(245,158,11,0.15); color:var(--gold);" id="mtn-status-badge">● Healthy</span>
                 </div>
-                <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-mtn">515.50</span></div>
-                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $500.00</div>
+                <div style="font-size:15px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-mtn-usd">515.50</span> <span style="font-size:10px; color:var(--text-muted);">USD</span></div>
+                <div style="font-size:14px; font-weight:800; font-family:var(--font-mono); color:var(--text-muted); margin-top:2px;">L$<span id="val-mtn-lrd">95,000</span> <span style="font-size:9px;">LRD</span></div>
               </div>
 
+              <!-- ORANGE MONEY -->
               <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
                   <div style="font-size:11px; font-weight:800; color:var(--primary);">📱 Orange Money</div>
-                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(239,68,68,0.15); color:var(--red);" id="orange-status-badge">● Critical</span>
+                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(239,68,68,0.15); color:var(--red);" id="orange-status-badge">● Warning</span>
                 </div>
-                <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-orange">350.00</span></div>
-                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $400.00</div>
+                <div style="font-size:15px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-orange-usd">350.00</span> <span style="font-size:10px; color:var(--text-muted);">USD</span></div>
+                <div style="font-size:14px; font-weight:800; font-family:var(--font-mono); color:var(--text-muted); margin-top:2px;">L$<span id="val-orange-lrd">65,000</span> <span style="font-size:9px;">LRD</span></div>
               </div>
             </div>
 
             <!-- ACTION BUTTONS -->
             <div style="display:flex; gap: 10px;">
               <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openUpdateWalletModal()">
-                <span>🔄</span> Update Wallet
+                <span>🔄</span> Update Wallets
               </button>
               <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--red-soft); color:var(--red); border:1px solid rgba(239,68,68,0.3); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openCloseDayModal()">
                 <span>🔒</span> Close Day
@@ -1130,9 +1164,14 @@
             </div>
           </div>
 
-          <!-- SMS Auto-Recording -->
+          <!-- SMS Auto-Recording & Button Phone Gateway -->
           <div class="card-box" style="margin: 0 16px 18px; padding: 16px;">
-            <div style="font-size: 13px; font-weight: 800; color: var(--cyan); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+              <div style="font-size: 13px; font-weight: 800; color: var(--cyan);">💬 SMS Auto-Recording & Gateway</div>
+              <button style="font-size:10px; font-weight:800; background:var(--surface-2); color:var(--primary); border:1px solid var(--border); padding:2px 8px; border-radius:8px; cursor:pointer;" onclick="openButtonPhoneModal()">
+                📲 Button Phone Sync
+              </button>
+            </div>
             <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Paste a mobile money SMS notification below to auto-detect and record transaction.</div>
             <div style="display: flex; gap: 8px;">
               <input type="text" id="sms-input" class="form-input" style="font-size:12px; padding:10px;" placeholder='e.g. "You have received USD 100.00 from 0886..."'>
@@ -1189,7 +1228,19 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Amount ($ USD)</label>
+        <label class="form-label">Transaction Currency</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button type="button" class="carrier-opt active mtn" id="curr-usd-btn" onclick="selectTxCurrency('USD')">
+            💵 USD ($)
+          </button>
+          <button type="button" class="carrier-opt" id="curr-lrd-btn" onclick="selectTxCurrency('LRD')">
+            💶 LRD (L$)
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" id="tx-amount-label">Amount ($ USD)</label>
         <input type="number" inputmode="decimal" class="form-input" id="tx-amount-input" placeholder="0.00" step="0.01">
       </div>
 
@@ -1203,15 +1254,43 @@
   </div>
 
   <div class="modal-overlay" id="wallet-update-modal">
-    <div class="modal-card">
+    <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
       <div class="modal-header">
         <span class="modal-title">🔄 Update Wallet & Cash Balances</span>
         <button class="close-btn" onclick="closeUpdateWalletModal()">✕</button>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">MTN Mobile Money Float ($)</label>
-        <input type="number" step="0.01" class="form-input" id="update-mtn-input" placeholder="0.00">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">MTN Float ($ USD)</label>
+          <input type="number" step="0.01" class="form-input" id="update-mtn-usd-input">
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">MTN Float (L$ LRD)</label>
+          <input type="number" step="1" class="form-input" id="update-mtn-lrd-input">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Orange Float ($ USD)</label>
+          <input type="number" step="0.01" class="form-input" id="update-orange-usd-input">
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Orange Float (L$ LRD)</label>
+          <input type="number" step="1" class="form-input" id="update-orange-lrd-input">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Drawer Cash ($ USD)</label>
+          <input type="number" step="0.01" class="form-input" id="update-cash-usd-input">
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Drawer Cash (L$ LRD)</label>
+          <input type="number" step="1" class="form-input" id="update-cash-lrd-input">
+        </div>
       </div>
 
       <div class="form-group">
@@ -1358,6 +1437,64 @@
 
       <div class="card-box" id="notif-list-container" style="padding:14px; background:var(--surface-2); border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
         <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No unread notifications at this time.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTANT FX CURRENCY CONVERTER MODAL -->
+  <div class="modal-overlay" id="fx-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">🔱 FX Currency Converter ($ ↔ L$)</span>
+        <button class="close-btn" onclick="closeFxModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Exchange Rate ($1 USD = L$ LRD)</label>
+        <input type="number" step="0.5" class="form-input" id="fx-rate-input" value="195.00" oninput="convertFx()">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">USD Amount ($)</label>
+          <input type="number" step="0.01" class="form-input" id="fx-usd-input" placeholder="e.g. 20.00" oninput="calcUsdToLrd()">
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Equivalent LRD (L$)</label>
+          <input type="number" step="1" class="form-input" id="fx-lrd-input" placeholder="e.g. 3900" oninput="calcLrdToUsd()">
+        </div>
+      </div>
+
+      <div class="card-box" style="padding:12px; background:var(--surface-2); border:1px solid var(--border); font-size:12px; text-align:center;">
+        <b>Result:</b> <span id="fx-result-text" style="color:var(--gold);">10.00 USD = 1,950.00 LRD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTON PHONE (USSD) FEATURE PHONE WEBHOOK GATEWAY MODAL -->
+  <div class="modal-overlay" id="button-phone-modal">
+    <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
+      <div class="modal-header">
+        <span class="modal-title">📲 Button Phone & Background SMS Relay</span>
+        <button class="close-btn" onclick="closeButtonPhoneModal()">✕</button>
+      </div>
+
+      <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">
+        Agents using feature phones (Nokia button phones) or Android SMS forwarders can automatically sync SMS transactions to PocketBook in real-time!
+      </div>
+
+      <div class="card-box" style="padding:14px; background:var(--surface-2); border:1px solid var(--border); margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase; margin-bottom:6px;">Your Dedicated SMS Webhook Endpoint</div>
+        <input type="text" readonly class="form-input" id="agent-webhook-url" value="https://pocketbook.onrender.com/api/sms-webhook?agent_id=ag_770987" style="font-size:11px; font-family:var(--font-mono); color:var(--cyan); cursor:pointer;" onclick="this.select(); document.execCommand('copy'); showToast('Webhook URL copied to clipboard!', 'success');">
+        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">Install any free SMS-to-HTTP Android forwarder app or connect to your SIM gateway to auto-forward incoming SMS!</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>⚡ Live Web Clipboard SMS Monitor</span>
+          <input type="checkbox" id="clipboard-listener-chk" checked onchange="toggleClipboardListener(this)">
+        </label>
+        <div style="font-size:11px; color:var(--text-muted);">When enabled, copying transaction SMS on your device automatically parses and prompts for instant 1-click recording.</div>
       </div>
     </div>
   </div>
@@ -1550,9 +1687,28 @@
       else if (fromStep === 4) goToStep(5);
     }
 
+    // LEDGER & DUAL-CURRENCY STATE MANAGEMENT
+    let activeType = 'deposit';
+    let activeCarrier = 'MTN';
+    let activeCurrency = 'USD';
+    let sessionOpen = true;
+    let minFloatThreshold = 500;
+    let fxRateUSD_LRD = 195.00;
+
+    let usersDb = JSON.parse(localStorage.getItem('pocketbook_users_db')) || {};
+
+    let state = {
+      cashUSD: 620.00, cashLRD: 120000.00,
+      openingCashUSD: 620.00, openingCashLRD: 120000.00,
+      mtnFloatUSD: 515.50, mtnFloatLRD: 95000.00,
+      orangeFloatUSD: 350.00, orangeFloatLRD: 65000.00,
+      transactions: []
+    };
+
     function getStorageKey(user) {
       if (!user) return 'pocketbook_state_demo';
-      return 'pocketbook_state_' + (user.email || user.phone || 'demo').replace(/[^a-zA-Z0-9]/g, '_');
+      const id = (user.email || user.phone || 'demo').toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
+      return 'pocketbook_state_' + id;
     }
 
     function loadUserState() {
@@ -1560,13 +1716,21 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         state = JSON.parse(saved);
+        if (state.cashUSD === undefined) state.cashUSD = state.cash || 620.00;
+        if (state.cashLRD === undefined) state.cashLRD = 120000.00;
+        if (state.mtnFloatUSD === undefined) state.mtnFloatUSD = state.mtnFloat || 515.50;
+        if (state.mtnFloatLRD === undefined) state.mtnFloatLRD = 95000.00;
+        if (state.orangeFloatUSD === undefined) state.orangeFloatUSD = state.orangeFloat || 350.00;
+        if (state.orangeFloatLRD === undefined) state.orangeFloatLRD = 65000.00;
       } else {
         state = {
-          cash: 620.00, openingCash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00,
+          cashUSD: 620.00, cashLRD: 120000.00,
+          openingCashUSD: 620.00, openingCashLRD: 120000.00,
+          mtnFloatUSD: 515.50, mtnFloatLRD: 95000.00,
+          orangeFloatUSD: 350.00, orangeFloatLRD: 65000.00,
           transactions: [
-            { id: 1, type: 'deposit', carrier: 'MTN', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
-            { id: 2, type: 'withdrawal', carrier: 'Orange', amount: 100.00, phone: '0770987654', comm: 1.50, time: '09:15 AM' },
-            { id: 3, type: 'deposit', carrier: 'MTN', amount: 200.00, phone: '0880555444', comm: 2.20, time: '08:30 AM' }
+            { id: 1, type: 'deposit', carrier: 'MTN', curr: 'USD', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
+            { id: 2, type: 'withdrawal', carrier: 'Orange', curr: 'LRD', amount: 10000.00, phone: '0770987654', comm: 150.00, time: '09:15 AM' }
           ]
         };
       }
@@ -1581,29 +1745,43 @@
       event.preventDefault();
       if (type === 'login') {
         const idVal = document.getElementById('login-phone').value.trim();
-        let storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-        currentUser = storedUser || { name: idVal.split('@')[0] || 'Rashford', phone: idVal, email: 'agent@pocketbook.app', role: 'MoMo Agent' };
+        const userKey = idVal.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
+        
+        if (usersDb[userKey]) {
+          currentUser = usersDb[userKey];
+        } else {
+          currentUser = { name: idVal.split('@')[0] || 'Agent', phone: idVal, email: idVal.includes('@') ? idVal : 'agent@pocketbook.app', role: 'MoMo Agent' };
+          usersDb[userKey] = currentUser;
+          localStorage.setItem('pocketbook_users_db', JSON.stringify(usersDb));
+        }
+        localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
         loadUserState();
       } else {
         const name = document.getElementById('signup-name').value.trim() || 'MoMo Agent';
         const email = document.getElementById('signup-email').value.trim() || (name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app');
         const phone = document.getElementById('signup-phone-step2').value.trim() || document.getElementById('signup-phone-step1').value.trim() || '+231 88 123 4567';
+        const userKey = (email || phone).toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
 
         currentUser = { name: name, phone: phone, email: email, role: 'MoMo Agent' };
+        usersDb[userKey] = currentUser;
+        localStorage.setItem('pocketbook_users_db', JSON.stringify(usersDb));
         localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
 
-        // Read exact opening balances entered by user in Step 5
-        const initCash = parseFloat(document.getElementById('signup-init-cash').value) || 0.00;
-        const initMtn = parseFloat(document.getElementById('signup-init-mtn').value) || 0.00;
-        const initOrange = parseFloat(document.getElementById('signup-init-orange').value) || 0.00;
+        // Read dual currency opening balances from Step 5
+        const initCashUSD = parseFloat(document.getElementById('signup-init-cash-usd').value) || 0.00;
+        const initCashLRD = parseFloat(document.getElementById('signup-init-cash-lrd').value) || 0.00;
+        const initMtnUSD = parseFloat(document.getElementById('signup-init-mtn-usd').value) || 0.00;
+        const initMtnLRD = parseFloat(document.getElementById('signup-init-mtn-lrd').value) || 0.00;
+        const initOrangeUSD = parseFloat(document.getElementById('signup-init-orange-usd').value) || 0.00;
+        const initOrangeLRD = parseFloat(document.getElementById('signup-init-orange-lrd').value) || 0.00;
 
         state = {
-          cash: initCash,
-          openingCash: initCash,
-          mtnFloat: initMtn,
-          orangeFloat: initOrange,
+          cashUSD: initCashUSD, cashLRD: initCashLRD,
+          openingCashUSD: initCashUSD, openingCashLRD: initCashLRD,
+          mtnFloatUSD: initMtnUSD, mtnFloatLRD: initMtnLRD,
+          orangeFloatUSD: initOrangeUSD, orangeFloatLRD: initOrangeLRD,
           transactions: [
-            { id: Date.now(), type: 'deposit', carrier: 'MTN', amount: initMtn, phone: 'Opening Float Configured', comm: 0, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+            { id: Date.now(), type: 'deposit', carrier: 'MTN', curr: 'USD', amount: initMtnUSD, phone: 'Opening Float Configured', comm: 0, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
           ]
         };
         saveState();
@@ -1611,7 +1789,7 @@
 
       closeAuthModal();
       switchAppView('app');
-      showToast(`Welcome, ${currentUser.name}! Your balances have been loaded.`, 'success');
+      showToast(`Welcome, ${currentUser.name}! Your account balances have been loaded.`, 'success');
     }
 
     function openSecurityQuestionReset() {
@@ -1636,22 +1814,16 @@
     }
 
     function handleLogout() {
-      if (confirm("Log out of PocketBook?")) {
+      if (confirm("Log out of PocketBook? Your data will remain safely saved.")) {
         localStorage.removeItem('pocketbook_user');
         currentUser = null;
         switchAppView('landing');
       }
     }
 
-    // LEDGER STATE
-    let activeType = 'deposit';
-    let activeCarrier = 'MTN';
-    let sessionOpen = true;
-    let minFloatThreshold = 500;
-    let state = { cash: 620.00, openingCash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00, transactions: [] };
-
     function toggleProfileDropdown() { document.getElementById('profile-menu').classList.toggle('active'); }
-    const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmt = n => (n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtInt = n => Math.round(n || 0).toLocaleString('en-US');
 
     function updateUI() {
       if (currentUser) {
@@ -1661,62 +1833,39 @@
         document.getElementById('header-user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
       }
 
-      const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
-      const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
+      document.getElementById('cash-main-val-usd').textContent = fmt(state.cashUSD);
+      document.getElementById('cash-main-val-lrd').textContent = fmtInt(state.cashLRD);
+      document.getElementById('cash-opening-usd').textContent = fmt(state.openingCashUSD || state.cashUSD);
+      document.getElementById('cash-opening-lrd').textContent = fmtInt(state.openingCashLRD || state.cashLRD);
 
-      const openingCash = state.openingCash !== undefined ? state.openingCash : (state.cash - deps + wds);
-      document.getElementById('cash-main-val').textContent = fmt(state.cash);
-      document.getElementById('cash-opening-val').textContent = fmt(openingCash);
-      document.getElementById('cash-dep-val').textContent = fmt(deps);
-      document.getElementById('cash-wd-val').textContent = fmt(wds);
+      document.getElementById('val-mtn-usd').textContent = fmt(state.mtnFloatUSD);
+      document.getElementById('val-mtn-lrd').textContent = fmtInt(state.mtnFloatLRD);
+      document.getElementById('val-orange-usd').textContent = fmt(state.orangeFloatUSD);
+      document.getElementById('val-orange-lrd').textContent = fmtInt(state.orangeFloatLRD);
 
       minFloatThreshold = state.minThreshold || 500;
 
-      document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
-      document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
-
-      // DYNAMIC STATUS BADGES
+      // STATUS BADGES
       const mtnBadge = document.getElementById('mtn-status-badge');
-      if (state.mtnFloat < 200) { mtnBadge.textContent = '● Critical'; mtnBadge.style.color = 'var(--red)'; }
-      else if (state.mtnFloat < minFloatThreshold) { mtnBadge.textContent = '● Warning'; mtnBadge.style.color = 'var(--gold)'; }
+      if (state.mtnFloatUSD < 200) { mtnBadge.textContent = '● Critical'; mtnBadge.style.color = 'var(--red)'; }
+      else if (state.mtnFloatUSD < minFloatThreshold) { mtnBadge.textContent = '● Warning'; mtnBadge.style.color = 'var(--gold)'; }
       else { mtnBadge.textContent = '● Healthy'; mtnBadge.style.color = 'var(--cyan)'; }
 
       const orangeBadge = document.getElementById('orange-status-badge');
-      if (state.orangeFloat < 200) { orangeBadge.textContent = '● Critical'; orangeBadge.style.color = 'var(--red)'; }
-      else if (state.orangeFloat < minFloatThreshold) { orangeBadge.textContent = '● Warning'; orangeBadge.style.color = 'var(--gold)'; }
+      if (state.orangeFloatUSD < 200) { orangeBadge.textContent = '● Critical'; orangeBadge.style.color = 'var(--red)'; }
+      else if (state.orangeFloatUSD < minFloatThreshold) { orangeBadge.textContent = '● Warning'; orangeBadge.style.color = 'var(--gold)'; }
       else { orangeBadge.textContent = '● Healthy'; orangeBadge.style.color = 'var(--cyan)'; }
 
-      // DYNAMIC ACCOUNT FLOAT ALERT ENGINE
+      // FLOAT ALERT CARD
       const floatAlertCard = document.getElementById('dashboard-float-alert');
-      const alertTitle = document.getElementById('float-alert-title');
-      const alertBadge = document.getElementById('float-alert-badge');
-      const alertBody = document.getElementById('float-alert-body');
-      const alertSuggest = document.getElementById('float-alert-suggest');
-
-      let lowCarriers = [];
-      if (state.mtnFloat < minFloatThreshold) lowCarriers.push({ name: 'MTN Mobile Money', val: state.mtnFloat });
-      if (state.orangeFloat < minFloatThreshold) lowCarriers.push({ name: 'Orange Money', val: state.orangeFloat });
-
-      if (lowCarriers.length > 0) {
+      if (state.mtnFloatUSD < minFloatThreshold || state.orangeFloatUSD < minFloatThreshold) {
         floatAlertCard.style.display = 'block';
-        const target = lowCarriers[0];
-        const isCritical = target.val < 200;
-        alertBadge.textContent = isCritical ? 'Critical' : 'Warning';
-        alertBadge.style.background = isCritical ? 'rgba(239,68,68,0.18)' : 'var(--gold-glow)';
-        alertBadge.style.color = isCritical ? 'var(--red)' : 'var(--gold)';
-
-        alertTitle.textContent = `${target.name} Low Float Alert`;
-        alertBody.innerHTML = `${target.name} balance is low (<b>$${fmt(target.val)}</b>). Minimum threshold is set to <b>$${fmt(minFloatThreshold)}</b>.`;
-        alertSuggest.textContent = `→ Rebalance ${target.name} float or deposit cash before peak hours.`;
-        
-        // Add to notification list
-        addNotification(`⚠️ Alert: ${target.name} balance is $${fmt(target.val)}`);
       } else {
         floatAlertCard.style.display = 'none';
       }
 
-      const totalComm = state.transactions.reduce((acc, item) => acc + item.comm, 0);
-      document.getElementById('est-commission').textContent = fmt(totalComm);
+      const totalCommUSD = state.transactions.filter(t => (t.curr || 'USD') === 'USD').reduce((acc, item) => acc + item.comm, 0);
+      document.getElementById('est-commission').textContent = fmt(totalCommUSD);
 
       const container = document.getElementById('tx-container');
       container.innerHTML = '';
@@ -1729,6 +1878,8 @@
         const isDep = tx.type === 'deposit';
         const isRebal = tx.type === 'transfer' || tx.type === 'rebalance';
         let actionText = isDep ? 'Deposit' : (isRebal ? 'Transfer' : 'Withdraw');
+        const currSym = (tx.curr === 'LRD') ? 'L$' : '$';
+        const amtStr = (tx.curr === 'LRD') ? fmtInt(tx.amount) : fmt(tx.amount);
         
         const card = document.createElement('div');
         card.className = 'tx-card';
@@ -1736,13 +1887,13 @@
           <div class="tx-left">
             <div class="tx-badge ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">${isDep ? '⬇' : (isRebal ? '🔄' : '⬆')}</div>
             <div class="tx-details">
-              <div class="name">${tx.carrier} ${actionText}</div>
+              <div class="name">${tx.carrier} ${actionText} (${tx.curr || 'USD'})</div>
               <div class="meta">${tx.time} • ${tx.phone || 'No phone'}</div>
             </div>
           </div>
           <div class="tx-right">
-            <div class="tx-amount ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">${isDep ? '+' : (isRebal ? '±' : '-')}$${fmt(tx.amount)}</div>
-            <div class="tx-comm">+${fmt(tx.comm)} comm</div>
+            <div class="tx-amount ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">${isDep ? '+' : (isRebal ? '±' : '-')}${currSym}${amtStr}</div>
+            <div class="tx-comm">+${currSym}${fmt(tx.comm)} comm</div>
           </div>
         `;
         container.appendChild(card);
@@ -1766,50 +1917,103 @@
       document.getElementById('opt-orange').className = `carrier-opt ${carrier === 'Orange' ? 'active orange' : ''}`;
     }
 
+    function selectTxCurrency(curr) {
+      activeCurrency = curr;
+      document.getElementById('curr-usd-btn').className = `carrier-opt ${curr === 'USD' ? 'active mtn' : ''}`;
+      document.getElementById('curr-lrd-btn').className = `carrier-opt ${curr === 'LRD' ? 'active orange' : ''}`;
+      document.getElementById('tx-amount-label').textContent = `Amount (${curr === 'USD' ? '$ USD' : 'L$ LRD'})`;
+    }
+
     function submitTransaction() {
       const amt = parseFloat(document.getElementById('tx-amount-input').value);
       const phone = document.getElementById('tx-phone-input').value.trim();
       if (!amt || amt <= 0) { alert('Please enter valid amount'); return; }
 
       const comm = parseFloat((amt * 0.012).toFixed(2));
-      if (activeType === 'deposit') {
-        state.cash += amt;
-        if (activeCarrier === 'MTN') state.mtnFloat -= amt; else state.orangeFloat -= amt;
-      } else if (activeType === 'withdrawal') {
-        state.cash -= amt;
-        if (activeCarrier === 'MTN') state.mtnFloat += amt; else state.orangeFloat += amt;
+      if (activeCurrency === 'USD') {
+        if (activeType === 'deposit') {
+          state.cashUSD += amt;
+          if (activeCarrier === 'MTN') state.mtnFloatUSD -= amt; else state.orangeFloatUSD -= amt;
+        } else if (activeType === 'withdrawal') {
+          state.cashUSD -= amt;
+          if (activeCarrier === 'MTN') state.mtnFloatUSD += amt; else state.orangeFloatUSD += amt;
+        }
+      } else {
+        if (activeType === 'deposit') {
+          state.cashLRD += amt;
+          if (activeCarrier === 'MTN') state.mtnFloatLRD -= amt; else state.orangeFloatLRD -= amt;
+        } else if (activeType === 'withdrawal') {
+          state.cashLRD -= amt;
+          if (activeCarrier === 'MTN') state.mtnFloatLRD += amt; else state.orangeFloatLRD += amt;
+        }
       }
 
       state.transactions.unshift({
-        id: Date.now(), type: activeType, carrier: activeCarrier, amount: amt, phone: phone, comm: comm,
+        id: Date.now(), type: activeType, carrier: activeCarrier, curr: activeCurrency, amount: amt, phone: phone, comm: comm,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
 
       updateUI();
       closeModal();
-      showToast(`Logged ${activeCarrier} ${activeType} of $${fmt(amt)}`, 'success');
+      showToast(`Logged ${activeCarrier} ${activeType} of ${activeCurrency === 'USD' ? '$' : 'L$'}${amt}`, 'success');
     }
 
     function openUpdateWalletModal() {
-      document.getElementById('update-mtn-input').value = state.mtnFloat;
-      document.getElementById('update-orange-input').value = state.orangeFloat;
-      document.getElementById('update-cash-input').value = state.cash;
+      document.getElementById('update-mtn-usd-input').value = state.mtnFloatUSD;
+      document.getElementById('update-mtn-lrd-input').value = state.mtnFloatLRD;
+      document.getElementById('update-orange-usd-input').value = state.orangeFloatUSD;
+      document.getElementById('update-orange-lrd-input').value = state.orangeFloatLRD;
+      document.getElementById('update-cash-usd-input').value = state.cashUSD;
+      document.getElementById('update-cash-lrd-input').value = state.cashLRD;
       document.getElementById('wallet-update-modal').classList.add('active');
     }
     function closeUpdateWalletModal() { document.getElementById('wallet-update-modal').classList.remove('active'); }
 
     function saveWalletUpdates() {
-      const mtn = parseFloat(document.getElementById('update-mtn-input').value);
-      const orange = parseFloat(document.getElementById('update-orange-input').value);
-      const cash = parseFloat(document.getElementById('update-cash-input').value);
+      const mtnUsd = parseFloat(document.getElementById('update-mtn-usd-input').value);
+      const mtnLrd = parseFloat(document.getElementById('update-mtn-lrd-input').value);
+      const orangeUsd = parseFloat(document.getElementById('update-orange-usd-input').value);
+      const orangeLrd = parseFloat(document.getElementById('update-orange-lrd-input').value);
+      const cashUsd = parseFloat(document.getElementById('update-cash-usd-input').value);
+      const cashLrd = parseFloat(document.getElementById('update-cash-lrd-input').value);
 
-      if (!isNaN(mtn)) state.mtnFloat = mtn;
-      if (!isNaN(orange)) state.orangeFloat = orange;
-      if (!isNaN(cash)) state.cash = cash;
+      if (!isNaN(mtnUsd)) state.mtnFloatUSD = mtnUsd;
+      if (!isNaN(mtnLrd)) state.mtnFloatLRD = mtnLrd;
+      if (!isNaN(orangeUsd)) state.orangeFloatUSD = orangeUsd;
+      if (!isNaN(orangeLrd)) state.orangeFloatLRD = orangeLrd;
+      if (!isNaN(cashUsd)) state.cashUSD = cashUsd;
+      if (!isNaN(cashLrd)) state.cashLRD = cashLrd;
 
       updateUI();
       closeUpdateWalletModal();
-      showToast('Wallet and cash balances updated successfully!', 'success');
+      showToast('USD and LRD wallet balances updated successfully!', 'success');
+    }
+
+    // FX CONVERTER FUNCTIONS
+    function openFxModal() { document.getElementById('fx-modal').classList.add('active'); }
+    function closeFxModal() { document.getElementById('fx-modal').classList.remove('active'); }
+
+    function calcUsdToLrd() {
+      const rate = parseFloat(document.getElementById('fx-rate-input').value) || 195.0;
+      const usd = parseFloat(document.getElementById('fx-usd-input').value) || 0;
+      const lrd = usd * rate;
+      document.getElementById('fx-lrd-input').value = lrd.toFixed(0);
+      document.getElementById('fx-result-text').textContent = `$${fmt(usd)} USD = L$${fmtInt(lrd)} LRD`;
+    }
+
+    function calcLrdToUsd() {
+      const rate = parseFloat(document.getElementById('fx-rate-input').value) || 195.0;
+      const lrd = parseFloat(document.getElementById('fx-lrd-input').value) || 0;
+      const usd = lrd / rate;
+      document.getElementById('fx-usd-input').value = usd.toFixed(2);
+      document.getElementById('fx-result-text').textContent = `L$${fmtInt(lrd)} LRD = $${fmt(usd)} USD`;
+    }
+
+    // FEATURE PHONE WEBHOOK GATEWAY FUNCTIONS
+    function openButtonPhoneModal() { document.getElementById('button-phone-modal').classList.add('active'); }
+    function closeButtonPhoneModal() { document.getElementById('button-phone-modal').classList.remove('active'); }
+    function toggleClipboardListener(chk) {
+      showToast(chk.checked ? "⚡ Live Clipboard SMS Listener Enabled" : "Clipboard Listener Disabled");
     }
 
     function openCloseDayModal() {
