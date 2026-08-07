@@ -18,9 +18,9 @@
       --border: #233252;
       --border-light: #2D3F66;
       
-      /* UNIQUE HIGH-END SUNSET CORAL & CYAN PALETTE (NON-GREEN) */
+      /* RICH SUNSET CORAL & CYAN FINTECH PALETTE */
       --primary: #FF5E36;
-      --primary-glow: rgba(255, 94, 54, 0.24);
+      --primary-glow: rgba(255, 94, 54, 0.22);
       --primary-hover: #E04620;
       --cyan: #06B6D4;
       --cyan-glow: rgba(6, 182, 212, 0.2);
@@ -39,30 +39,35 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; cursor: default; }
-
-    /* CUSTOM INTERACTIVE MOUSE CURSOR FOLLOWER */
-    .custom-cursor-dot {
-      position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: var(--primary);
-      border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-      transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease;
-      box-shadow: 0 0 12px var(--primary);
-    }
-    .custom-cursor-halo {
-      position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 1.5px solid var(--primary);
-      border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
-      transition: transform 0.18s cubic-bezier(0.1, 0.8, 0.2, 1), width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      background: var(--primary-glow); backdrop-filter: blur(2px);
-    }
-    .cursor-hover .custom-cursor-halo {
-      width: 58px; height: 58px; border-color: var(--cyan); background: var(--cyan-glow);
-    }
-    .cursor-hover .custom-cursor-dot {
-      background: var(--cyan); box-shadow: 0 0 16px var(--cyan); width: 12px; height: 12px;
-    }
+    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; }
 
     /* BACKGROUND CANVAS PARTICLES */
     #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+    /* SCROLL ANIMATION SYSTEM - BOUNCING ENTRANCE */
+    .reveal-on-scroll {
+      opacity: 0; transform: translateY(45px) scale(0.92);
+      transition: opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.revealed {
+      opacity: 1; transform: translateY(0) scale(1);
+    }
+
+    /* CONTINUOUS GENTLE BOUNCE & FLOAT ANIMATIONS */
+    @keyframes gentleFloat {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+    .floating-anim { animation: gentleFloat 4s ease-in-out infinite; }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 14px rgba(255, 94, 54, 0.2); }
+      50% { box-shadow: 0 0 28px rgba(255, 94, 54, 0.5); }
+      100% { box-shadow: 0 0 14px rgba(255, 94, 54, 0.2); }
+    }
+    .pulse-glow { animation: pulseGlow 2.5s infinite; }
 
     /* NAVIGATION */
     .navbar {
@@ -76,7 +81,7 @@
       border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #FFFFFF;
       box-shadow: 0 4px 20px var(--primary-glow); font-weight: 800; font-size: 22px; transition: transform 0.3s ease;
     }
-    .brand:hover .brand-mark { transform: rotate(8deg) scale(1.05); }
+    .brand:hover .brand-mark { transform: rotate(8deg) scale(1.08); }
     .brand-name { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.6px; }
 
     .nav-links { display: flex; gap: 32px; align-items: center; }
@@ -89,7 +94,7 @@
       background: var(--surface); color: var(--text); font-weight: 700; font-size: 13.5px;
       cursor: pointer; text-decoration: none; transition: all 0.22s ease;
     }
-    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
 
     .btn-primary {
       padding: 11px 24px; border-radius: var(--radius-sm); border: none;
@@ -97,7 +102,7 @@
       color: #FFFFFF; font-weight: 800; font-size: 13.5px; cursor: pointer; text-decoration: none;
       box-shadow: 0 6px 20px var(--primary-glow); transition: all 0.22s ease; display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255, 94, 54, 0.45); }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 30px rgba(255, 94, 54, 0.48); }
 
     /* HERO SECTION */
     .hero-container {
@@ -122,19 +127,29 @@
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
     .stat-card {
       background: var(--surface); border: 1px solid var(--border); padding: 18px 14px; border-radius: var(--radius-sm);
-      transition: transform 0.25s ease, border-color 0.25s ease;
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease; position: relative; overflow: hidden;
     }
-    .stat-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .stat-card:hover { transform: translateY(-6px) scale(1.03); border-color: var(--primary); }
     .stat-card .number { font-size: 26px; font-weight: 800; color: var(--primary); font-family: var(--font-mono); }
     .stat-card .label { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
 
-    /* 3D TILT CARDS & LIVE TERMINAL PREVIEW */
+    /* SPOTLIGHT & MAGNETIC CARDS */
+    .spotlight-card {
+      position: relative; overflow: hidden;
+    }
+    .spotlight-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 94, 54, 0.14), transparent 80%);
+      opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+    }
+    .spotlight-card:hover::before { opacity: 1; }
+
     .preview-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
       padding: 26px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
-      transform-style: preserve-3d; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
     }
-    .preview-card:hover { border-color: var(--cyan); }
+    .preview-card:hover { border-color: var(--cyan); transform: translateY(-6px); }
     .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
     .preview-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
     .live-tag { font-size: 10px; font-weight: 800; background: var(--cyan-glow); color: var(--cyan); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(6, 182, 212, 0.35); }
@@ -156,10 +171,10 @@
     .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
     .feature-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 32px 26px; transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.28s ease, box-shadow 0.28s ease;
-      position: relative; overflow: hidden; transform-style: preserve-3d;
+      padding: 32px 26px; transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+      position: relative; overflow: hidden;
     }
-    .feature-card:hover { transform: translateY(-6px) rotateX(2deg) rotateY(-2deg); border-color: var(--primary); box-shadow: 0 16px 40px var(--primary-glow); }
+    .feature-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--primary); box-shadow: 0 16px 40px var(--primary-glow); }
     .feature-icon {
       width: 52px; height: 52px; border-radius: 16px; background: var(--primary-glow); color: var(--primary);
       display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; font-weight: 800;
@@ -171,9 +186,9 @@
     .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
     .step-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 28px 22px; text-align: center; transition: all 0.25s ease;
+      padding: 28px 22px; text-align: center; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease;
     }
-    .step-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .step-card:hover { border-color: var(--cyan); transform: translateY(-6px) scale(1.03); }
     .step-number {
       width: 48px; height: 48px; border-radius: 50%; background: var(--cyan-glow); border: 2px solid var(--cyan);
       color: var(--cyan); font-size: 17px; font-weight: 800; font-family: var(--font-mono);
@@ -186,9 +201,9 @@
     .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
     .testimonial-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 28px; transition: all 0.25s ease;
+      padding: 28px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease;
     }
-    .testimonial-card:hover { border-color: var(--gold); }
+    .testimonial-card:hover { border-color: var(--gold); transform: translateY(-6px); }
     .testimonial-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; font-style: italic; margin-bottom: 20px; }
     .testimonial-author { display: flex; align-items: center; gap: 14px; }
     .author-avatar {
@@ -211,7 +226,7 @@
     .footer { border-top: 1px solid var(--border); padding: 52px 32px; max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
     .footer-text { font-size: 12.5px; color: var(--text-muted); }
 
-    /* ================= AUTH OVERLAY STYLES ================= */
+    /* AUTH OVERLAY STYLES */
     .auth-overlay {
       position: fixed; inset: 0; background: rgba(11, 15, 25, 0.94); backdrop-filter: blur(20px); z-index: 200;
       display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 28px 16px;
@@ -279,7 +294,7 @@
       font-size: 15px; cursor: pointer; margin-top: 8px; box-shadow: 0 6px 20px var(--primary-glow);
     }
 
-    /* ================= AGENT APP TERMINAL STYLES ================= */
+    /* AGENT APP TERMINAL STYLES */
     .app-wrapper { display: flex; justify-content: center; min-height: 100vh; background: var(--bg); }
     .app-frame {
       width: 100%; max-width: 480px; min-height: 100vh; background: #0D1424;
@@ -378,16 +393,11 @@
 </head>
 <body>
 
-  <!-- CUSTOM MOUSE CURSOR FOLLOWER -->
-  <div class="custom-cursor-dot" id="cursor-dot"></div>
-  <div class="custom-cursor-halo" id="cursor-halo"></div>
-
   <!-- ================= VIEW 1: LANDING PAGE ================= -->
   <div id="view-landing">
     <!-- NAVIGATION BAR -->
     <nav class="navbar">
       <div class="brand" onclick="switchAppView('landing')">
-        <!-- LOGO PLACEHOLDER READY FOR USER'S FINAL LOGO -->
         <div class="brand-mark">P</div>
         <div class="brand-name">PocketBook</div>
       </div>
@@ -405,8 +415,8 @@
     <!-- HERO SECTION WITH PARTICLES CANVAS -->
     <section class="hero-container">
       <canvas id="hero-canvas"></canvas>
-      <div style="position:relative; z-index:2;">
-        <div class="hero-badge">
+      <div style="position:relative; z-index:2;" class="reveal-on-scroll">
+        <div class="hero-badge floating-anim">
           <span class="pulse-dot"></span>
           PAN-AFRICAN MoMo OPERATING SYSTEM
         </div>
@@ -415,32 +425,32 @@
           PocketBook is the complete AI-powered operating system for Mobile Money Agents, money exchangers, and kiosk operators across Africa. Track dual-wallets, auto-parse SMS notifications, and lock shift closing reconciled in real time.
         </p>
         <div style="display:flex; gap:14px; align-items:center;">
-          <button class="btn-primary" style="padding:15px 30px; font-size:15.5px;" onclick="openAuthModal('signup')">Start Free Trial Now →</button>
+          <button class="btn-primary pulse-glow" style="padding:15px 30px; font-size:15.5px;" onclick="openAuthModal('signup')">Start Free Trial Now →</button>
           <button class="btn-secondary" style="padding:15px 26px; font-size:15.5px;" onclick="openAuthModal('login')">Log In / Open Kiosk</button>
         </div>
 
         <div class="stats-grid">
-          <div class="stat-card" data-tilt>
+          <div class="stat-card spotlight-card reveal-on-scroll">
             <div class="number">10K+</div>
             <div class="label">Targeted Agents</div>
           </div>
-          <div class="stat-card" data-tilt>
+          <div class="stat-card spotlight-card reveal-on-scroll">
             <div class="number">$50M+</div>
             <div class="label">Vol Tracked</div>
           </div>
-          <div class="stat-card" data-tilt>
+          <div class="stat-card spotlight-card reveal-on-scroll">
             <div class="number">0.2s</div>
             <div class="label">SMS Parser</div>
           </div>
-          <div class="stat-card" data-tilt>
+          <div class="stat-card spotlight-card reveal-on-scroll">
             <div class="number">99.9%</div>
             <div class="label">Uptime</div>
           </div>
         </div>
       </div>
 
-      <!-- 3D TILT PREVIEW CARD -->
-      <div class="preview-card" data-tilt style="position:relative; z-index:2;">
+      <!-- LIVE TERMINAL PREVIEW CARD WITH SPOTLIGHT -->
+      <div class="preview-card spotlight-card floating-anim reveal-on-scroll" style="position:relative; z-index:2;">
         <div class="preview-header">
           <div class="preview-title">
             <span>📱</span> PocketBook Agent Terminal
@@ -480,43 +490,43 @@
       </div>
     </section>
 
-    <!-- FEATURES GRID WITH 3D TILT -->
+    <!-- FEATURES GRID WITH BOUNCING SCROLL REVEAL -->
     <section class="section-container" id="features">
-      <div class="section-tag">Platform Features</div>
-      <h2 class="section-heading">Everything You Need to <span>Run Smarter</span></h2>
+      <div class="section-tag reveal-on-scroll">Platform Features</div>
+      <h2 class="section-heading reveal-on-scroll">Everything You Need to <span>Run Smarter</span></h2>
 
       <div class="features-grid">
-        <div class="feature-card" data-tilt>
+        <div class="feature-card spotlight-card reveal-on-scroll">
           <div class="feature-icon">💳</div>
           <h3 class="feature-title">Dual-Wallet & Cash Ledger</h3>
           <p class="feature-desc">Simultaneous balance tracking for Lonestar MTN, Orange Money, Airtel, and physical kiosk cash. No more scattered notebooks or miscalculations.</p>
         </div>
 
-        <div class="feature-card" data-tilt>
+        <div class="feature-card spotlight-card reveal-on-scroll">
           <div class="feature-icon">💬</div>
           <h3 class="feature-title">SMS Auto-Recording</h3>
           <p class="feature-desc">Intelligent AI parser auto-detects transaction amounts, mobile carriers, and customer phone numbers directly from notification SMS messages.</p>
         </div>
 
-        <div class="feature-card" data-tilt>
+        <div class="feature-card spotlight-card reveal-on-scroll">
           <div class="feature-icon">⚡</div>
           <h3 class="feature-title">AI Smart Float Advisor</h3>
           <p class="feature-desc">Proactive float alerts warn agents before float runs low, suggesting exact cash rebalancing amounts before missing customer cash-out requests.</p>
         </div>
 
-        <div class="feature-card" data-tilt>
+        <div class="feature-card spotlight-card reveal-on-scroll">
           <div class="feature-icon">🔒</div>
           <h3 class="feature-title">EOD Drawer Reconciliation</h3>
           <p class="feature-desc">End-of-day audit assistant comparing drawer cash against system float movements, highlighting surplus or missing cash instantly.</p>
         </div>
 
-        <div class="feature-card" data-tilt>
+        <div class="feature-card spotlight-card reveal-on-scroll">
           <div class="feature-icon">🛡️</div>
           <h3 class="feature-title">Security & Recovery Shield</h3>
           <p class="feature-desc">Protected by security questions, anti-bot honeypot traps, and client-side rate limiting built to withstand 10,000+ concurrent kiosk requests.</p>
         </div>
 
-        <div class="feature-card" data-tilt>
+        <div class="feature-card spotlight-card reveal-on-scroll">
           <div class="feature-icon">🔗</div>
           <h3 class="feature-title">Multi-Branch & Referrals</h3>
           <p class="feature-desc">Manage sub-agents and branch join codes while earning referral commissions by inviting fellow kiosk operators across your network.</p>
@@ -526,29 +536,29 @@
 
     <!-- SIMPLE PROCESS SECTION -->
     <section class="section-container" id="how-it-works" style="background:var(--surface-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
-      <div class="section-tag">Simple Process</div>
-      <h2 class="section-heading">Up and Running in <span>Minutes</span></h2>
+      <div class="section-tag reveal-on-scroll">Simple Process</div>
+      <h2 class="section-heading reveal-on-scroll">Up and Running in <span>Minutes</span></h2>
 
       <div class="steps-grid">
-        <div class="step-card">
+        <div class="step-card spotlight-card reveal-on-scroll">
           <div class="step-number">01</div>
           <h3 class="step-title">Sign Up in 60s</h3>
           <div class="step-desc">Create your agent account with phone/email, set your security question, and choose your operating currency.</div>
         </div>
 
-        <div class="step-card">
+        <div class="step-card spotlight-card reveal-on-scroll">
           <div class="step-number">02</div>
           <h3 class="step-title">Configure Balances</h3>
           <div class="step-desc">Set your opening cash-in-hand and wallet float numbers for MTN, Orange, and Airtel Money.</div>
         </div>
 
-        <div class="step-card">
+        <div class="step-card spotlight-card reveal-on-scroll">
           <div class="step-number">03</div>
           <h3 class="step-title">Log & Parse SMS</h3>
           <div class="step-desc">Record deposits and withdrawals with 1 tap or paste SMS messages for automatic instant parsing.</div>
         </div>
 
-        <div class="step-card">
+        <div class="step-card spotlight-card reveal-on-scroll">
           <div class="step-number">04</div>
           <h3 class="step-title">Reconcile Daily</h3>
           <div class="step-desc">Perform End-of-Day cash drawer audit, review net commission earnings, and lock shift with confidence.</div>
@@ -558,11 +568,11 @@
 
     <!-- TESTIMONIALS -->
     <section class="section-container" id="testimonials">
-      <div class="section-tag">Early Users</div>
-      <h2 class="section-heading">Trusted by Agents Across <span>Africa</span></h2>
+      <div class="section-tag reveal-on-scroll">Early Users</div>
+      <h2 class="section-heading reveal-on-scroll">Trusted by Agents Across <span>Africa</span></h2>
 
       <div class="testimonial-grid">
-        <div class="testimonial-card">
+        <div class="testimonial-card spotlight-card reveal-on-scroll">
           <p class="testimonial-text">"Recording transactions is now very fast and accurate. I don't write anything down in physical books anymore. PocketBook keeps my daily float clear."</p>
           <div class="testimonial-author">
             <div class="author-avatar">SN</div>
@@ -573,7 +583,7 @@
           </div>
         </div>
 
-        <div class="testimonial-card">
+        <div class="testimonial-card spotlight-card reveal-on-scroll">
           <p class="testimonial-text">"I used to run out of float without even realizing it. With the AI Float Advisor, I see warnings early and know when to top up. It keeps me in complete control."</p>
           <div class="testimonial-author">
             <div class="author-avatar">BT</div>
@@ -584,7 +594,7 @@
           </div>
         </div>
 
-        <div class="testimonial-card">
+        <div class="testimonial-card spotlight-card reveal-on-scroll">
           <p class="testimonial-text">"The End-of-Day Close Day audit saves me 2 hours every evening. I compare actual cash drawer counts with expected balances in 30 seconds."</p>
           <div class="testimonial-author">
             <div class="author-avatar">FA</div>
@@ -598,10 +608,10 @@
     </section>
 
     <!-- CTA BANNER -->
-    <div class="cta-banner">
+    <div class="cta-banner reveal-on-scroll">
       <h2 class="cta-title">Be Among the First to Experience PocketBook</h2>
       <p class="cta-desc">Join thousands of mobile money agents and kiosk entrepreneurs who are transforming how they manage float and daily cash across Africa.</p>
-      <button class="btn-primary" style="padding:16px 38px; font-size:16px;" onclick="openAuthModal('signup')">Start Free Now →</button>
+      <button class="btn-primary pulse-glow" style="padding:16px 38px; font-size:16px;" onclick="openAuthModal('signup')">Start Free Now →</button>
     </div>
 
     <footer class="footer">
@@ -1162,45 +1172,29 @@
 
   <!-- ================= JAVASCRIPT CONTROLLERS & ANIMATIONS ================= -->
   <script>
-    // MOUSE CURSOR FOLLOWER LOGIC
-    const dot = document.getElementById('cursor-dot');
-    const halo = document.getElementById('cursor-halo');
-    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-    let haloX = mouseX, haloY = mouseY;
+    // SCROLL INTERSECTION OBSERVER FOR BOUNCING ENTRANCE ANIMATION
+    const observerOptions = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('revealed');
+          }, index * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
 
-    window.addEventListener('mousemove', e => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      dot.style.left = mouseX + 'px';
-      dot.style.top = mouseY + 'px';
-    });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
 
-    function animateCursor() {
-      haloX += (mouseX - haloX) * 0.15;
-      haloY += (mouseY - haloY) * 0.15;
-      halo.style.left = haloX + 'px';
-      halo.style.top = haloY + 'px';
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-
-    document.querySelectorAll('button, a, .feature-card, .stat-card, .preview-card, input, select').forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
-
-    // 3D TILT EFFECT FOR CARDS
-    document.querySelectorAll('[data-tilt]').forEach(card => {
+    // MAGNETIC SPOTLIGHT HOVER EFFECT FOR CARDS
+    document.querySelectorAll('.spotlight-card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        const rotateX = (-y / rect.height) * 12;
-        const rotateY = (x / rect.width) * 12;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
       });
     });
 
