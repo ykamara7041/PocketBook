@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#C65D3B">
+  <title>PocketBook — Your Mobile Money Operating System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAF7F2;
+      --surface: #FFFFFF;
+      --surface-2: #FFFDF9;
+      --text: #2D241E;
+      --text-muted: #786C62;
+      --border: #EAE3D9;
+      --border-light: #F4EEE5;
+      --terracotta: #C65D3B;
+      --terracotta-soft: rgba(198, 93, 59, 0.10);
+      --terracotta-hover: #AA4B2B;
+      --amber: #D97706;
+      --amber-soft: rgba(217, 119, 6, 0.12);
+      --cocoa: #4A2E1B;
+      --cocoa-soft: rgba(74, 46, 27, 0.08);
+      --red: #DC2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --radius-sm: 10px;
+      --radius: 16px;
+      --radius-lg: 22px;
+      --shadow: 0 2px 4px rgba(45, 36, 30, 0.04), 0 8px 20px rgba(45, 36, 30, 0.06);
+      --shadow-lg: 0 4px 12px rgba(45, 36, 30, 0.08), 0 16px 40px rgba(45, 36, 30, 0.12);
+      --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    body.dark-mode {
+      --bg: #12100E;
+      --surface: #1E1B18;
+      --surface-2: #27231F;
+      --text: #F5EFE6;
+      --text-muted: #A3978C;
+      --border: #38322C;
+      --border-light: #2D2823;
+      --shadow: 0 4px 20px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.6);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; line-height: 1.45; transition: background 0.25s ease, color 0.25s ease; }
+
+    /* Auth Screen Modal */
+    .auth-overlay {
+      position: fixed; inset: 0; background: var(--bg); z-index: 200;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .auth-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .auth-card {
+      width: 100%; max-width: 400px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px 24px; box-shadow: var(--shadow-lg);
+    }
+    .auth-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; text-align: center; }
+    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 24px; }
+    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 20px; }
+    .auth-toggle-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: 800; font-size: 13px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
+    .auth-toggle-btn.active { background: var(--surface); color: var(--terracotta); box-shadow: var(--shadow); }
+
+    .country-select-group { display: flex; gap: 8px; }
+    .country-code-select { width: 90px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 700; padding: 10px; outline: none; }
+
+    .app-frame {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: var(--surface-2);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 60px rgba(0,0,0,0.06);
+      padding-bottom: 96px;
+    }
+
+    /* Header */
+    .header {
+      padding: 18px 20px 14px;
+      background: rgba(255, 253, 249, 0.94);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    body.dark-mode .header { background: rgba(30, 27, 24, 0.94); }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--terracotta), var(--amber));
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; color: #fff; box-shadow: 0 4px 12px rgba(198, 93, 59, 0.3);
+    }
+    .brand-name { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
+    .brand-tagline { font-size: 10px; font-weight: 600; color: var(--text-muted); }
+
+    .session-badge {
+      font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+      display: flex; align-items: center; gap: 5px; cursor: pointer;
+    }
+    .session-badge.open { background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .session-badge.closed { background: var(--red-soft); color: var(--red); border: 1px solid rgba(220, 38, 38, 0.2); }
+
+    /* Profile Dropdown Menu */
+    .profile-dropdown {
+      position: absolute; top: 68px; right: 16px; width: 260px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+      z-index: 90; display: none; padding: 12px; transition: all 0.2s ease;
+    }
+    .profile-dropdown.active { display: block; }
+    .dropdown-header { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); margin-bottom: 8px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+    .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-sm); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s ease; }
+    .dropdown-item:hover { background: var(--surface-2); }
+    .dropdown-item.danger { color: var(--red); }
+
+    /* Tab Content Wrapper */
+    .tab-content { display: none; padding-top: 4px; }
+    .tab-content.active { display: block; }
+
+    /* Summary Card */
+    .summary-card {
+      margin: 16px 16px 14px; padding: 22px 20px 18px;
+      background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow); position: relative; overflow: hidden;
+    }
+    .summary-card::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 170px; height: 170px;
+      background: radial-gradient(circle, rgba(198,93,59,0.09) 0%, rgba(0,0,0,0) 70%); pointer-events: none;
+    }
+
+    .summary-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .summary-amount { font-size: 36px; font-weight: 800; font-family: var(--font-mono); color: var(--text); margin: 8px 0 16px; letter-spacing: -1px; }
+    .summary-amount .currency { font-size: 20px; font-weight: 600; color: var(--terracotta); margin-right: 2px; }
+
+    .float-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 14px; border-top: 1px solid var(--border-light); }
+    .float-cell { background: var(--surface-2); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 8px; text-align: center; }
+    .float-cell .label { font-size: 10px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 4px; }
+    .float-cell .value { font-size: 14px; font-weight: 700; font-family: var(--font-mono); color: var(--text); }
+
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .dot-cash { background: var(--terracotta); }
+    .dot-mtn { background: var(--amber); }
+    .dot-orange { background: var(--cocoa); }
+
+    /* Action Buttons */
+    .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0 16px 18px; }
+    .btn-action {
+      border: 1px solid var(--border); background: var(--surface); padding: 14px 10px;
+      border-radius: var(--radius); display: flex; flex-direction: column; align-items: center;
+      gap: 6px; color: var(--text); font-weight: 700; font-size: 12px; cursor: pointer;
+      transition: all 0.18s ease; box-shadow: var(--shadow); text-align: center;
+    }
+    .btn-action:active { transform: scale(0.97); }
+    .btn-action.in .action-icon { background: var(--terracotta-soft); color: var(--terracotta); }
+    .btn-action.out .action-icon { background: var(--red-soft); color: var(--red); }
+    .btn-action.rebal .action-icon { background: var(--amber-soft); color: var(--amber); }
+    .action-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+    /* AI Banner */
+    .ai-banner {
+      margin: 0 16px 18px; padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.08), rgba(198, 93, 59, 0.05));
+      border: 1px solid rgba(217, 119, 6, 0.2); border-radius: var(--radius);
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .ai-icon { width: 28px; height: 28px; background: var(--amber); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; font-weight: 800; }
+    .ai-text .title { font-size: 12px; font-weight: 800; color: var(--amber); }
+    .ai-text .desc { font-size: 11px; color: var(--text); margin-top: 2px; }
+
+    /* Section headers */
+    .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px 10px; }
+    .section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+    .section-meta { font-size: 12px; font-weight: 700; color: var(--terracotta); }
+
+    /* Transaction list */
+    .tx-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+    .tx-card {
+      background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius);
+      padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow);
+    }
+    .tx-left { display: flex; align-items: center; gap: 12px; }
+    .tx-badge { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tx-badge.in { background: var(--terracotta-soft); color: var(--terracotta); }
+    .tx-badge.out { background: var(--red-soft); color: var(--red); }
+    .tx-badge.rebal { background: var(--amber-soft); color: var(--amber); }
+    .tx-details .name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .tx-details .meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .tx-right { text-align: right; }
+    .tx-amount { font-size: 14px; font-weight: 700; font-family: var(--font-mono); }
+    .tx-amount.in { color: var(--terracotta); }
+    .tx-amount.out { color: var(--red); }
+    .tx-amount.rebal { color: var(--amber); }
+    .tx-comm { font-size: 10px; font-weight: 700; color: var(--amber); margin-top: 2px; }
+
+    /* Cards */
+    .card-box {
+      margin: 16px; padding: 20px; background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow);
+    }
+    .card-box h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .card-box p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; }
+    .form-input {
+      width: 100%; background: var(--surface-2); border: 1px solid var(--border); padding: 12px 14px;
+      border-radius: var(--radius-sm); color: var(--text); font-size: 16px; font-family: var(--font-mono); outline: none;
+    }
+    .form-input:focus { border-color: var(--terracotta); }
+
+    .audit-result {
+      margin-top: 16px; padding: 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .audit-result.match { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    .audit-result.diff { background: rgba(220, 38, 38, 0.1); color: var(--red); }
+
+    /* Referral Box (BizAssist Cloned Feature) */
+    .referral-card {
+      background: linear-gradient(135deg, var(--cocoa), #2D1B10); color: white;
+      border-radius: var(--radius-lg); padding: 20px; margin: 16px; box-shadow: var(--shadow-lg);
+    }
+    .referral-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+    .referral-card p { font-size: 11px; opacity: 0.8; margin-bottom: 14px; }
+    .referral-code-box {
+      background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3);
+      padding: 10px; border-radius: var(--radius-sm); font-family: var(--font-mono);
+      font-size: 16px; font-weight: 700; text-align: center; letter-spacing: 2px; color: var(--amber);
+    }
+
+    /* Bottom Nav */
+    .nav-bar {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: 74px;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border-light);
+      display: flex; justify-content: space-around; align-items: center; z-index: 40;
+    }
+    body.dark-mode .nav-bar { background: rgba(30, 27, 24, 0.96); }
+
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted);
+      font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; width: 56px;
+    }
+    .nav-item.active { color: var(--terracotta); }
+    .nav-icon { width: 22px; height: 22px; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(45,36,30,0.55); backdrop-filter: blur(4px);
+      z-index: 100; display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-card {
+      width: 100%; max-width: 480px; background: var(--surface); border-radius: 26px 26px 0 0;
+      border-top: 1px solid var(--border-light); padding: 24px 20px 34px;
+      transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-lg);
+    }
+    .modal-overlay.active .modal-card { transform: translateY(0); }
+
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .close-btn {
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted);
+      width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .carrier-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .carrier-opt {
+      padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--surface-2); color: var(--text-muted); font-weight: 700; font-size: 12px;
+      text-align: center; cursor: pointer; transition: all 0.15s ease; display: flex;
+      align-items: center; justify-content: center; gap: 6px;
+    }
+    .carrier-opt.active.mtn { background: var(--amber-soft); border-color: var(--amber); color: var(--amber); }
+    .carrier-opt.active.orange { background: var(--terracotta-soft); border-color: var(--terracotta); color: var(--terracotta); }
+
+    .btn-submit {
+      width: 100%; background: linear-gradient(135deg, var(--terracotta), var(--terracotta-hover));
+      border: none; padding: 16px; border-radius: var(--radius-sm); color: white; font-weight: 800;
+      font-size: 16px; cursor: pointer; margin-top: 6px; box-shadow: 0 4px 14px rgba(198,93,59,0.28);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH SCREEN OVERLAY (Login & Signup MVP Module) -->
+  <div class="auth-overlay" id="auth-screen">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
+      <div class="brand-mark" style="width:48px; height:48px; font-size:22px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/><path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
+      </div>
+      <div>
+        <div style="font-size:22px; font-weight:800; color:var(--text);">PocketBook</div>
+        <div style="font-size:11px; font-weight:700; color:var(--terracotta);">MoMo Agent Operating System</div>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-toggle-row">
+        <button class="auth-toggle-btn active" id="btn-tab-login" onclick="switchAuthTab('login')">Log In</button>
+        <button class="auth-toggle-btn" id="btn-tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-login" onsubmit="handleAuthSubmit(event, 'login')">
+        <div class="auth-title">Welcome Back</div>
+        <div class="auth-subtitle">Log in to manage your kiosk float & daily register.</div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <div class="country-select-group">
+            <select class="country-code-select" id="login-country">
+              <option value="+231">🇱🇷 +231</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+225">🇨🇮 +225</option>
+            </select>
+            <input type="tel" inputmode="tel" class="form-input" id="login-phone" placeholder="088 / 077 ..." required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Log In to PocketBook</button>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="form-signup" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
+        <div class="auth-title">Create Agent Account</div>
+        <div class="auth-subtitle">Register your kiosk agent profile in 60 seconds.</div>
+
+        <div class="form-group">
+          <label class="form-label">Full Name / Agent Name</label>
+          <input type="text" class="form-input" id="signup-name" placeholder="e.g. Rashford MoMo Services" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <div class="country-select-group">
+            <select class="country-code-select" id="signup-country">
+              <option value="+231">🇱🇷 +231</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+225">🇨🇮 +225</option>
+            </select>
+            <input type="tel" inputmode="tel" class="form-input" id="signup-phone" placeholder="088 / 077 ..." required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="signup-password" placeholder="Create strong password" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Referral Code (Optional)</label>
+          <input type="text" class="form-input" id="signup-ref" placeholder="e.g. POCKET-7729">
+        </div>
+
+        <button type="submit" class="btn-submit">Create My Account</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="app-frame">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/>
+            <path d="M3 9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.667c0-2.08-1.674-3.6-3.75-3.6h-1.5c-1.653 0-3.064.986-3.75 2.4-.686-1.414-2.097-2.4-3.75-2.4h-1.5C4.674 4.733 3 6.253 3 8.333V9z"/>
+            <path d="M4 10v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">PocketBook</div>
+          <div class="brand-tagline">MoMo Business OS</div>
+        </div>
+      </div>
+
+      <!-- Controls: Notifications, Dark/Light Mode, Profile Dropdown -->
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="alert('No unread notifications')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+
+        <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="toggleTheme()">
+          <span id="theme-icon">🌙</span>
+        </button>
+
+        <div class="avatar" id="header-user-avatar" style="cursor:pointer;" onclick="toggleProfileDropdown()">R</div>
+      </div>
+
+      <!-- Profile Dropdown -->
+      <div class="profile-dropdown" id="profile-menu">
+        <div class="dropdown-header">
+          <div class="avatar">R</div>
+          <div>
+            <div style="font-size:13px; font-weight:800; color:var(--text);" id="header-user-name">Rashford</div>
+            <div style="font-size:10px; color:var(--text-muted);" id="header-user-email">rashford234@gmail.com</div>
+            <span style="font-size:9px; background:var(--terracotta-soft); color:var(--terracotta); padding:2px 6px; border-radius:10px; font-weight:800;">MoMo Agent</span>
+          </div>
+        </div>
+        <div class="dropdown-item" onclick="switchTab('settings', document.querySelectorAll('.nav-item')[4]); toggleProfileDropdown();">
+          👤 My Profile
+        </div>
+        <div class="dropdown-item" onclick="switchTab('ledger', document.querySelectorAll('.nav-item')[0]); toggleProfileDropdown();">
+          💳 Transactions & Book
+        </div>
+        <div class="dropdown-item" onclick="switchTab('settings', document.querySelectorAll('.nav-item')[4]); toggleProfileDropdown();">
+          ⚙️ Settings
+        </div>
+        <div class="dropdown-item" onclick="switchTab('earnings', document.querySelectorAll('.nav-item')[3]); toggleProfileDropdown();">
+          🔗 Referrals
+        </div>
+        <div class="dropdown-item danger" onclick="handleLogout()">
+          🚪 Logout
+        </div>
+      </div>
+    </header>
+
+    <!-- TAB 1: LEDGER / MY BOOK -->
+    <main id="tab-ledger" class="tab-content active">
+      <!-- Summary Card -->
+      <div class="summary-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="summary-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 10h.01"/><path d="M10 10h.01"/></svg>
+            Money in my hand today
+          </div>
+          <div id="session-status-tag" class="session-badge open" onclick="toggleSessionLock()">
+            <span>🟢 Shift Open</span>
+          </div>
+        </div>
+        <div class="summary-amount">
+          <span class="currency">$</span><span id="total-balance">1,485.50</span>
+        </div>
+
+        <div class="float-row">
+          <div class="float-cell">
+            <div class="label"><span class="dot dot-cash"></span>Cash</div>
+            <div class="value" id="val-cash">620.00</div>
+          </div>
+          <div class="float-cell">
+            <div class="label"><span class="dot dot-mtn"></span>MTN Float</div>
+            <div class="value" id="val-mtn">515.50</div>
+          </div>
+          <div class="float-cell">
+            <div class="label"><span class="dot dot-orange"></span>Orange Float</div>
+            <div class="value" id="val-orange">350.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Banner -->
+      <div class="ai-banner">
+        <div class="ai-icon">⚡</div>
+        <div class="ai-text">
+          <div class="title">AI Float Advisor</div>
+          <div class="desc" id="ai-alert-text">Orange Float is down to $350. Recommend rebalancing before peak hours.</div>
+        </div>
+      </div>
+
+      <!-- SMS Auto-Recording Feature (From BizAssist Video) -->
+      <div class="card-box" style="margin: 0 16px 18px; padding: 16px;">
+        <div style="font-size: 13px; font-weight: 800; color: var(--terracotta); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Paste a mobile money SMS notification below to auto-detect and record transaction.</div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="sms-input" class="form-input" style="font-size:12px; padding:10px;" placeholder='e.g. "You have received USD 100.00 from 0886..."'>
+          <button class="btn-submit" style="width:auto; padding:10px 16px; margin:0; font-size:12px; white-space:nowrap;" onclick="parseSMS()">Parse SMS</button>
+        </div>
+      </div>
+
+      <!-- Quick Actions (Deposit, Withdraw, Transfer/Buy Float) -->
+      <div class="actions">
+        <button class="btn-action in" onclick="openModal('deposit')">
+          <div class="action-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+          </div>
+          <span>Deposit</span>
+        </button>
+        <button class="btn-action out" onclick="openModal('withdrawal')">
+          <div class="action-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+          </div>
+          <span>Withdraw</span>
+        </button>
+        <button class="btn-action rebal" onclick="openModal('transfer')">
+          <div class="action-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M16 3l4 4-4 4"/><path d="M20 7H4"/><path d="M8 21l-4-4 4-4"/><path d="M4 17h16"/></svg>
+          </div>
+          <span>Transfer</span>
+        </button>
+      </div>
+
+      <!-- Transactions Header -->
+      <div class="section-header">
+        <span class="section-title">Today's Entries</span>
+        <span class="section-meta">Est. Comm: $<span id="est-commission">18.40</span></span>
+      </div>
+
+      <!-- Transaction List Container -->
+      <div class="tx-list" id="tx-container" style="margin-bottom:20px;"></div>
+
+      <!-- Advanced Report Analytics Dashboard (From BizAssist Screenshots) -->
+      <div class="card-box" style="margin: 0 16px 24px; padding: 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <div style="font-size:15px; font-weight:800; color:var(--text);">📊 Detailed Register Report</div>
+            <div style="font-size:11px; color:var(--text-muted);">Real-time breakdown & audit search</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-submit" style="width:auto; padding:6px 12px; margin:0; font-size:11px; background:var(--terracotta);" onclick="exportCSV()">📥 Download</button>
+            <button class="btn-submit" style="width:auto; padding:6px 12px; margin:0; font-size:11px; background:var(--surface-2); color:var(--text); border:1px solid var(--border);" onclick="updateUI()">Reset</button>
+          </div>
+        </div>
+
+        <!-- Metric Cards 3-Grid -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+          <div class="float-cell" style="padding:10px 6px;">
+            <div class="label"># Txns</div>
+            <div class="value" id="report-count" style="font-size:15px;">3</div>
+          </div>
+          <div class="float-cell" style="padding:10px 6px;">
+            <div class="label">📈 Revenue</div>
+            <div class="value" id="report-rev" style="font-size:14px; color:var(--terracotta);">$350.00</div>
+          </div>
+          <div class="float-cell" style="padding:10px 6px;">
+            <div class="label">💰 Commission</div>
+            <div class="value" id="report-comm" style="font-size:14px; color:var(--amber);">$18.40</div>
+          </div>
+        </div>
+
+        <!-- Breakdown by Type -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:16px;">
+          <div class="float-cell" style="padding:8px 4px; background:var(--surface-2);">
+            <div class="label" style="font-size:9px;">⬇ Deposit</div>
+            <div class="value" id="report-dep-val" style="font-size:12px;">$250.00</div>
+          </div>
+          <div class="float-cell" style="padding:8px 4px; background:var(--surface-2);">
+            <div class="label" style="font-size:9px;">⬆ Withdraw</div>
+            <div class="value" id="report-wd-val" style="font-size:12px;">$100.00</div>
+          </div>
+          <div class="float-cell" style="padding:8px 4px; background:var(--surface-2);">
+            <div class="label" style="font-size:9px;">🔄 Transfer</div>
+            <div class="value" id="report-tr-val" style="font-size:12px;">$0.00</div>
+          </div>
+        </div>
+
+        <!-- Date Filter Pills -->
+        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px;">
+          <button class="carrier-opt active mtn" style="padding:6px 12px; font-size:11px; border-radius:16px;">Today</button>
+          <button class="carrier-opt" style="padding:6px 12px; font-size:11px; border-radius:16px;">7 Days</button>
+          <button class="carrier-opt" style="padding:6px 12px; font-size:11px; border-radius:16px;">30 Days</button>
+          <button class="carrier-opt" style="padding:6px 12px; font-size:11px; border-radius:16px;">This Month</button>
+        </div>
+
+        <!-- Search Controls -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <input type="text" class="form-input" style="font-size:11px; padding:8px 10px;" placeholder="🔍 Customer Phone...">
+          <select class="form-input" style="font-size:11px; padding:8px 10px;">
+            <option value="ALL">All Providers</option>
+            <option value="MTN">Lonestar MTN</option>
+            <option value="Orange">Orange Money</option>
+          </select>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 2: BRANCHES & OPERATORS -->
+    <main id="tab-branches" class="tab-content">
+      <div class="card-box">
+        <h3>Multi-Branch & Operator Management</h3>
+        <p>Manage multiple kiosk branches and employee operator permissions.</p>
+
+        <div class="form-group">
+          <label class="form-label">Branch Name</label>
+          <input type="text" class="form-input" id="branch-name-input" placeholder="e.g. Duala Market Branch">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Branch Join Code</label>
+          <div class="referral-code-box" id="branch-join-code">KT-8942</div>
+        </div>
+
+        <button class="btn-submit" onclick="alert('New branch registered successfully!')">Add Kiosk Branch</button>
+      </div>
+    </main>
+
+    <!-- TAB 3: RECONCILE -->
+    <main id="tab-reconcile" class="tab-content">
+      <div class="card-box">
+        <h3>End-of-Day Drawer Reconciliation</h3>
+        <p>Count physical cash to audit against system float movements.</p>
+        
+        <div class="form-group">
+          <label class="form-label">Physical Cash in Drawer ($)</label>
+          <input type="number" inputmode="decimal" class="form-input" id="audit-cash-input" placeholder="0.00" oninput="runAudit()">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Terminal Lonestar MTN Float ($)</label>
+          <input type="number" inputmode="decimal" class="form-input" id="audit-mtn-input" placeholder="0.00" oninput="runAudit()">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Terminal Orange Float ($)</label>
+          <input type="number" inputmode="decimal" class="form-input" id="audit-orange-input" placeholder="0.00" oninput="runAudit()">
+        </div>
+
+        <div id="audit-summary-box"></div>
+      </div>
+    </main>
+
+    <!-- TAB 4: EARNINGS & REFERRALS -->
+    <main id="tab-earnings" class="tab-content">
+      <div class="card-box">
+        <h3>Commission & Earnings</h3>
+        <p>Real-time analytics of turnover and expected payouts.</p>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:14px;">
+          <div class="float-cell" style="text-align:left; padding:14px;">
+            <div class="label">Gross Volume</div>
+            <div class="value" id="val-gross-vol" style="font-size:18px;">$350.00</div>
+          </div>
+          <div class="float-cell" style="text-align:left; padding:14px;">
+            <div class="label">Est. Commissions</div>
+            <div class="value" id="val-net-comm" style="font-size:18px; color:var(--amber);">$18.40</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="referral-card">
+        <h4>Refer an Agent & Earn Payouts</h4>
+        <p>Share your unique referral link with other kiosk operators. Earn $5.00 for every active agent registered!</p>
+        <div class="referral-code-box">POCKET-7729</div>
+        <button class="btn-submit" style="margin-top:12px; background:var(--amber);" onclick="alert('Referral link copied to clipboard!')">Copy Referral Link</button>
+      </div>
+    </main>
+
+    <!-- TAB 5: SETTINGS & PREFERENCES -->
+    <main id="tab-settings" class="tab-content">
+      <div class="card-box">
+        <h3>🔒 Account & Security</h3>
+        <p>Update password, email address, and registered agent phone number.</p>
+
+        <div class="form-group">
+          <label class="form-label">Change Password</label>
+          <input type="password" class="form-input" placeholder="New Password">
+          <input type="password" class="form-input" style="margin-top:6px;" placeholder="Confirm new password">
+          <button class="btn-submit" style="margin-top:8px; padding:10px; font-size:12px;" onclick="alert('Password updated successfully!')">Update Password</button>
+        </div>
+
+        <div class="form-group" style="border-top:1px solid var(--border-light); padding-top:12px;">
+          <label class="form-label">Change Email</label>
+          <input type="email" class="form-input" value="rashford234@gmail.com">
+          <input type="email" class="form-input" style="margin-top:6px;" placeholder="New email address">
+          <button class="btn-submit" style="margin-top:8px; padding:10px; font-size:12px;" onclick="alert('Email updated successfully!')">Update Email</button>
+        </div>
+
+        <div class="form-group" style="border-top:1px solid var(--border-light); padding-top:12px;">
+          <label class="form-label">Change Phone Number</label>
+          <input type="tel" class="form-input" value="+231772629908">
+          <input type="tel" class="form-input" style="margin-top:6px;" placeholder="New phone number">
+          <button class="btn-submit" style="margin-top:8px; padding:10px; font-size:12px;" onclick="alert('Phone number updated successfully!')">Update Phone</button>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <h3>🔔 Notifications & Alerts</h3>
+        <p>Manage SMS alerts, push notifications, and float level warnings.</p>
+        
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
+            <span>Push Notifications</span>
+            <input type="checkbox" checked style="accent-color:var(--terracotta);">
+          </label>
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
+            <span>SMS alerts for transactions</span>
+            <input type="checkbox" checked style="accent-color:var(--terracotta);">
+          </label>
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
+            <span>Daily summary report</span>
+            <input type="checkbox" checked style="accent-color:var(--terracotta);">
+          </label>
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700;">
+            <span>Float level warnings</span>
+            <input type="checkbox" checked style="accent-color:var(--terracotta);">
+          </label>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <h3>🌐 App Preferences</h3>
+        <p>Set default operational currency for display.</p>
+
+        <div class="form-group">
+          <label class="form-label">Primary Currency</label>
+          <select class="form-input">
+            <option value="USD">$ US Dollar (USD)</option>
+            <option value="LRD">$ Liberian Dollar (LRD)</option>
+            <option value="GHS">₵ Ghanaian Cedi (GHS)</option>
+            <option value="XOF">CFA Franc (XOF)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <h3>🛡️ Privacy & Data</h3>
+        <p>Export CSV registers or reset local agent storage.</p>
+        
+        <button class="btn-submit" style="margin-top:6px; background:var(--cocoa);" onclick="exportCSV()">📥 Download My Data (CSV)</button>
+        <button class="btn-submit" style="margin-top:10px; background:var(--red);" onclick="resetData()">⚠️ Clear All Data</button>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="nav-item active" onclick="switchTab('ledger', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <span>My Book</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('branches', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Branches</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('reconcile', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span>Reconcile</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('earnings', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        <span>Earnings</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('settings', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="entry-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-heading">Deposit</span>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mobile Money Operator</label>
+        <div class="carrier-options">
+          <div class="carrier-opt active mtn" id="opt-mtn" onclick="selectCarrier('MTN')">
+            <span class="dot dot-mtn"></span> Lonestar MTN
+          </div>
+          <div class="carrier-opt orange" id="opt-orange" onclick="selectCarrier('Orange')">
+            <span class="dot dot-orange"></span> Orange Money
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Amount ($ USD)</label>
+        <input type="number" inputmode="decimal" class="form-input" id="tx-amount-input" placeholder="0.00" step="0.01">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Customer Number (Optional)</label>
+        <input type="tel" inputmode="tel" class="form-input" id="tx-phone-input" placeholder="088 / 077 ...">
+      </div>
+
+      <button class="btn-submit" onclick="submitTransaction()">Record in my book</button>
+    </div>
+  </div>
+
+  <script>
+    // AUTH & SESSION STATE MANAGEMENT (MVP Module)
+    let currentUser = JSON.parse(localStorage.getItem('pocketbook_user')) || null;
+
+    function initAuth() {
+      const authScreen = document.getElementById('auth-screen');
+      if (currentUser) {
+        authScreen.classList.add('hidden');
+        document.getElementById('header-user-name').textContent = currentUser.name;
+        document.getElementById('header-user-email').textContent = currentUser.email || currentUser.phone;
+        document.getElementById('header-user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+      } else {
+        authScreen.classList.remove('hidden');
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const btnLogin = document.getElementById('btn-tab-login');
+      const btnSignup = document.getElementById('btn-tab-signup');
+      const formLogin = document.getElementById('form-login');
+      const formSignup = document.getElementById('form-signup');
+
+      if (tab === 'login') {
+        btnLogin.classList.add('active');
+        btnSignup.classList.remove('active');
+        formLogin.style.display = 'block';
+        formSignup.style.display = 'none';
+      } else {
+        btnSignup.classList.add('active');
+        btnLogin.classList.remove('active');
+        formSignup.style.display = 'block';
+        formLogin.style.display = 'none';
+      }
+    }
+
+    function handleAuthSubmit(event, type) {
+      event.preventDefault();
+      if (type === 'login') {
+        const phone = document.getElementById('login-phone').value.trim();
+        const country = document.getElementById('login-country').value;
+        currentUser = {
+          name: 'Rashford',
+          phone: country + ' ' + phone,
+          email: 'rashford234@gmail.com',
+          role: 'MoMo Agent'
+        };
+      } else {
+        const name = document.getElementById('signup-name').value.trim();
+        const phone = document.getElementById('signup-phone').value.trim();
+        const country = document.getElementById('signup-country').value;
+        currentUser = {
+          name: name,
+          phone: country + ' ' + phone,
+          email: name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app',
+          role: 'MoMo Agent'
+        };
+      }
+
+      localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
+      initAuth();
+      alert(`Welcome to PocketBook, ${currentUser.name}! Your kiosk session is active.`);
+    }
+
+    function handleLogout() {
+      if (confirm("Are you sure you want to log out of PocketBook?")) {
+        localStorage.removeItem('pocketbook_user');
+        currentUser = null;
+        location.reload();
+      }
+    }
+
+    let activeType = 'deposit';
+    let activeCarrier = 'MTN';
+    let sessionOpen = true;
+
+    let state = JSON.parse(localStorage.getItem('pocketbook_state')) || {
+      cash: 620.00,
+      mtnFloat: 515.50,
+      orangeFloat: 350.00,
+      transactions: [
+        { id: 1, type: 'deposit', carrier: 'MTN', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
+        { id: 2, type: 'withdrawal', carrier: 'Orange', amount: 100.00, phone: '0770987654', comm: 1.50, time: '09:15 AM' },
+        { id: 3, type: 'deposit', carrier: 'MTN', amount: 200.00, phone: '0880555444', comm: 2.20, time: '08:30 AM' }
+      ]
+    };
+
+    function saveState() {
+      localStorage.setItem('pocketbook_state', JSON.stringify(state));
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('pocketbook_theme', isDark ? 'dark' : 'light');
+    }
+
+    function toggleProfileDropdown() {
+      const menu = document.getElementById('profile-menu');
+      menu.classList.toggle('active');
+    }
+
+    if (localStorage.getItem('pocketbook_theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('theme-icon').textContent = '☀️';
+    }
+
+    const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    function updateUI() {
+      const total = state.cash + state.mtnFloat + state.orangeFloat;
+      document.getElementById('total-balance').textContent = fmt(total);
+      document.getElementById('val-cash').textContent = fmt(state.cash);
+      document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
+      document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
+
+      const totalComm = state.transactions.reduce((acc, item) => acc + item.comm, 0);
+      document.getElementById('est-commission').textContent = fmt(totalComm);
+
+      const grossVol = state.transactions.reduce((acc, item) => acc + item.amount, 0);
+      document.getElementById('val-gross-vol').textContent = '$' + fmt(grossVol);
+      document.getElementById('val-net-comm').textContent = '$' + fmt(totalComm);
+
+      document.getElementById('report-count').textContent = state.transactions.length;
+      document.getElementById('report-rev').textContent = '$' + fmt(grossVol);
+      document.getElementById('report-comm').textContent = '$' + fmt(totalComm);
+
+      const deps = state.transactions.filter(t => t.type === 'deposit').reduce((acc, t) => acc + t.amount, 0);
+      const wds = state.transactions.filter(t => t.type === 'withdrawal').reduce((acc, t) => acc + t.amount, 0);
+      const trs = state.transactions.filter(t => t.type === 'transfer' || t.type === 'rebalance').reduce((acc, t) => acc + t.amount, 0);
+
+      document.getElementById('report-dep-val').textContent = '$' + fmt(deps);
+      document.getElementById('report-wd-val').textContent = '$' + fmt(wds);
+      document.getElementById('report-tr-val').textContent = '$' + fmt(trs);
+
+      const aiText = document.getElementById('ai-alert-text');
+      if (state.orangeFloat < 400) {
+        aiText.textContent = `Orange Float is low ($${fmt(state.orangeFloat)}). Rebalance soon to avoid missing cash-out requests.`;
+      } else if (state.mtnFloat < 400) {
+        aiText.textContent = `MTN Float is low ($${fmt(state.mtnFloat)}). Rebalance float with bank or super-agent.`;
+      } else {
+        aiText.textContent = `Liquidity is healthy across Cash and Float. Ready for peak transaction hours.`;
+      }
+
+      const container = document.getElementById('tx-container');
+      container.innerHTML = '';
+
+      if (state.transactions.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">No entries recorded today.</div>';
+        return;
+      }
+
+      state.transactions.forEach(tx => {
+        const isDep = tx.type === 'deposit';
+        const isRebal = tx.type === 'transfer' || tx.type === 'rebalance';
+        let actionText = isDep ? 'Deposit' : (isRebal ? 'Transfer' : 'Withdraw');
+        
+        const card = document.createElement('div');
+        card.className = 'tx-card';
+        card.innerHTML = `
+          <div class="tx-left">
+            <div class="tx-badge ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">
+              ${isDep ? '⬇' : (isRebal ? '🔄' : '⬆')}
+            </div>
+            <div class="tx-details">
+              <div class="name">${tx.carrier} ${actionText}</div>
+              <div class="meta">${tx.time} • ${tx.phone || 'No phone'}</div>
+            </div>
+          </div>
+          <div class="tx-right">
+            <div class="tx-amount ${isDep ? 'in' : (isRebal ? 'rebal' : 'out')}">${isDep ? '+' : (isRebal ? '±' : '-')}$${fmt(tx.amount)}</div>
+            <div class="tx-comm">+${fmt(tx.comm)} comm</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      saveState();
+    }
+
+    function parseSMS() {
+      const input = document.getElementById('sms-input').value.trim();
+      if (!input) {
+        alert("Please paste a Mobile Money SMS notification message.");
+        return;
+      }
+
+      const amtMatch = input.match(/(?:GHS|USD|\$)\s*([0-9]+(?:\.[0-9]{1,2})?)/i) || input.match(/([0-9]+(?:\.[0-9]{1,2})?)\s*(?:USD|GHS)/i);
+      const phoneMatch = input.match(/(088\d{7}|077\d{7}|024\d{7}|054\d{7}|\d{10})/);
+
+      let type = 'deposit';
+      if (/received|cash in|credited|deposit/i.test(input)) {
+        type = 'deposit';
+      } else if (/sent|paid|withdrawn|debited|cash out/i.test(input)) {
+        type = 'withdrawal';
+      }
+
+      const carrier = /orange/i.test(input) ? 'Orange' : 'MTN';
+
+      if (amtMatch) {
+        const amt = parseFloat(amtMatch[1]);
+        const phone = phoneMatch ? phoneMatch[0] : '';
+        
+        activeType = type;
+        activeCarrier = carrier;
+        
+        document.getElementById('tx-amount-input').value = amt;
+        document.getElementById('tx-phone-input').value = phone;
+        openModal(type);
+        alert(`SMS Parsed! Detected ${type.toUpperCase()} of $${amt} via ${carrier}. Review & Confirm.`);
+      } else {
+        alert("Could not automatically extract transaction amount from this SMS. Please enter manually.");
+      }
+    }
+
+    function openModal(type) {
+      if (!sessionOpen) {
+        alert("Your daily agent session is locked. Reopen session to log transactions.");
+        return;
+      }
+      activeType = type;
+      let titles = { deposit: 'Deposit (Cash In)', withdrawal: 'Withdraw (Cash Out)', transfer: 'Transfer / Rebalance Float' };
+      document.getElementById('modal-heading').textContent = titles[type] || 'New Entry';
+      document.getElementById('entry-modal').classList.add('active');
+      setTimeout(() => document.getElementById('tx-amount-input').focus(), 120);
+    }
+
+    function closeModal() {
+      document.getElementById('entry-modal').classList.remove('active');
+      document.getElementById('tx-amount-input').value = '';
+      document.getElementById('tx-phone-input').value = '';
+    }
+
+    function selectCarrier(carrier) {
+      activeCarrier = carrier;
+      document.getElementById('opt-mtn').className = `carrier-opt ${carrier === 'MTN' ? 'active mtn' : ''}`;
+      document.getElementById('opt-orange').className = `carrier-opt ${carrier === 'Orange' ? 'active orange' : ''}`;
+    }
+
+    function submitTransaction() {
+      const amt = parseFloat(document.getElementById('tx-amount-input').value);
+      const phone = document.getElementById('tx-phone-input').value.trim();
+
+      if (!amt || amt <= 0 || isNaN(amt)) {
+        alert('Please enter a valid amount');
+        return;
+      }
+
+      const comm = parseFloat((amt * 0.012).toFixed(2));
+
+      if (activeType === 'deposit') {
+        state.cash += amt;
+        if (activeCarrier === 'MTN') state.mtnFloat -= amt;
+        else state.orangeFloat -= amt;
+      } else if (activeType === 'withdrawal') {
+        state.cash -= amt;
+        if (activeCarrier === 'MTN') state.mtnFloat += amt;
+        else state.orangeFloat += amt;
+      } else if (activeType === 'transfer') {
+        state.cash -= amt;
+        if (activeCarrier === 'MTN') state.mtnFloat += amt;
+        else state.orangeFloat += amt;
+      }
+
+      state.transactions.unshift({
+        id: Date.now(),
+        type: activeType,
+        carrier: activeCarrier,
+        amount: amt,
+        phone: phone,
+        comm: comm,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      updateUI();
+      closeModal();
+    }
+
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      el.classList.add('active');
+    }
+
+    function toggleSessionLock() {
+      sessionOpen = !sessionOpen;
+      const tag = document.getElementById('session-status-tag');
+      if (sessionOpen) {
+        tag.className = 'session-badge open';
+        tag.innerHTML = '<span>🟢 Shift Open</span>';
+      } else {
+        tag.className = 'session-badge closed';
+        tag.innerHTML = '<span>🔒 Session Locked</span>';
+      }
+    }
+
+    function runAudit() {
+      const drawerCash = parseFloat(document.getElementById('audit-cash-input').value) || 0;
+      const termMtn = parseFloat(document.getElementById('audit-mtn-input').value) || 0;
+      const termOrange = parseFloat(document.getElementById('audit-orange-input').value) || 0;
+
+      const totalAudited = drawerCash + termMtn + termOrange;
+      const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
+      const diff = totalAudited - expectedTotal;
+
+      const box = document.getElementById('audit-summary-box');
+      if (Math.abs(diff) < 0.01) {
+        box.className = 'audit-result match';
+        box.innerHTML = `<span>Balance Match!</span> <span>+$0.00</span>`;
+      } else {
+        box.className = 'audit-result diff';
+        box.innerHTML = `<span>${diff > 0 ? 'Surplus Cash' : 'Missing Cash/Float'}</span> <span>${diff > 0 ? '+' : ''}$${fmt(diff)}</span>`;
+      }
+    }
+
+    function exportCSV() {
+      let csv = "ID,Type,Carrier,Amount,Phone,Commission,Time\n";
+      state.transactions.forEach(t => {
+        csv += `${t.id},${t.type},${t.carrier},${t.amount},${t.phone || ''},${t.comm},${t.time}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pocketbook_register_${Date.now()}.csv`;
+      a.click();
+    }
+
+    function resetData() {
+      if (confirm("Reset all kiosk ledger records?")) {
+        localStorage.removeItem('pocketbook_state');
+        location.reload();
+      }
+    }
+
+    document.getElementById('entry-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('entry-modal')) closeModal();
+    });
+
+    updateUI();
+    initAuth();
+  </script>
+</body>
+</html>
