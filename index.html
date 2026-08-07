@@ -38,8 +38,28 @@
       --font-mono: 'IBM Plex Mono', monospace;
     }
 
+    /* LIGHT MODE THEME OVERRIDES */
+    body.light-theme {
+      --bg: #F1F5F9;
+      --surface: #FFFFFF;
+      --surface-2: #F8FAFC;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --border: #CBD5E1;
+      --border-light: #E2E8F0;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.12);
+    }
+    body.light-theme .app-frame { background: #FFFFFF; }
+    body.light-theme .header { background: rgba(255, 255, 255, 0.95); }
+
+    .notif-badge-dot {
+      position: absolute; top: 4px; right: 4px; width: 8px; height: 8px;
+      border-radius: 50%; background: var(--primary); box-shadow: 0 0 8px var(--primary);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; }
+    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; transition: background 0.3s ease, color 0.3s ease; }
 
     /* BACKGROUND CANVAS PARTICLES */
     #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
@@ -981,10 +1001,19 @@
             </div>
           </div>
 
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer; position:relative;" onclick="openNotificationsModal()" title="Notifications">
+              🔔<span class="notif-badge-dot" id="notif-dot" style="display:none;"></span>
+            </button>
+
+            <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+              <span id="theme-toggle-icon">🌙</span>
+            </button>
+
             <button style="background:var(--surface-2); border:1px solid var(--border); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); cursor:pointer;" onclick="switchAppView('landing')" title="Home / Landing Page">
               🌐
             </button>
+
             <div class="avatar" id="header-user-avatar" style="cursor:pointer;" onclick="toggleProfileDropdown()">R</div>
           </div>
 
@@ -999,6 +1028,12 @@
             </div>
             <div class="dropdown-item" onclick="openReportModal(); toggleProfileDropdown();">
               📊 Generate Daily Report
+            </div>
+            <div class="dropdown-item" onclick="openSettingsModal(); toggleProfileDropdown();">
+              ⚙️ Kiosk Settings
+            </div>
+            <div class="dropdown-item" onclick="openNotificationsModal(); toggleProfileDropdown();">
+              🔔 Notifications & Alerts
             </div>
             <div class="dropdown-item" onclick="switchAppView('landing')">
               🌐 Home / Landing Page
@@ -1271,6 +1306,58 @@
         <button class="btn-submit" style="flex:1; margin:0; font-size:12px; background:var(--primary);" onclick="exportTransactionsCSV()">
           📥 Export CSV
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIOSK SETTINGS MODAL -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
+      <div class="modal-header">
+        <span class="modal-title">⚙️ Kiosk Settings & Thresholds</span>
+        <button class="close-btn" onclick="closeSettingsModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Business / Kiosk Name</label>
+        <input type="text" class="form-input" id="setting-biz-name" placeholder="e.g. Rashford MoMo Kiosk #1">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Min Safety Float Threshold ($)</label>
+        <input type="number" class="form-input" id="setting-min-threshold" value="500">
+        <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">Float alerts trigger whenever any wallet balance falls below this number.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Withdrawal Commission Rate (%)</label>
+        <input type="number" step="0.1" class="form-input" id="setting-comm-rate" value="1.2">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Operating Currency</label>
+        <select class="form-input" id="setting-currency">
+          <option value="USD">USD – United States Dollar ($)</option>
+          <option value="GHS">GHS – Ghanaian Cedi (₵)</option>
+          <option value="LRD">LRD – Liberian Dollar ($)</option>
+          <option value="NGN">NGN – Nigerian Naira (₦)</option>
+        </select>
+      </div>
+
+      <button class="btn-submit" onclick="saveSettings()">Save Kiosk Settings</button>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS DRAWER MODAL -->
+  <div class="modal-overlay" id="notifications-modal">
+    <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
+      <div class="modal-header">
+        <span class="modal-title">🔔 Notifications & Alerts</span>
+        <button class="close-btn" onclick="closeNotificationsModal()">✕</button>
+      </div>
+
+      <div class="card-box" id="notif-list-container" style="padding:14px; background:var(--surface-2); border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
+        <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No unread notifications at this time.</div>
       </div>
     </div>
   </div>
@@ -1583,18 +1670,47 @@
       document.getElementById('cash-dep-val').textContent = fmt(deps);
       document.getElementById('cash-wd-val').textContent = fmt(wds);
 
+      minFloatThreshold = state.minThreshold || 500;
+
       document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
       document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
 
-      // Status badges & float alert
+      // DYNAMIC STATUS BADGES
       const mtnBadge = document.getElementById('mtn-status-badge');
-      if (state.mtnFloat < 200) { mtnBadge.textContent = '● Critical'; }
-      else if (state.mtnFloat < minFloatThreshold) { mtnBadge.textContent = '● Warning'; }
-      else { mtnBadge.textContent = '● Healthy'; }
+      if (state.mtnFloat < 200) { mtnBadge.textContent = '● Critical'; mtnBadge.style.color = 'var(--red)'; }
+      else if (state.mtnFloat < minFloatThreshold) { mtnBadge.textContent = '● Warning'; mtnBadge.style.color = 'var(--gold)'; }
+      else { mtnBadge.textContent = '● Healthy'; mtnBadge.style.color = 'var(--cyan)'; }
 
+      const orangeBadge = document.getElementById('orange-status-badge');
+      if (state.orangeFloat < 200) { orangeBadge.textContent = '● Critical'; orangeBadge.style.color = 'var(--red)'; }
+      else if (state.orangeFloat < minFloatThreshold) { orangeBadge.textContent = '● Warning'; orangeBadge.style.color = 'var(--gold)'; }
+      else { orangeBadge.textContent = '● Healthy'; orangeBadge.style.color = 'var(--cyan)'; }
+
+      // DYNAMIC ACCOUNT FLOAT ALERT ENGINE
       const floatAlertCard = document.getElementById('dashboard-float-alert');
-      if (state.mtnFloat < minFloatThreshold || state.orangeFloat < 400) {
+      const alertTitle = document.getElementById('float-alert-title');
+      const alertBadge = document.getElementById('float-alert-badge');
+      const alertBody = document.getElementById('float-alert-body');
+      const alertSuggest = document.getElementById('float-alert-suggest');
+
+      let lowCarriers = [];
+      if (state.mtnFloat < minFloatThreshold) lowCarriers.push({ name: 'MTN Mobile Money', val: state.mtnFloat });
+      if (state.orangeFloat < minFloatThreshold) lowCarriers.push({ name: 'Orange Money', val: state.orangeFloat });
+
+      if (lowCarriers.length > 0) {
         floatAlertCard.style.display = 'block';
+        const target = lowCarriers[0];
+        const isCritical = target.val < 200;
+        alertBadge.textContent = isCritical ? 'Critical' : 'Warning';
+        alertBadge.style.background = isCritical ? 'rgba(239,68,68,0.18)' : 'var(--gold-glow)';
+        alertBadge.style.color = isCritical ? 'var(--red)' : 'var(--gold)';
+
+        alertTitle.textContent = `${target.name} Low Float Alert`;
+        alertBody.innerHTML = `${target.name} balance is low (<b>$${fmt(target.val)}</b>). Minimum threshold is set to <b>$${fmt(minFloatThreshold)}</b>.`;
+        alertSuggest.textContent = `→ Rebalance ${target.name} float or deposit cash before peak hours.`;
+        
+        // Add to notification list
+        addNotification(`⚠️ Alert: ${target.name} balance is $${fmt(target.val)}`);
       } else {
         floatAlertCard.style.display = 'none';
       }
@@ -1808,6 +1924,84 @@
         setTimeout(() => toast.remove(), 300);
       }, 3500);
     }
+
+    // DARK / LIGHT THEME TOGGLE
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      document.getElementById('theme-toggle-icon').textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('pocketbook_theme', isLight ? 'light' : 'dark');
+      showToast(isLight ? '☀️ Light Mode Activated' : '🌙 Dark Obsidian Mode Activated');
+    }
+
+    // Restore saved theme on load
+    if (localStorage.getItem('pocketbook_theme') === 'light') {
+      document.body.classList.add('light-theme');
+      const icon = document.getElementById('theme-toggle-icon');
+      if (icon) icon.textContent = '☀️';
+    }
+
+    // SETTINGS MODAL HANDLERS
+    function openSettingsModal() {
+      if (currentUser) {
+        document.getElementById('setting-biz-name').value = currentUser.bizName || currentUser.name + " Kiosk";
+      }
+      document.getElementById('setting-min-threshold').value = state.minThreshold || 500;
+      document.getElementById('settings-modal').classList.add('active');
+    }
+    function closeSettingsModal() { document.getElementById('settings-modal').classList.remove('active'); }
+
+    function saveSettings() {
+      const bizName = document.getElementById('setting-biz-name').value.trim();
+      const minThresh = parseFloat(document.getElementById('setting-min-threshold').value) || 500;
+      const currency = document.getElementById('setting-currency').value;
+
+      state.minThreshold = minThresh;
+      if (currentUser) {
+        currentUser.bizName = bizName;
+        currentUser.currency = currency;
+        localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
+      }
+      saveState();
+      updateUI();
+      closeSettingsModal();
+      showToast("⚙️ Kiosk Settings saved successfully!", "success");
+    }
+
+    // NOTIFICATIONS DRAWER HANDLERS
+    let userNotifications = [
+      { id: 1, text: "👋 Welcome to PocketBook Terminal! System active.", time: "Just now" }
+    ];
+
+    function addNotification(text) {
+      if (!userNotifications.some(n => n.text === text)) {
+        userNotifications.unshift({ id: Date.now(), text: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+        const dot = document.getElementById('notif-dot');
+        if (dot) dot.style.display = 'block';
+      }
+    }
+
+    function openNotificationsModal() {
+      const dot = document.getElementById('notif-dot');
+      if (dot) dot.style.display = 'none';
+      
+      const container = document.getElementById('notif-list-container');
+      container.innerHTML = '';
+
+      if (userNotifications.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No unread notifications.</div>';
+      } else {
+        userNotifications.forEach(n => {
+          const item = document.createElement('div');
+          item.style.cssText = 'background:var(--surface); border:1px solid var(--border); padding:10px 12px; border-radius:var(--radius-sm); font-size:12px;';
+          item.innerHTML = `<div style="color:var(--text); font-weight:700;">${n.text}</div><div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${n.time}</div>`;
+          container.appendChild(item);
+        });
+      }
+
+      document.getElementById('notifications-modal').classList.add('active');
+    }
+    function closeNotificationsModal() { document.getElementById('notifications-modal').classList.remove('active'); }
 
     if (currentUser) {
       loadUserState();
