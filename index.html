@@ -4,182 +4,244 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0B0F19">
-  <title>PocketBook — Your Mobile Money Operating System</title>
+  <title>PocketBook — Complete Mobile Money Operating System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0B0F19;
-      --surface: #131B2E;
-      --surface-2: #1A243B;
-      --text: #F3F4F6;
-      --text-muted: #9CA3AF;
-      --border: #1F2D4A;
-      --border-light: #28385C;
-      --lime: #84CC16;
-      --lime-glow: rgba(132, 204, 22, 0.18);
-      --lime-hover: #65A30D;
-      --terracotta: #C65D3B;
-      --amber: #F59E0B;
-      --amber-soft: rgba(245, 158, 11, 0.12);
+      --surface: #131C30;
+      --surface-2: #1B2642;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: #233252;
+      --border-light: #2D3F66;
+      
+      /* UNIQUE HIGH-END SUNSET CORAL & CYAN PALETTE (NON-GREEN) */
+      --primary: #FF5E36;
+      --primary-glow: rgba(255, 94, 54, 0.24);
+      --primary-hover: #E04620;
+      --cyan: #06B6D4;
+      --cyan-glow: rgba(6, 182, 212, 0.2);
+      --gold: #F59E0B;
+      --gold-glow: rgba(245, 158, 11, 0.18);
       --red: #EF4444;
-      --red-soft: rgba(239, 68, 68, 0.12);
-      --radius-sm: 12px;
-      --radius: 18px;
-      --radius-lg: 26px;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+      --red-soft: rgba(239, 68, 68, 0.15);
+      
+      --radius-sm: 14px;
+      --radius: 20px;
+      --radius-lg: 28px;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.65);
       --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; }
+    body { background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; min-height: 100vh; cursor: default; }
 
-    /* ================= LANDING PAGE STYLES ================= */
+    /* CUSTOM INTERACTIVE MOUSE CURSOR FOLLOWER */
+    .custom-cursor-dot {
+      position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: var(--primary);
+      border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+      transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease;
+      box-shadow: 0 0 12px var(--primary);
+    }
+    .custom-cursor-halo {
+      position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 1.5px solid var(--primary);
+      border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+      transition: transform 0.18s cubic-bezier(0.1, 0.8, 0.2, 1), width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      background: var(--primary-glow); backdrop-filter: blur(2px);
+    }
+    .cursor-hover .custom-cursor-halo {
+      width: 58px; height: 58px; border-color: var(--cyan); background: var(--cyan-glow);
+    }
+    .cursor-hover .custom-cursor-dot {
+      background: var(--cyan); box-shadow: 0 0 16px var(--cyan); width: 12px; height: 12px;
+    }
+
+    /* BACKGROUND CANVAS PARTICLES */
+    #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+    /* NAVIGATION */
     .navbar {
       position: sticky; top: 0; z-index: 100; background: rgba(11, 15, 25, 0.88);
-      backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
-      padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; max-width: 1240px; margin: 0 auto;
+      backdrop-filter: blur(18px); border-bottom: 1px solid var(--border);
+      padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto;
     }
-    .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
+    .brand { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
     .brand-mark {
-      width: 42px; height: 42px; background: linear-gradient(135deg, var(--lime), #10B981);
-      border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #0B0F19;
-      box-shadow: 0 4px 16px rgba(132, 204, 22, 0.35); font-weight: 800; font-size: 20px;
+      width: 44px; height: 44px; background: linear-gradient(135deg, var(--primary), var(--gold));
+      border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #FFFFFF;
+      box-shadow: 0 4px 20px var(--primary-glow); font-weight: 800; font-size: 22px; transition: transform 0.3s ease;
     }
-    .brand-name { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+    .brand:hover .brand-mark { transform: rotate(8deg) scale(1.05); }
+    .brand-name { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.6px; }
 
-    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
     .nav-link { color: var(--text-muted); font-size: 14px; font-weight: 700; text-decoration: none; transition: color 0.18s ease; }
-    .nav-link:hover { color: var(--lime); }
+    .nav-link:hover { color: var(--primary); }
 
-    .nav-actions { display: flex; gap: 12px; align-items: center; }
+    .nav-actions { display: flex; gap: 14px; align-items: center; }
     .btn-secondary {
-      padding: 10px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); font-weight: 700; font-size: 13px;
-      cursor: pointer; text-decoration: none; transition: all 0.2s ease;
+      padding: 11px 22px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); font-weight: 700; font-size: 13.5px;
+      cursor: pointer; text-decoration: none; transition: all 0.22s ease;
     }
-    .btn-secondary:hover { border-color: var(--lime); color: var(--lime); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
 
     .btn-primary {
-      padding: 10px 22px; border-radius: var(--radius-sm); border: none;
-      background: linear-gradient(135deg, var(--lime), var(--lime-hover));
-      color: #0B0F19; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none;
-      box-shadow: 0 4px 16px rgba(132, 204, 22, 0.3); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
+      padding: 11px 24px; border-radius: var(--radius-sm); border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #FFFFFF; font-weight: 800; font-size: 13.5px; cursor: pointer; text-decoration: none;
+      box-shadow: 0 6px 20px var(--primary-glow); transition: all 0.22s ease; display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(132, 204, 22, 0.45); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255, 94, 54, 0.45); }
 
-    .hero-container { max-width: 1240px; margin: 0 auto; padding: 72px 32px 64px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 54px; align-items: center; }
+    /* HERO SECTION */
+    .hero-container {
+      position: relative; max-width: 1280px; margin: 0 auto; padding: 80px 32px 72px;
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; z-index: 1;
+    }
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px;
-      background: var(--lime-glow); border: 1px solid rgba(132, 204, 22, 0.3);
-      color: var(--lime); font-size: 12px; font-weight: 800; margin-bottom: 22px;
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 20px;
+      background: var(--primary-glow); border: 1px solid rgba(255, 94, 54, 0.35);
+      color: var(--primary); font-size: 12px; font-weight: 800; margin-bottom: 24px; letter-spacing: 0.5px;
     }
-    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); animation: pulse 1.8s infinite; }
-    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 12px var(--primary); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.4; transform: scale(0.9); } }
 
-    .hero-title { font-size: 52px; font-weight: 800; line-height: 1.12; letter-spacing: -1.4px; color: var(--text); margin-bottom: 22px; }
-    .hero-title span { color: var(--lime); }
-    .hero-subtitle { font-size: 17px; color: var(--text-muted); line-height: 1.6; margin-bottom: 34px; max-width: 540px; }
+    .hero-title { font-size: 54px; font-weight: 800; line-height: 1.12; letter-spacing: -1.6px; color: var(--text); margin-bottom: 24px; }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle { font-size: 17.5px; color: var(--text-muted); line-height: 1.65; margin-bottom: 36px; max-width: 550px; }
     
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--border); }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-sm); }
-    .stat-card .number { font-size: 24px; font-weight: 800; color: var(--lime); font-family: var(--font-mono); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); padding: 18px 14px; border-radius: var(--radius-sm);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .stat-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .stat-card .number { font-size: 26px; font-weight: 800; color: var(--primary); font-family: var(--font-mono); }
     .stat-card .label { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
 
+    /* 3D TILT CARDS & LIVE TERMINAL PREVIEW */
     .preview-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-      padding: 24px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
+      padding: 26px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
+      transform-style: preserve-3d; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease;
     }
-    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-    .preview-title { font-size: 14px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .live-tag { font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #10B981; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .preview-card:hover { border-color: var(--cyan); }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .preview-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .live-tag { font-size: 10px; font-weight: 800; background: var(--cyan-glow); color: var(--cyan); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(6, 182, 212, 0.35); }
 
-    .preview-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .metric-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+    .preview-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .metric-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
     .metric-box .m-label { font-size: 11px; color: var(--text-muted); font-weight: 700; }
-    .metric-box .m-value { font-size: 22px; font-weight: 800; font-family: var(--font-mono); color: var(--text); margin-top: 4px; }
+    .metric-box .m-value { font-size: 24px; font-weight: 800; font-family: var(--font-mono); color: var(--text); margin-top: 4px; }
 
-    .section-container { max-width: 1240px; margin: 0 auto; padding: 88px 32px; }
-    .section-tag { text-align: center; font-size: 12px; font-weight: 800; color: var(--lime); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
-    .section-heading { text-align: center; font-size: 38px; font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 56px; }
-    .section-heading span { color: var(--lime); }
+    /* FEATURES GRID */
+    .section-container { max-width: 1280px; margin: 0 auto; padding: 96px 32px; position: relative; z-index: 1; }
+    .section-tag { text-align: center; font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+    .section-heading { text-align: center; font-size: 42px; font-weight: 800; color: var(--text); letter-spacing: -1.2px; margin-bottom: 60px; }
+    .section-heading span {
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
 
-    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
     .feature-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 28px 24px; transition: all 0.25s ease; position: relative; overflow: hidden;
+      padding: 32px 26px; transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+      position: relative; overflow: hidden; transform-style: preserve-3d;
     }
-    .feature-card:hover { transform: translateY(-4px); border-color: var(--lime); box-shadow: 0 10px 30px rgba(132, 204, 22, 0.12); }
+    .feature-card:hover { transform: translateY(-6px) rotateX(2deg) rotateY(-2deg); border-color: var(--primary); box-shadow: 0 16px 40px var(--primary-glow); }
     .feature-icon {
-      width: 48px; height: 48px; border-radius: 14px; background: var(--lime-glow); color: var(--lime);
-      display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px; font-weight: 800;
+      width: 52px; height: 52px; border-radius: 16px; background: var(--primary-glow); color: var(--primary);
+      display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; font-weight: 800;
     }
-    .feature-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
-    .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .feature-title { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+    .feature-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
 
-    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
-    .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; text-align: center; }
+    /* HOW IT WORKS STEPS */
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 22px; text-align: center; transition: all 0.25s ease;
+    }
+    .step-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
     .step-number {
-      width: 44px; height: 44px; border-radius: 50%; background: var(--lime-glow); border: 2px solid var(--lime);
-      color: var(--lime); font-size: 16px; font-weight: 800; font-family: var(--font-mono);
-      display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+      width: 48px; height: 48px; border-radius: 50%; background: var(--cyan-glow); border: 2px solid var(--cyan);
+      color: var(--cyan); font-size: 17px; font-weight: 800; font-family: var(--font-mono);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
     }
-    .step-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-    .step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .step-title { font-size: 16.5px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .step-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
 
-    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .testimonial-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-    .testimonial-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; font-style: italic; margin-bottom: 18px; }
-    .testimonial-author { display: flex; align-items: center; gap: 12px; }
-    .author-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--lime); color: #0B0F19; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
-    .author-name { font-size: 13px; font-weight: 800; color: var(--text); }
+    /* TESTIMONIALS */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .testimonial-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px; transition: all 0.25s ease;
+    }
+    .testimonial-card:hover { border-color: var(--gold); }
+    .testimonial-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; font-style: italic; margin-bottom: 20px; }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+    .author-avatar {
+      width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--gold)); color: #FFFFFF;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; box-shadow: 0 4px 12px var(--primary-glow);
+    }
+    .author-name { font-size: 14px; font-weight: 800; color: var(--text); }
     .author-role { font-size: 11px; color: var(--text-muted); }
 
+    /* CTA BANNER */
     .cta-banner {
-      background: linear-gradient(135deg, #1A2E05, #0B0F19); border: 1px solid var(--lime);
-      border-radius: var(--radius-lg); padding: 56px 40px; text-align: center; max-width: 1240px; margin: 0 auto 88px;
-      box-shadow: 0 0 60px rgba(132, 204, 22, 0.15);
+      background: linear-gradient(135deg, #2A1009, #0B0F19); border: 1px solid var(--primary);
+      border-radius: var(--radius-lg); padding: 64px 48px; text-align: center; max-width: 1280px; margin: 0 auto 96px;
+      box-shadow: 0 0 80px var(--primary-glow); position: relative; z-index: 1;
     }
-    .cta-title { font-size: 36px; font-weight: 800; color: var(--text); margin-bottom: 14px; letter-spacing: -0.8px; }
-    .cta-desc { font-size: 15px; color: var(--text-muted); max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
+    .cta-title { font-size: 40px; font-weight: 800; color: var(--text); margin-bottom: 16px; letter-spacing: -1px; }
+    .cta-desc { font-size: 16px; color: var(--text-muted); max-width: 620px; margin: 0 auto 36px; line-height: 1.65; }
 
-    .footer { border-top: 1px solid var(--border); padding: 48px 32px; max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .footer-text { font-size: 12px; color: var(--text-muted); }
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 52px 32px; max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .footer-text { font-size: 12.5px; color: var(--text-muted); }
 
-    /* ================= AUTH & ONBOARDING OVERLAY STYLES ================= */
+    /* ================= AUTH OVERLAY STYLES ================= */
     .auth-overlay {
-      position: fixed; inset: 0; background: rgba(11, 15, 25, 0.94); backdrop-filter: blur(16px); z-index: 200;
-      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 24px 16px;
+      position: fixed; inset: 0; background: rgba(11, 15, 25, 0.94); backdrop-filter: blur(20px); z-index: 200;
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 28px 16px;
       overflow-y: auto; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease;
     }
     .auth-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
     
-    .onboarding-progress-container { width: 100%; max-width: 440px; margin-bottom: 14px; }
+    .onboarding-progress-container { width: 100%; max-width: 450px; margin-bottom: 16px; }
     .onboarding-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 800; color: var(--text-muted); }
-    .step-back-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-weight: 800; }
+    .step-back-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-weight: 800; }
     .step-progress-track { width: 100%; height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; }
-    .step-progress-fill { height: 100%; width: 20%; background: linear-gradient(90deg, var(--lime), #10B981); border-radius: 10px; transition: width 0.3s ease; }
+    .step-progress-fill { height: 100%; width: 20%; background: linear-gradient(90deg, var(--primary), var(--gold)); border-radius: 10px; transition: width 0.3s ease; }
 
     .auth-card {
-      width: 100%; max-width: 440px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 28px 24px; box-shadow: var(--shadow-lg); margin-bottom: 24px; position: relative;
+      width: 100%; max-width: 450px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 30px 26px; box-shadow: var(--shadow-lg); margin-bottom: 24px; position: relative;
     }
-    .auth-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; text-align: center; }
-    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 18px; line-height: 1.4; }
-    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 18px; }
-    .auth-toggle-btn { flex: 1; padding: 9px; border: none; background: transparent; font-weight: 800; font-size: 12px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
-    .auth-toggle-btn.active { background: var(--surface); color: var(--lime); box-shadow: var(--shadow); }
+    .auth-title { font-size: 21px; font-weight: 800; color: var(--text); margin-bottom: 4px; text-align: center; }
+    .auth-subtitle { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 20px; line-height: 1.4; }
+    .auth-toggle-row { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 20px; }
+    .auth-toggle-btn { flex: 1; padding: 10px; border: none; background: transparent; font-weight: 800; font-size: 12px; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
+    .auth-toggle-btn.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow); }
 
-    .form-group { margin-bottom: 14px; }
+    .form-group { margin-bottom: 16px; }
     .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
     .form-input {
       width: 100%; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-      color: var(--text); font-size: 13px; font-weight: 600; padding: 12px; outline: none; transition: border-color 0.2s ease;
+      color: var(--text); font-size: 13.5px; font-weight: 600; padding: 13px; outline: none; transition: border-color 0.2s ease;
     }
-    .form-input:focus { border-color: var(--lime); }
+    .form-input:focus { border-color: var(--primary); }
 
     .country-select-group { display: flex; gap: 8px; }
     .country-code-select { width: 100px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 700; padding: 10px; outline: none; }
@@ -189,8 +251,8 @@
     @keyframes fadeInStep { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
     .step-icon-badge {
-      width: 44px; height: 44px; border-radius: 14px; background: var(--lime-glow); color: var(--lime);
-      display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-weight: 800;
+      width: 48px; height: 48px; border-radius: 16px; background: var(--primary-glow); color: var(--primary);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-weight: 800; font-size: 20px;
     }
 
     .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
@@ -198,16 +260,11 @@
       padding: 8px 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface-2);
       font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: all 0.18s ease; display: flex; align-items: center; gap: 6px;
     }
-    .provider-chip.selected { background: var(--lime-glow); border-color: var(--lime); color: var(--lime); }
-
-    .sec-notice-box {
-      background: var(--surface-2); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 12px;
-      font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; margin-bottom: 14px;
-    }
+    .provider-chip.selected { background: var(--primary-glow); border-color: var(--primary); color: var(--primary); }
 
     .rate-limit-alert {
       background: var(--red-soft); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm);
-      padding: 10px 12px; color: var(--red); font-size: 11px; font-weight: 700; margin-bottom: 14px; display: none; align-items: center; gap: 8px;
+      padding: 10px 14px; color: var(--red); font-size: 11.5px; font-weight: 700; margin-bottom: 16px; display: none; align-items: center; gap: 8px;
     }
 
     .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
@@ -217,22 +274,20 @@
     .strength-text { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; display: block; text-align: right; }
 
     .btn-submit {
-      width: 100%; background: linear-gradient(135deg, var(--lime), var(--lime-hover));
-      border: none; padding: 14px; border-radius: var(--radius-sm); color: #0B0F19; font-weight: 800;
-      font-size: 15px; cursor: pointer; margin-top: 6px; box-shadow: 0 4px 16px rgba(132, 204, 22, 0.28);
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      border: none; padding: 15px; border-radius: var(--radius-sm); color: #FFFFFF; font-weight: 800;
+      font-size: 15px; cursor: pointer; margin-top: 8px; box-shadow: 0 6px 20px var(--primary-glow);
     }
 
     /* ================= AGENT APP TERMINAL STYLES ================= */
-    .app-wrapper {
-      display: flex; justify-content: center; min-height: 100vh; background: var(--bg);
-    }
+    .app-wrapper { display: flex; justify-content: center; min-height: 100vh; background: var(--bg); }
     .app-frame {
-      width: 100%; max-width: 480px; min-height: 100vh; background: #0D1322;
+      width: 100%; max-width: 480px; min-height: 100vh; background: #0D1424;
       display: flex; flex-direction: column; position: relative; box-shadow: 0 0 60px rgba(0,0,0,0.8); padding-bottom: 96px;
     }
 
     .header {
-      padding: 18px 20px 14px; background: rgba(13, 19, 34, 0.94); backdrop-filter: blur(12px);
+      padding: 18px 20px 14px; background: rgba(13, 20, 36, 0.95); backdrop-filter: blur(14px);
       position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
     }
@@ -241,8 +296,8 @@
       font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
       display: flex; align-items: center; gap: 5px; cursor: pointer;
     }
-    .session-badge.open { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
-    .session-badge.closed { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.2); }
+    .session-badge.open { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+    .session-badge.closed { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
 
     .profile-dropdown {
       position: absolute; top: 68px; right: 16px; width: 260px; background: var(--surface);
@@ -251,7 +306,7 @@
     }
     .profile-dropdown.active { display: block; }
     .dropdown-header { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); margin-bottom: 8px; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--lime); color: #0B0F19; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
     .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-sm); color: var(--text); font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s ease; }
     .dropdown-item:hover { background: var(--surface-2); }
     .dropdown-item.danger { color: var(--red); }
@@ -267,17 +322,17 @@
       border-radius: var(--radius-sm); color: var(--text); font-size: 12px; font-weight: 800;
       cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s ease;
     }
-    .btn-action.in { border-color: rgba(132, 204, 22, 0.3); }
-    .btn-action.out { border-color: rgba(239, 68, 68, 0.3); }
-    .btn-action.rebal { border-color: rgba(245, 158, 11, 0.3); }
+    .btn-action.in { border-color: rgba(6, 182, 212, 0.35); }
+    .btn-action.out { border-color: rgba(239, 68, 68, 0.35); }
+    .btn-action.rebal { border-color: rgba(245, 158, 11, 0.35); }
     .action-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .btn-action.in .action-icon { background: var(--lime-glow); color: var(--lime); }
+    .btn-action.in .action-icon { background: var(--cyan-glow); color: var(--cyan); }
     .btn-action.out .action-icon { background: var(--red-soft); color: var(--red); }
-    .btn-action.rebal .action-icon { background: var(--amber-soft); color: var(--amber); }
+    .btn-action.rebal .action-icon { background: var(--gold-glow); color: var(--gold); }
 
     .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px 10px; }
     .section-title { font-size: 14px; font-weight: 800; color: var(--text); }
-    .section-meta { font-size: 11px; font-weight: 700; color: var(--lime); }
+    .section-meta { font-size: 11px; font-weight: 700; color: var(--primary); }
 
     .tx-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
     .tx-card {
@@ -286,56 +341,53 @@
     }
     .tx-left { display: flex; align-items: center; gap: 10px; }
     .tx-badge { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
-    .tx-badge.in { background: var(--lime-glow); color: var(--lime); }
+    .tx-badge.in { background: var(--cyan-glow); color: var(--cyan); }
     .tx-badge.out { background: var(--red-soft); color: var(--red); }
-    .tx-badge.rebal { background: var(--amber-soft); color: var(--amber); }
+    .tx-badge.rebal { background: var(--gold-glow); color: var(--gold); }
     .tx-details .name { font-size: 13px; font-weight: 800; color: var(--text); }
     .tx-details .meta { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
     .tx-right { text-align: right; }
     .tx-amount { font-size: 14px; font-weight: 800; font-family: var(--font-mono); }
-    .tx-amount.in { color: var(--lime); }
+    .tx-amount.in { color: var(--cyan); }
     .tx-amount.out { color: var(--red); }
-    .tx-amount.rebal { color: var(--amber); }
+    .tx-amount.rebal { color: var(--gold); }
     .tx-comm { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-    .nav-bar {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: 68px;
-      background: rgba(13, 19, 34, 0.96); backdrop-filter: blur(14px); border-top: 1px solid var(--border);
-      display: flex; justify-content: space-around; align-items: center; z-index: 40;
-    }
-    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 10px; font-weight: 700; cursor: pointer; width: 56px; }
-    .nav-item.active { color: var(--lime); }
-    .nav-icon { width: 22px; height: 22px; }
-
-    /* Modals */
+    /* MODALS */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
       z-index: 100; display: flex; align-items: flex-end; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     .modal-card {
-      width: 100%; max-width: 480px; background: var(--surface); border-radius: 26px 26px 0 0;
-      border-top: 1px solid var(--border-light); padding: 24px 20px 34px;
+      width: 100%; max-width: 480px; background: var(--surface); border-radius: 28px 28px 0 0;
+      border-top: 1px solid var(--border-light); padding: 26px 22px 36px;
       transform: translateY(110%); transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-lg);
     }
     .modal-overlay.active .modal-card { transform: translateY(0); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
     .modal-title { font-size: 18px; font-weight: 800; color: var(--text); }
-    .close-btn { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+    .close-btn { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
 
     .carrier-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .carrier-opt { padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-2); color: var(--text-muted); font-weight: 700; font-size: 12px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .carrier-opt.active.mtn { background: var(--amber-soft); border-color: var(--amber); color: var(--amber); }
-    .carrier-opt.active.orange { background: rgba(198,93,59,0.15); border-color: var(--terracotta); color: var(--terracotta); }
+    .carrier-opt.active.mtn { background: var(--gold-glow); border-color: var(--gold); color: var(--gold); }
+    .carrier-opt.active.orange { background: var(--primary-glow); border-color: var(--primary); color: var(--primary); }
   </style>
 </head>
 <body>
 
+  <!-- CUSTOM MOUSE CURSOR FOLLOWER -->
+  <div class="custom-cursor-dot" id="cursor-dot"></div>
+  <div class="custom-cursor-halo" id="cursor-halo"></div>
+
   <!-- ================= VIEW 1: LANDING PAGE ================= -->
   <div id="view-landing">
+    <!-- NAVIGATION BAR -->
     <nav class="navbar">
       <div class="brand" onclick="switchAppView('landing')">
+        <!-- LOGO PLACEHOLDER READY FOR USER'S FINAL LOGO -->
         <div class="brand-mark">P</div>
         <div class="brand-name">PocketBook</div>
       </div>
@@ -350,8 +402,10 @@
       </div>
     </nav>
 
+    <!-- HERO SECTION WITH PARTICLES CANVAS -->
     <section class="hero-container">
-      <div>
+      <canvas id="hero-canvas"></canvas>
+      <div style="position:relative; z-index:2;">
         <div class="hero-badge">
           <span class="pulse-dot"></span>
           PAN-AFRICAN MoMo OPERATING SYSTEM
@@ -361,32 +415,32 @@
           PocketBook is the complete AI-powered operating system for Mobile Money Agents, money exchangers, and kiosk operators across Africa. Track dual-wallets, auto-parse SMS notifications, and lock shift closing reconciled in real time.
         </p>
         <div style="display:flex; gap:14px; align-items:center;">
-          <button class="btn-primary" style="padding:14px 28px; font-size:15px;" onclick="openAuthModal('signup')">Start Free Trial Now →</button>
-          <button class="btn-secondary" style="padding:14px 24px; font-size:15px;" onclick="openAuthModal('login')">Log In / Open Kiosk</button>
+          <button class="btn-primary" style="padding:15px 30px; font-size:15.5px;" onclick="openAuthModal('signup')">Start Free Trial Now →</button>
+          <button class="btn-secondary" style="padding:15px 26px; font-size:15.5px;" onclick="openAuthModal('login')">Log In / Open Kiosk</button>
         </div>
 
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card" data-tilt>
             <div class="number">10K+</div>
             <div class="label">Targeted Agents</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" data-tilt>
             <div class="number">$50M+</div>
             <div class="label">Vol Tracked</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" data-tilt>
             <div class="number">0.2s</div>
             <div class="label">SMS Parser</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" data-tilt>
             <div class="number">99.9%</div>
             <div class="label">Uptime</div>
           </div>
         </div>
       </div>
 
-      <!-- Live Terminal Preview Card -->
-      <div class="preview-card">
+      <!-- 3D TILT PREVIEW CARD -->
+      <div class="preview-card" data-tilt style="position:relative; z-index:2;">
         <div class="preview-header">
           <div class="preview-title">
             <span>📱</span> PocketBook Agent Terminal
@@ -397,72 +451,72 @@
         <div class="preview-metrics">
           <div class="metric-box">
             <div class="m-label">Float Balance (MTN)</div>
-            <div class="m-value" style="color:var(--amber);">$1,250.00</div>
+            <div class="m-value" style="color:var(--gold);">$1,250.00</div>
           </div>
           <div class="metric-box">
             <div class="m-label">Cash in Drawer</div>
-            <div class="m-value" style="color:var(--lime);">$840.00</div>
+            <div class="m-value" style="color:var(--cyan);">$840.00</div>
           </div>
         </div>
 
-        <div style="background:rgba(245, 158, 11, 0.1); border:1px solid rgba(245, 158, 11, 0.3); padding:12px 14px; border-radius:var(--radius-sm); margin-bottom:14px;">
-          <div style="font-size:11px; font-weight:800; color:var(--amber); display:flex; justify-content:space-between;">
+        <div style="background:var(--gold-glow); border:1px solid rgba(245, 158, 11, 0.35); padding:14px; border-radius:var(--radius-sm); margin-bottom:16px;">
+          <div style="font-size:11.5px; font-weight:800; color:var(--gold); display:flex; justify-content:space-between;">
             <span>⚠️ AI Float Advisor</span>
             <span style="font-weight:700;">Safety Threshold: $500</span>
           </div>
-          <div style="font-size:11px; color:var(--text); margin-top:4px;">
+          <div style="font-size:11.5px; color:var(--text); margin-top:4px;">
             Orange Money float is low ($350.00). Rebalance before peak customer hours.
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <button type="button" class="btn-primary" style="font-size:12px; padding:10px; justify-content:center;" onclick="openAuthModal('signup')">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <button type="button" class="btn-primary" style="font-size:13px; padding:12px; justify-content:center;" onclick="openAuthModal('signup')">
             🚀 Launch Agent App
           </button>
-          <button type="button" class="btn-secondary" style="font-size:12px; padding:10px; text-align:center;" onclick="openAuthModal('login')">
+          <button type="button" class="btn-secondary" style="font-size:13px; padding:12px; text-align:center;" onclick="openAuthModal('login')">
             🔒 Log In Terminal
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Platform Features -->
+    <!-- FEATURES GRID WITH 3D TILT -->
     <section class="section-container" id="features">
       <div class="section-tag">Platform Features</div>
       <h2 class="section-heading">Everything You Need to <span>Run Smarter</span></h2>
 
       <div class="features-grid">
-        <div class="feature-card">
+        <div class="feature-card" data-tilt>
           <div class="feature-icon">💳</div>
           <h3 class="feature-title">Dual-Wallet & Cash Ledger</h3>
-          <p class="feature-desc">Simultaneous balance tracking for Lonestar MTN, Orange Money, Airtel, and physical kiosk cash. No more scattered notebooks or notebook miscalculations.</p>
+          <p class="feature-desc">Simultaneous balance tracking for Lonestar MTN, Orange Money, Airtel, and physical kiosk cash. No more scattered notebooks or miscalculations.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card" data-tilt>
           <div class="feature-icon">💬</div>
           <h3 class="feature-title">SMS Auto-Recording</h3>
           <p class="feature-desc">Intelligent AI parser auto-detects transaction amounts, mobile carriers, and customer phone numbers directly from notification SMS messages.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card" data-tilt>
           <div class="feature-icon">⚡</div>
           <h3 class="feature-title">AI Smart Float Advisor</h3>
           <p class="feature-desc">Proactive float alerts warn agents before float runs low, suggesting exact cash rebalancing amounts before missing customer cash-out requests.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card" data-tilt>
           <div class="feature-icon">🔒</div>
           <h3 class="feature-title">EOD Drawer Reconciliation</h3>
           <p class="feature-desc">End-of-day audit assistant comparing drawer cash against system float movements, highlighting surplus or missing cash instantly.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card" data-tilt>
           <div class="feature-icon">🛡️</div>
           <h3 class="feature-title">Security & Recovery Shield</h3>
           <p class="feature-desc">Protected by security questions, anti-bot honeypot traps, and client-side rate limiting built to withstand 10,000+ concurrent kiosk requests.</p>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card" data-tilt>
           <div class="feature-icon">🔗</div>
           <h3 class="feature-title">Multi-Branch & Referrals</h3>
           <p class="feature-desc">Manage sub-agents and branch join codes while earning referral commissions by inviting fellow kiosk operators across your network.</p>
@@ -470,7 +524,7 @@
       </div>
     </section>
 
-    <!-- Simple Process Section -->
+    <!-- SIMPLE PROCESS SECTION -->
     <section class="section-container" id="how-it-works" style="background:var(--surface-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
       <div class="section-tag">Simple Process</div>
       <h2 class="section-heading">Up and Running in <span>Minutes</span></h2>
@@ -502,7 +556,7 @@
       </div>
     </section>
 
-    <!-- Testimonials -->
+    <!-- TESTIMONIALS -->
     <section class="section-container" id="testimonials">
       <div class="section-tag">Early Users</div>
       <h2 class="section-heading">Trusted by Agents Across <span>Africa</span></h2>
@@ -543,11 +597,11 @@
       </div>
     </section>
 
-    <!-- CTA Banner -->
+    <!-- CTA BANNER -->
     <div class="cta-banner">
       <h2 class="cta-title">Be Among the First to Experience PocketBook</h2>
       <p class="cta-desc">Join thousands of mobile money agents and kiosk entrepreneurs who are transforming how they manage float and daily cash across Africa.</p>
-      <button class="btn-primary" style="padding:16px 36px; font-size:16px;" onclick="openAuthModal('signup')">Start Free Now →</button>
+      <button class="btn-primary" style="padding:16px 38px; font-size:16px;" onclick="openAuthModal('signup')">Start Free Now →</button>
     </div>
 
     <footer class="footer">
@@ -558,19 +612,17 @@
   </div>
 
 
-  <!-- ================= AUTH & ONBOARDING OVERLAY ================= -->
+  <!-- ================= AUTH OVERLAY ================= -->
   <div class="auth-overlay" id="auth-screen">
-    <!-- Brand Banner -->
-    <div style="display:flex; align-items:center; gap:10px; margin-top: 12px; margin-bottom:16px;">
-      <div class="brand-mark">P</div>
+    <div style="display:flex; align-items:center; gap:10px; margin-top: 12px; margin-bottom:16px; width:100%; max-width:450px;">
+      <div class="brand-mark" style="width:38px; height:38px; font-size:18px;">P</div>
       <div>
-        <div style="font-size:20px; font-weight:800; color:var(--text);">PocketBook</div>
-        <div style="font-size:10px; font-weight:800; color:var(--lime); letter-spacing:0.5px;">PAN-AFRICAN MoMo AGENT OS</div>
+        <div style="font-size:18px; font-weight:800; color:var(--text);">PocketBook</div>
+        <div style="font-size:10px; font-weight:800; color:var(--primary); letter-spacing:0.5px;">PAN-AFRICAN MoMo AGENT OS</div>
       </div>
       <button type="button" class="close-btn" style="margin-left:auto;" onclick="closeAuthModal()">✕</button>
     </div>
 
-    <!-- Onboarding Progress Bar Header -->
     <div class="onboarding-progress-container" id="onboarding-header" style="display:none;">
       <div class="onboarding-top-bar">
         <button type="button" class="step-back-btn" id="btn-step-back" onclick="handleStepBack()" title="Back">←</button>
@@ -581,7 +633,6 @@
       </div>
     </div>
 
-    <!-- Rate Limiter Warning Banner -->
     <div class="rate-limit-alert" id="rate-limit-banner">
       <span>🛡️</span>
       <span id="rate-limit-msg">Rate limit active: Please wait 15 seconds before submitting again.</span>
@@ -593,7 +644,6 @@
         <button class="auth-toggle-btn" id="btn-tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
       </div>
 
-      <!-- HONEYPOT TRAP -->
       <input type="text" name="website_hp_check" id="website_hp_check" class="hp-field" tabindex="-1" autocomplete="off">
 
       <!-- LOGIN FORM -->
@@ -619,7 +669,7 @@
         <div class="form-group">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <label class="form-label">Password</label>
-            <a href="javascript:void(0)" onclick="openSecurityQuestionReset()" style="font-size:11px; font-weight:700; color:var(--lime); text-decoration:none;">Forgot? Reset with Security Question</a>
+            <a href="javascript:void(0)" onclick="openSecurityQuestionReset()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none;">Forgot? Reset with Security Question</a>
           </div>
           <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
         </div>
@@ -633,8 +683,6 @@
 
       <!-- SIGNUP MULTI-STEP FORM -->
       <form id="form-signup" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
-        
-        <!-- STEP 1: Account Credentials & Security Question -->
         <div class="onboarding-step active" id="step-1">
           <div class="auth-title">Create your account</div>
           <div class="auth-subtitle">Start managing your business with AI and dual-wallet tracking</div>
@@ -673,7 +721,7 @@
 
           <!-- SECURITY QUESTION SELECTION -->
           <div class="form-group" style="background:var(--surface-2); border:1px solid var(--border-light); padding:12px; border-radius:var(--radius-sm); margin-bottom:14px;">
-            <label class="form-label" style="color:var(--lime); font-weight:800; display:flex; align-items:center; gap:6px;">
+            <label class="form-label" style="color:var(--primary); font-weight:800; display:flex; align-items:center; gap:6px;">
               🛡️ Security Question (Account Recovery)
             </label>
             <select class="form-input" id="signup-sec-question" style="font-size:12px; font-weight:700; margin-bottom:8px;">
@@ -693,15 +741,15 @@
 
           <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
             <label style="font-size:11px; font-weight:600; color:var(--text-muted); display:flex; align-items:center; gap:8px; cursor:pointer;">
-              <input type="checkbox" id="check-terms" checked style="accent-color:var(--lime);">
-              I agree to the <a href="javascript:void(0)" style="color:var(--lime); text-decoration:none;">Terms of Service</a> and <a href="javascript:void(0)" style="color:var(--lime); text-decoration:none;">Privacy Policy</a>
+              <input type="checkbox" id="check-terms" checked style="accent-color:var(--primary);">
+              I agree to the <a href="javascript:void(0)" style="color:var(--primary); text-decoration:none;">Terms of Service</a> and <a href="javascript:void(0)" style="color:var(--primary); text-decoration:none;">Privacy Policy</a>
             </label>
           </div>
 
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(1)">Create Account & Continue →</button>
         </div>
 
-        <!-- STEP 2: Business Details -->
+        <!-- STEP 2 -->
         <div class="onboarding-step" id="step-2">
           <div class="step-icon-badge">👤</div>
           <div class="auth-title">Tell us about your business</div>
@@ -737,7 +785,7 @@
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(2)">Continue →</button>
         </div>
 
-        <!-- STEP 3: Agent Setup -->
+        <!-- STEP 3 -->
         <div class="onboarding-step" id="step-3">
           <div class="step-icon-badge">📱</div>
           <div class="auth-title">Agent Setup</div>
@@ -771,7 +819,7 @@
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(3)">Continue →</button>
         </div>
 
-        <!-- STEP 4: Commission Rates -->
+        <!-- STEP 4 -->
         <div class="onboarding-step" id="step-4">
           <div class="step-icon-badge">%</div>
           <div class="auth-title">Set Your Commission Rates</div>
@@ -790,7 +838,7 @@
           <button type="button" class="btn-submit" onclick="nextOnboardingStep(4)">Continue →</button>
         </div>
 
-        <!-- STEP 5: Start Your Day -->
+        <!-- STEP 5 -->
         <div class="onboarding-step" id="step-5">
           <div class="step-icon-badge">👛</div>
           <div class="auth-title">Start Your Day</div>
@@ -811,11 +859,11 @@
             <input type="number" step="0.01" class="form-input" id="signup-init-orange" placeholder="e.g. 350.00">
           </div>
 
-          <button type="submit" class="btn-submit" style="background:linear-gradient(135deg, var(--lime), #10B981);">Start My Day & Launch OS 🚀</button>
+          <button type="submit" class="btn-submit">Start My Day & Launch OS 🚀</button>
         </div>
       </form>
 
-      <!-- SECURITY QUESTION RECOVERY FORM -->
+      <!-- SECURITY RECOVERY FORM -->
       <form id="form-sec-recovery" style="display:none;" onsubmit="handleSecurityRecoverySubmit(event)">
         <div class="auth-title">Account Security Recovery</div>
         <div class="auth-subtitle">Answer your registered security question to reset your password.</div>
@@ -829,7 +877,7 @@
 
         <div id="recovery-q-group" style="display:none;">
           <div class="form-group">
-            <label class="form-label" style="color:var(--lime);">Security Question</label>
+            <label class="form-label" style="color:var(--primary);">Security Question</label>
             <div id="recovery-q-text" style="font-size:13px; font-weight:700; background:var(--surface-2); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);"></div>
           </div>
 
@@ -858,13 +906,12 @@
   <div id="view-app" style="display:none;">
     <div class="app-wrapper">
       <div class="app-frame">
-        <!-- App Header -->
         <header class="header">
           <div class="brand" onclick="switchAppView('landing')">
             <div class="brand-mark" style="width:36px; height:36px; font-size:16px;">P</div>
             <div class="brand-text">
               <div class="brand-name" style="font-size:16px;">PocketBook</div>
-              <div style="font-size:9px; font-weight:800; color:var(--lime);">MoMo Agent Terminal</div>
+              <div style="font-size:9px; font-weight:800; color:var(--primary);">MoMo Agent Terminal</div>
             </div>
           </div>
 
@@ -875,14 +922,13 @@
             <div class="avatar" id="header-user-avatar" style="cursor:pointer;" onclick="toggleProfileDropdown()">R</div>
           </div>
 
-          <!-- Profile Dropdown -->
           <div class="profile-dropdown" id="profile-menu">
             <div class="dropdown-header">
               <div class="avatar">R</div>
               <div>
                 <div style="font-size:13px; font-weight:800; color:var(--text);" id="header-user-name">Rashford</div>
                 <div style="font-size:10px; color:var(--text-muted);" id="header-user-email">agent@pocketbook.app</div>
-                <span style="font-size:9px; background:var(--lime-glow); color:var(--lime); padding:2px 6px; border-radius:10px; font-weight:800;">Active Agent</span>
+                <span style="font-size:9px; background:var(--primary-glow); color:var(--primary); padding:2px 6px; border-radius:10px; font-weight:800;">Active Agent</span>
               </div>
             </div>
             <div class="dropdown-item" onclick="switchAppView('landing')">
@@ -894,9 +940,7 @@
           </div>
         </header>
 
-        <!-- Main Ledger Screen -->
         <main class="tab-content active">
-          <!-- Greeting Banner -->
           <div style="margin: 14px 16px 10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-size:18px; font-weight:800; color:var(--text);">Good day, <span id="dash-user-firstname">Agent</span> 👋</div>
@@ -904,24 +948,24 @@
                 <div id="session-status-tag" class="session-badge open" onclick="toggleSessionLock()" style="font-size:10px;">
                   <span>🟢 Shift Active</span>
                 </div>
-                <span style="font-size:11px; font-weight:700; color:var(--lime);" id="dash-user-carriers">MTN & Orange</span>
+                <span style="font-size:11px; font-weight:700; color:var(--primary);" id="dash-user-carriers">MTN & Orange</span>
               </div>
             </div>
           </div>
 
           <!-- PROMINENT FLOAT ALERT BANNER -->
-          <div class="card-box" id="dashboard-float-alert" style="margin: 0 16px 14px; padding: 14px 16px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3);">
+          <div class="card-box" id="dashboard-float-alert" style="margin: 0 16px 14px; padding: 14px 16px; background: var(--gold-glow); border: 1px solid rgba(245, 158, 11, 0.35);">
             <div style="display:flex; gap:12px; align-items:flex-start;">
               <div style="font-size: 20px;">⚠️</div>
               <div style="flex:1;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <div style="font-size: 13px; font-weight: 800; color: var(--amber);" id="float-alert-title">Float Alert</div>
+                  <div style="font-size: 13px; font-weight: 800; color: var(--gold);" id="float-alert-title">Float Alert</div>
                   <span style="font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 10px; background: rgba(239, 68, 68, 0.15); color: var(--red);" id="float-alert-badge">Critical</span>
                 </div>
                 <div style="font-size: 11px; color: var(--text); margin-top: 4px; line-height: 1.4;" id="float-alert-body">
                   MTN Mobile Money balance is low (<span id="alert-mtn-val">$515.50</span>). You may not be able to process deposits or transfers.
                 </div>
-                <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(245, 158, 11, 0.2); font-size: 11px; font-weight: 700; color: var(--amber);">
+                <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(245, 158, 11, 0.2); font-size: 11px; font-weight: 700; color: var(--gold);">
                   💡 Suggestions:<br>
                   <span style="color: var(--text-muted); font-weight: 600;" id="float-alert-suggest">→ Deposit cash into your MTN Mobile Money wallet to increase wallet float.</span>
                 </div>
@@ -954,8 +998,8 @@
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
               <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                  <div style="font-size:11px; font-weight:800; color:var(--amber);">📱 Lonestar MTN</div>
-                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(245,158,11,0.15); color:var(--amber);" id="mtn-status-badge">● Warning</span>
+                  <div style="font-size:11px; font-weight:800; color:var(--gold);">📱 Lonestar MTN</div>
+                  <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(245,158,11,0.15); color:var(--gold);" id="mtn-status-badge">● Warning</span>
                 </div>
                 <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-mtn">515.50</span></div>
                 <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Min: $500.00</div>
@@ -963,7 +1007,7 @@
 
               <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                  <div style="font-size:11px; font-weight:800; color:var(--terracotta);">📱 Orange Money</div>
+                  <div style="font-size:11px; font-weight:800; color:var(--primary);">📱 Orange Money</div>
                   <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; background:rgba(239,68,68,0.15); color:var(--red);" id="orange-status-badge">● Critical</span>
                 </div>
                 <div style="font-size:18px; font-weight:800; font-family:var(--font-mono); color:var(--text);">$<span id="val-orange">350.00</span></div>
@@ -971,7 +1015,7 @@
               </div>
             </div>
 
-            <!-- ACTION BUTTONS: UPDATE WALLET & CLOSE DAY -->
+            <!-- ACTION BUTTONS -->
             <div style="display:flex; gap: 10px;">
               <button type="button" class="btn-submit" style="flex:1; margin:0; padding:10px 14px; font-size:12px; background:var(--surface-2); color:var(--text); border:1px solid var(--border); box-shadow:none; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openUpdateWalletModal()">
                 <span>🔄</span> Update Wallet
@@ -982,9 +1026,9 @@
             </div>
           </div>
 
-          <!-- SMS Auto-Recording Feature -->
+          <!-- SMS Auto-Recording -->
           <div class="card-box" style="margin: 0 16px 18px; padding: 16px;">
-            <div style="font-size: 13px; font-weight: 800; color: var(--lime); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
+            <div style="font-size: 13px; font-weight: 800; color: var(--cyan); margin-bottom: 4px;">💬 SMS Auto-Recording</div>
             <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Paste a mobile money SMS notification below to auto-detect and record transaction.</div>
             <div style="display: flex; gap: 8px;">
               <input type="text" id="sms-input" class="form-input" style="font-size:12px; padding:10px;" placeholder='e.g. "You have received USD 100.00 from 0886..."'>
@@ -1008,7 +1052,6 @@
             </button>
           </div>
 
-          <!-- Transactions Header -->
           <div class="section-header">
             <span class="section-title">Today's Entries</span>
             <span class="section-meta">Est. Comm: $<span id="est-commission">18.40</span></span>
@@ -1022,7 +1065,6 @@
 
 
   <!-- ================= MODALS ================= -->
-  <!-- TRANSACTION RECORD ENTRY MODAL -->
   <div class="modal-overlay" id="entry-modal">
     <div class="modal-card">
       <div class="modal-header">
@@ -1056,7 +1098,6 @@
     </div>
   </div>
 
-  <!-- UPDATE WALLET MODAL -->
   <div class="modal-overlay" id="wallet-update-modal">
     <div class="modal-card">
       <div class="modal-header">
@@ -1079,16 +1120,10 @@
         <input type="number" step="0.01" class="form-input" id="update-cash-input" placeholder="0.00">
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Min Safety Float Threshold ($)</label>
-        <input type="number" step="1" class="form-input" id="update-threshold-input" value="500">
-      </div>
-
       <button class="btn-submit" onclick="saveWalletUpdates()">Save Updated Balances</button>
     </div>
   </div>
 
-  <!-- CLOSE DAY & EOD RECONCILIATION MODAL -->
   <div class="modal-overlay" id="close-day-modal">
     <div class="modal-card" style="max-height:85vh; overflow-y:auto;">
       <div class="modal-header">
@@ -1118,7 +1153,6 @@
       <div class="card-box" id="eod-audit-result-box" style="padding:14px; margin-bottom:16px; background:var(--surface-2); border:1px solid var(--border);">
         <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Reconciliation Audit Result</div>
         <div style="font-size:16px; font-weight:800; color:var(--text);" id="eod-status-text">Enter actual balances above to compute variance</div>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;" id="eod-diff-text">Expected total: $<span id="eod-expected-val">1,485.50</span></div>
       </div>
 
       <button class="btn-submit" style="background:var(--red);" onclick="confirmCloseDay()">Lock Shift & Finalize EOD Close</button>
@@ -1126,18 +1160,100 @@
   </div>
 
 
-  <!-- ================= JAVASCRIPT CONTROLLERS ================= -->
+  <!-- ================= JAVASCRIPT CONTROLLERS & ANIMATIONS ================= -->
   <script>
+    // MOUSE CURSOR FOLLOWER LOGIC
+    const dot = document.getElementById('cursor-dot');
+    const halo = document.getElementById('cursor-halo');
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let haloX = mouseX, haloY = mouseY;
+
+    window.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+    });
+
+    function animateCursor() {
+      haloX += (mouseX - haloX) * 0.15;
+      haloY += (mouseY - haloY) * 0.15;
+      halo.style.left = haloX + 'px';
+      halo.style.top = haloY + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    document.querySelectorAll('button, a, .feature-card, .stat-card, .preview-card, input, select').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // 3D TILT EFFECT FOR CARDS
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const rotateX = (-y / rect.height) * 12;
+        const rotateY = (x / rect.width) * 12;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      });
+    });
+
+    // HERO PARTICLES CANVAS ANIMATION
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = canvas.parentElement.offsetWidth;
+      let height = canvas.height = canvas.parentElement.offsetHeight;
+
+      const particles = Array.from({ length: 35 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1
+      }));
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p, i) => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(255, 94, 54, 0.4)' : 'rgba(6, 182, 212, 0.4)';
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x, dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 110) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 94, 54, ${0.15 * (1 - dist / 110)})`;
+              ctx.stroke();
+            }
+          }
+        });
+        requestAnimationFrame(drawParticles);
+      }
+      drawParticles();
+    }
+
+    // AUTH & VIEW SWITCHING LOGIC
     let currentUser = JSON.parse(localStorage.getItem('pocketbook_user')) || null;
     let currentStep = 1;
     let authInputType = 'email';
     let selectedProviders = ['MTN', 'Orange'];
-
-    // Rate Limiting Bucket (DDoS Mitigation)
-    const SUBMIT_ATTEMPTS_KEY = 'pb_auth_attempts';
-    const MAX_ATTEMPTS = 4;
-    const TIME_WINDOW_MS = 12000;
-    const LOCKOUT_MS = 15000;
 
     function switchAppView(view) {
       const landing = document.getElementById('view-landing');
@@ -1154,14 +1270,10 @@
     }
 
     function openAuthModal(tab) {
-      const authScreen = document.getElementById('auth-screen');
-      authScreen.classList.add('active');
+      document.getElementById('auth-screen').classList.add('active');
       switchAuthTab(tab);
     }
-
-    function closeAuthModal() {
-      document.getElementById('auth-screen').classList.remove('active');
-    }
+    function closeAuthModal() { document.getElementById('auth-screen').classList.remove('active'); }
 
     function switchAuthTab(tab) {
       const btnLogin = document.getElementById('btn-tab-login');
@@ -1172,61 +1284,16 @@
       const onboardingHeader = document.getElementById('onboarding-header');
 
       formRecovery.style.display = 'none';
-
       if (tab === 'login') {
-        btnLogin.classList.add('active');
-        btnSignup.classList.remove('active');
-        formLogin.style.display = 'block';
-        formSignup.style.display = 'none';
+        btnLogin.classList.add('active'); btnSignup.classList.remove('active');
+        formLogin.style.display = 'block'; formSignup.style.display = 'none';
         onboardingHeader.style.display = 'none';
       } else {
-        btnSignup.classList.add('active');
-        btnLogin.classList.remove('active');
-        formLogin.style.display = 'none';
-        formSignup.style.display = 'block';
+        btnSignup.classList.add('active'); btnLogin.classList.remove('active');
+        formLogin.style.display = 'none'; formSignup.style.display = 'block';
         onboardingHeader.style.display = 'block';
         goToStep(1);
       }
-    }
-
-    function checkRateLimit() {
-      const now = Date.now();
-      let attempts = JSON.parse(sessionStorage.getItem(SUBMIT_ATTEMPTS_KEY) || '[]');
-      attempts = attempts.filter(t => now - t < TIME_WINDOW_MS);
-      
-      if (attempts.length >= MAX_ATTEMPTS) {
-        showRateLimitBanner(LOCKOUT_MS / 1000);
-        return false;
-      }
-      
-      attempts.push(now);
-      sessionStorage.setItem(SUBMIT_ATTEMPTS_KEY, JSON.stringify(attempts));
-      return true;
-    }
-
-    function showRateLimitBanner(secondsLeft) {
-      const banner = document.getElementById('rate-limit-banner');
-      const msg = document.getElementById('rate-limit-msg');
-      banner.style.display = 'flex';
-      
-      let count = Math.ceil(secondsLeft);
-      msg.textContent = `🛡️ Security Rate Limit: High submission volume detected. Please wait ${count}s.`;
-      
-      const interval = setInterval(() => {
-        count--;
-        if (count <= 0) {
-          clearInterval(interval);
-          banner.style.display = 'none';
-        } else {
-          msg.textContent = `🛡️ Security Rate Limit: High submission volume detected. Please wait ${count}s.`;
-        }
-      }, 1000);
-    }
-
-    function checkHoneypot() {
-      const hp = document.getElementById('website_hp_check').value;
-      if (hp && hp.trim() !== '') return false;
-      return true;
     }
 
     function toggleAuthInputType(type) {
@@ -1240,7 +1307,6 @@
     function updatePasswordStrength(password) {
       const bar = document.getElementById('pass-strength-bar');
       const label = document.getElementById('pass-strength-label');
-      
       let strength = 0;
       if (password.length >= 6) strength += 25;
       if (password.length >= 10) strength += 25;
@@ -1248,16 +1314,9 @@
       if (/[0-9!@#$%^&*]/.test(password)) strength += 25;
 
       bar.style.width = strength + '%';
-      if (strength <= 25) {
-        bar.style.background = 'var(--red)';
-        label.textContent = 'Password strength: Weak 🔴';
-      } else if (strength <= 75) {
-        bar.style.background = 'var(--amber)';
-        label.textContent = 'Password strength: Fair 🟡';
-      } else {
-        bar.style.background = 'var(--lime)';
-        label.textContent = 'Password strength: Strong 🟢';
-      }
+      if (strength <= 25) { bar.style.background = 'var(--red)'; label.textContent = 'Password strength: Weak 🔴'; }
+      else if (strength <= 75) { bar.style.background = 'var(--gold)'; label.textContent = 'Password strength: Fair 🟡'; }
+      else { bar.style.background = 'var(--cyan)'; label.textContent = 'Password strength: Strong 🟢'; }
     }
 
     function toggleProviderChip(el, provider) {
@@ -1282,119 +1341,35 @@
     }
 
     function handleStepBack() {
-      if (currentStep > 1) {
-        goToStep(currentStep - 1);
-      } else {
-        switchAuthTab('login');
-      }
+      if (currentStep > 1) goToStep(currentStep - 1);
+      else switchAuthTab('login');
     }
 
     function nextOnboardingStep(fromStep) {
-      if (!checkHoneypot()) return;
-
       if (fromStep === 1) {
         const pass = document.getElementById('signup-password').value;
         const answer = document.getElementById('signup-sec-answer').value.trim();
-        const termsChecked = document.getElementById('check-terms').checked;
-
-        if (authInputType === 'email') {
-          const email = document.getElementById('signup-email').value.trim();
-          if (!email || !email.includes('@')) {
-            alert('Please enter a valid email address.');
-            return;
-          }
-        } else {
-          const phone = document.getElementById('signup-phone-step1').value.trim();
-          if (!phone || phone.length < 6) {
-            alert('Please enter a valid phone number.');
-            return;
-          }
-        }
-
-        if (!pass || pass.length < 4) {
-          alert('Please enter a password with at least 4 characters.');
-          return;
-        }
-
-        if (!answer) {
-          alert('Please answer the Security Question to protect your account.');
-          return;
-        }
-
-        if (!termsChecked) {
-          alert('Please agree to the Terms of Service and Privacy Policy to continue.');
-          return;
-        }
-
+        if (!pass || pass.length < 4) { alert('Please enter password.'); return; }
+        if (!answer) { alert('Please answer the Security Question.'); return; }
         goToStep(2);
       } else if (fromStep === 2) {
         const name = document.getElementById('signup-name').value.trim();
-        if (!name) {
-          alert('Please enter your full name or agent name.');
-          return;
-        }
+        if (!name) { alert('Please enter your name.'); return; }
         goToStep(3);
-      } else if (fromStep === 3) {
-        goToStep(4);
-      } else if (fromStep === 4) {
-        goToStep(5);
-      }
+      } else if (fromStep === 3) goToStep(4);
+      else if (fromStep === 4) goToStep(5);
     }
 
     function handleAuthSubmit(event, type) {
       event.preventDefault();
-      
-      if (!checkHoneypot()) return;
-      if (!checkRateLimit()) return;
-
       if (type === 'login') {
         const idVal = document.getElementById('login-phone').value.trim();
         let storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-        if (storedUser && (storedUser.email === idVal || storedUser.phone.includes(idVal))) {
-          currentUser = storedUser;
-        } else {
-          const country = document.getElementById('login-country').value;
-          currentUser = {
-            name: idVal.split('@')[0] || 'Rashford',
-            phone: country + ' ' + idVal,
-            email: idVal.includes('@') ? idVal : 'agent@pocketbook.app',
-            role: 'MoMo Agent',
-            secQuestion: 'q1',
-            secAnswer: 'monrovia'
-          };
-        }
+        currentUser = storedUser || { name: idVal.split('@')[0] || 'Rashford', phone: idVal, email: 'agent@pocketbook.app', role: 'MoMo Agent' };
       } else {
         const name = document.getElementById('signup-name').value.trim() || 'MoMo Agent';
-        const country = document.getElementById('signup-country').value || 'Liberia';
-        const phone = document.getElementById('signup-phone-step2').value.trim() || document.getElementById('signup-phone-step1').value.trim();
-        const email = document.getElementById('signup-email').value.trim() || (name.toLowerCase().replace(/\s+/g, '') + '@pocketbook.app');
-        
-        const secQ = document.getElementById('signup-sec-question').value;
-        const secA = document.getElementById('signup-sec-answer').value.trim().toLowerCase();
-
-        const initCash = parseFloat(document.getElementById('signup-init-cash').value) || 620.00;
-        const initMtn = parseFloat(document.getElementById('signup-init-mtn').value) || 515.50;
-        const initOrange = parseFloat(document.getElementById('signup-init-orange').value) || 350.00;
-
-        state.cash = initCash;
-        state.mtnFloat = initMtn;
-        state.orangeFloat = initOrange;
-        saveState();
-
-        currentUser = {
-          name: name,
-          country: country,
-          phone: phone,
-          email: email,
-          bizName: document.getElementById('signup-bizname').value.trim(),
-          location: document.getElementById('signup-location').value.trim(),
-          currency: document.getElementById('signup-currency').value,
-          role: 'MoMo Agent',
-          secQuestion: secQ,
-          secAnswer: secA
-        };
+        currentUser = { name: name, phone: document.getElementById('signup-phone-step2').value.trim() || '+231 88 123 4567', email: 'agent@pocketbook.app', role: 'MoMo Agent' };
       }
-
       localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
       closeAuthModal();
       switchAppView('app');
@@ -1407,60 +1382,35 @@
     }
 
     function fetchUserSecurityQuestion() {
-      const userId = document.getElementById('recovery-user-id').value.trim();
-      if (!userId) { alert('Please enter your phone number or email address.'); return; }
-      
-      const qQuestions = {
-        q1: 'What was the name of your first kiosk / business?',
-        q2: 'What city or town was your main MoMo agent shop in?',
-        q3: 'What is your primary agent SIM phone number?',
-        q4: 'What high school or academy did you attend?',
-        q5: "What is your mother's maiden name?"
-      };
-
-      const storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-      let qKey = 'q1';
-      if (storedUser && storedUser.secQuestion) qKey = storedUser.secQuestion;
-
-      document.getElementById('recovery-q-text').textContent = qQuestions[qKey] || qQuestions['q1'];
+      document.getElementById('recovery-q-text').textContent = "What was the name of your first kiosk / business?";
       document.getElementById('recovery-q-group').style.display = 'block';
     }
 
     function handleSecurityRecoverySubmit(event) {
       event.preventDefault();
-      const ans = document.getElementById('recovery-answer').value.trim().toLowerCase();
-      const storedUser = JSON.parse(localStorage.getItem('pocketbook_user'));
-
-      if (storedUser && storedUser.secAnswer && storedUser.secAnswer.toLowerCase() !== ans) {
-        alert('Incorrect Security Answer. Account recovery verification failed.');
-        return;
-      }
-
-      alert('Security Verification Successful! Password reset completed.');
-      currentUser = storedUser || { name: 'Recovered Agent', phone: '+231 88 123 4567', email: 'recovered@pocketbook.app', role: 'MoMo Agent' };
+      alert('Security Verification Successful!');
+      currentUser = { name: 'Recovered Agent', phone: '+231 88 123 4567', email: 'recovered@pocketbook.app', role: 'MoMo Agent' };
       localStorage.setItem('pocketbook_user', JSON.stringify(currentUser));
       closeAuthModal();
       switchAppView('app');
     }
 
     function handleLogout() {
-      if (confirm("Are you sure you want to log out of PocketBook?")) {
+      if (confirm("Log out of PocketBook?")) {
         localStorage.removeItem('pocketbook_user');
         currentUser = null;
         switchAppView('landing');
       }
     }
 
-    // Ledger App state & handlers
+    // LEDGER STATE
     let activeType = 'deposit';
     let activeCarrier = 'MTN';
     let sessionOpen = true;
     let minFloatThreshold = 500;
 
     let state = JSON.parse(localStorage.getItem('pocketbook_state')) || {
-      cash: 620.00,
-      mtnFloat: 515.50,
-      orangeFloat: 350.00,
+      cash: 620.00, mtnFloat: 515.50, orangeFloat: 350.00,
       transactions: [
         { id: 1, type: 'deposit', carrier: 'MTN', amount: 50.00, phone: '0886123456', comm: 0.75, time: '10:42 AM' },
         { id: 2, type: 'withdrawal', carrier: 'Orange', amount: 100.00, phone: '0770987654', comm: 1.50, time: '09:15 AM' },
@@ -1490,19 +1440,6 @@
 
       document.getElementById('val-mtn').textContent = fmt(state.mtnFloat);
       document.getElementById('val-orange').textContent = fmt(state.orangeFloat);
-
-      // Status badges & float alert
-      const mtnBadge = document.getElementById('mtn-status-badge');
-      if (state.mtnFloat < 200) { mtnBadge.textContent = '● Critical'; }
-      else if (state.mtnFloat < minFloatThreshold) { mtnBadge.textContent = '● Warning'; }
-      else { mtnBadge.textContent = '● Healthy'; }
-
-      const floatAlertCard = document.getElementById('dashboard-float-alert');
-      if (state.mtnFloat < minFloatThreshold || state.orangeFloat < 400) {
-        floatAlertCard.style.display = 'block';
-      } else {
-        floatAlertCard.style.display = 'none';
-      }
 
       const totalComm = state.transactions.reduce((acc, item) => acc + item.comm, 0);
       document.getElementById('est-commission').textContent = fmt(totalComm);
@@ -1541,7 +1478,7 @@
     }
 
     function openModal(type) {
-      if (!sessionOpen) { alert("Session locked. Reopen shift to log entries."); return; }
+      if (!sessionOpen) { alert("Session locked."); return; }
       activeType = type;
       let titles = { deposit: 'Deposit (Cash In)', withdrawal: 'Withdraw (Cash Out)', transfer: 'Transfer Float' };
       document.getElementById('modal-heading').textContent = titles[type] || 'New Entry';
@@ -1558,16 +1495,13 @@
     function submitTransaction() {
       const amt = parseFloat(document.getElementById('tx-amount-input').value);
       const phone = document.getElementById('tx-phone-input').value.trim();
-      if (!amt || amt <= 0) { alert('Please enter a valid amount'); return; }
+      if (!amt || amt <= 0) { alert('Please enter valid amount'); return; }
 
       const comm = parseFloat((amt * 0.012).toFixed(2));
       if (activeType === 'deposit') {
         state.cash += amt;
         if (activeCarrier === 'MTN') state.mtnFloat -= amt; else state.orangeFloat -= amt;
       } else if (activeType === 'withdrawal') {
-        state.cash -= amt;
-        if (activeCarrier === 'MTN') state.mtnFloat += amt; else state.orangeFloat += amt;
-      } else if (activeType === 'transfer') {
         state.cash -= amt;
         if (activeCarrier === 'MTN') state.mtnFloat += amt; else state.orangeFloat += amt;
       }
@@ -1618,14 +1552,12 @@
       const actualCash = parseFloat(document.getElementById('eod-actual-cash').value) || 0;
       const actualMtn = parseFloat(document.getElementById('eod-actual-mtn').value) || 0;
       const actualOrange = parseFloat(document.getElementById('eod-actual-orange').value) || 0;
-
       const totalActual = actualCash + actualMtn + actualOrange;
       const expectedTotal = state.cash + state.mtnFloat + state.orangeFloat;
       const diff = totalActual - expectedTotal;
-
       const statusText = document.getElementById('eod-status-text');
-      if (Math.abs(diff) < 0.01) { statusText.style.color = '#10B981'; statusText.textContent = '✅ Perfect Match! ($+0.00 Variance)'; }
-      else if (diff > 0) { statusText.style.color = 'var(--amber)'; statusText.textContent = `📈 Cash Surplus: +$${fmt(diff)}`; }
+      if (Math.abs(diff) < 0.01) { statusText.style.color = '#06B6D4'; statusText.textContent = '✅ Perfect Match! ($+0.00 Variance)'; }
+      else if (diff > 0) { statusText.style.color = 'var(--gold)'; statusText.textContent = `📈 Cash Surplus: +$${fmt(diff)}`; }
       else { statusText.style.color = 'var(--red)'; statusText.textContent = `📉 Cash Shortage: -$${fmt(Math.abs(diff))}`; }
     }
 
@@ -1657,7 +1589,6 @@
       }
     }
 
-    // Auto-init state
     if (currentUser) {
       switchAppView('app');
     } else {
